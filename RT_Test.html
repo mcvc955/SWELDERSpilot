@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+    .face-container {
+      text-align: center;
+    }
+
+    .face-img {
+      width: 300px;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+    }
+
+    .face-name {
+      margin-top: 10px;
+      font-size: 20px;
+      font-weight: bold;
+    }
+    </style>
+    <title>FNR</title>
+    <script src="https://unpkg.com/jspsych@8.2.1"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@2.1.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@2.1.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-survey-html-form@2.1.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-fullscreen@2.1.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-survey-text@2.1.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-cloze@2.1.0"></script>
+    <link href="https://unpkg.com/jspsych@8.2.1/css/jspsych.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body></body>
+  <script>
+
+
+  /* initialize jsPsych */
+var jsPsych = initJsPsych({
+  override_safe_mode: true,
+/*  extensions: [
+    {type: jsPsychExtensionMouseTracking, params: {...}},
+  ],
+  */
+  on_finish: function() {
+    jsPsych.data.displayData();
+  }
+});
+
+/* create timeline */
+var timeline = [];
+
+// Insert a different task HERE
+
+/* define instructions trial */
+var instructions = {
+  type: jsPsychHtmlKeyboardResponse,
+  stimulus: `
+
+    <p>In the following task a stop light will appear on the screen.</p>
+    <p>If the light is <strong><font color="green"> GREEN </strong></font> press the <strong><font color="green"> P KEY </strong></font>
+    with your <strong>right index finger</strong> as fast as you can. Think of this key as your gas pedal.</p>
+<div style='width: 1000px;'>
+    <div style='float: left;'><img src='RTStimuli/RHand_Green_Q.png' style="width:500px;height:300px;"></img></div>
+    <div style='float: right;'><img src='RTStimuli/GreenLight.png' style="width:500px;height:300px;"></img></div>
+</div>
+    <p>If the light is <strong><font color="red"> RED</strong></font>, press the <strong><font color="red">Q KEY</strong></font>
+    with your <strong>left index finger</strong> as fast as you can, think of this as your brake pedal.</p>
+<div style='width: 1000px;'>
+    <div style='float: left;'><img src='RTStimuli/RedLight.png' style="width:500px;height:300px;"></img></div>
+    <div style='float: right;'><img src='RTStimuli/LHand_Red_P.png'style="width:500px;height:300px;"></img></div>
+</div>
+<div style='width: 1000px;'>
+    <p>If the lights are <strong> OFF </strong>, do not press any keys.</p>
+</div>
+    <div style='float: center;'><img src='RTStimuli/LightsOff.png'style="width:500px;height:300px;"></img></div>
+    <p> Let's have a practice run! When you are ready to start practicing, press the <strong>SPACEBAR.</strong></p>
+
+  `,
+  choices: " ",
+  post_trial_gap: 1000
+};
+timeline.push(instructions);
+
+
+
+var practice = {
+    type: jsPsychImageKeyboardResponse,
+    //post_trial_gap: 300,
+    render_on_canvas: true,
+    //response_ends_trial: true,
+    timeline: [
+      {stimulus:'RTStimuli/GreenLight.png', choices: ['p'], response_ends_trial: true, data: { test_part: 'practice', correct_response: 'p' }, },
+      {stimulus:'RTStimuli/LightsOff.png', choices: "NO_KEYS", trial_duration: 500, data: { test_part: 'practice', correct_response:"NO_KEYS",choices: "NO_KEYS" }, },
+      {stimulus:'RTStimuli/RedLight.png', choices: ['q'], response_ends_trial: true, data: { test_part: 'practice', correct_response: 'q' }, },
+      {stimulus:'RTStimuli/LightsOff.png', choices: "NO_KEYS", trial_duration: 500, data: { test_part: 'practice', correct_response:"NO_KEYS", choices: "NO_KEYS" }, },
+      {stimulus:'RTStimuli/GreenLight.png',  choices: ['p'], response_ends_trial: true, data: { test_part: 'practice', correct_response: 'p' }, },
+      {stimulus:'RTStimuli/LightsOff.png', choices: "NO_KEYS", trial_duration: 500, data: { test_part: 'practice', correct_response:"NO_KEYS", choices: "NO_KEYS" }, },
+      {stimulus:'RTStimuli/RedLight.png', choices: ['q'], response_ends_trial: true, data: { test_part: 'practice', correct_response: 'q' }, },
+],
+};
+timeline.push(practice);
+
+var instructions_2 = {
+  type: jsPsychHtmlKeyboardResponse,
+  stimulus: `
+    <p></strong> Well done! </p></strong>
+    <p>You are now ready to move on to the task. It will be the same as the practice task but longer.</p>
+    <p>When you are ready to start the task, press the <strong>SPACEBAR.</strong></p>
+  `,
+  choices: " ",
+  post_trial_gap: 1000
+};
+timeline.push(instructions_2);
+
+var test_stimuli = [
+    {stimulus: "RTStimuli/GreenLight.png", choices: ['p', 'q'], correct_response: 'p', data: {task: 'response_green'},}, /*, correct_response: jsPsych.timelineVariable('correct_response')},},*/
+    {stimulus: "RTStimuli/RedLight.png",  choices: ['p', 'q'], correct_response: 'q', data: {task: 'response_red'},}, /*correct_response: jsPsych.timelineVariable('correct_response')},},*/
+    {stimulus: 'RTStimuli/LightsOff.png', choices: "NO_KEYS", correct_response: "NO_KEYS", data: {task: 'response_light_off'},},
+    {stimulus: "RTStimuli/GreenLight.png", choices: ['p', 'q'], correct_response: 'p', data: {task: 'response_green'},}, /*, correct_response: jsPsych.timelineVariable('correct_response')},},*/
+    {stimulus: "RTStimuli/RedLight.png",  choices: ['p', 'q'], correct_response: 'q', data: {task: 'response_red'},},
+];
+
+var flat_test_stimuli = test_stimuli.flat();
+
+/*
+var light_off = {
+  type: jsPsychImageKeyboardResponse,
+  stimulus: 'RTStimuli/LightsOff.png',
+  choices: "NO_KEYS",
+  trial_duration: function(){
+    return jsPsych.randomization.sampleWithoutReplacement([250, 500, 750, 1000, 1250, 1500, 1750, 2000], 1)[0];
+  },
+  data: {
+    task: 'light_off'
+  }
+};
+var lights_on = {
+  type: jsPsychImageKeyboardResponse,
+  stimulus: jsPsych.timelineVariable('stimulus'),
+  choices: ['p', 'q'],
+  data: {
+    task: 'response',
+    correct_response: jsPsych.timelineVariable('correct_response')
+  },
+  on_finish: function(data){
+    data.correct = jsPsych.pluginAPI.compareKeys(data.response, data.correct_response);
+  }
+}
+*/
+/* define test procedure */
+
+var RT_Task = {
+  type: jsPsychImageKeyboardResponse,
+  timeline: [
+    {stimulus: "RTStimuli/GreenLight.png", choices: ['p', 'q'], correct_response: 'p', data: {task: 'response_green'},}, /*, correct_response: jsPsych.timelineVariable('correct_response')},},*/
+    {stimulus: "RTStimuli/RedLight.png",  choices: ['p', 'q'], correct_response: 'q', data: {task: 'response_red'},}, /*correct_response: jsPsych.timelineVariable('correct_response')},},*/
+    {stimulus: 'RTStimuli/LightsOff.png', choices: "NO_KEYS", correct_response: "NO_KEYS", data: {task: 'response_light_off'},},
+    {stimulus: "RTStimuli/GreenLight.png", choices: ['p', 'q'], correct_response: 'p', data: {task: 'response_green'},}, /*, correct_response: jsPsych.timelineVariable('correct_response')},},*/
+    {stimulus: "RTStimuli/RedLight.png",  choices: ['p', 'q'], correct_response: 'q', data: {task: 'response_red'},},
+  ],
+  timeline_variables: test_stimuli,
+  repetitions: 16,
+  randomize_order: true,
+};
+timeline.push(RT_Task);
+
+// face name pairs test (baseline meansure)
+/*
+var allfaceswithdata_shuffled_fortest2 = jsPsych.randomization.shuffle(allfaces_withdata);
+
+var facename_baselinetest = {
+  timeline: allfaceswithdata_shuffled_fortest2.map((f, i) => {
+
+    let correct_name = f.text.match(/%([^%]+)%/)[1].trim();
+
+    return {
+      type: jsPsychCloze,
+      text: f.text,
+      check_answers: true,
+      button_text: 'Next'
+    };
+
+  })
+};
+
+timeline.push(facename_baselinetest);
+*/
+
+jsPsych.run(timeline)
+console.log('timeline:', timeline),
+initJsPsych({
+  timeline: timeline,
+  preload_images: allfaces, /*["faces/AllFaces/CFD-AF-200-228-N.jpg", "faces/AllFaces/CFD-AF-236-145-N.jpg", "faces/AllFaces/CFD-AM-223-138-N.jpg", "faces/AllFaces/CFD-BF-225-192-N.jpg", "faces/AllFaces/CFD-BM-019-002-N.jpg",
+  "faces/AllFaces/CFD-BM-044-001-N.jpg", "faces/AllFaces/CFD-LF-219-223-N.jpg", "faces/AllFaces/CFD-LF-241-188-N.jpg", "faces/AllFaces/CFD-LM-251-073-N.jpg", "faces/AllFaces/CFD-WF-245-084-N.jpg",
+  "faces/AllFaces/CFD-WM-023-001-N.jpg", "faces/AllFaces/CFD-WM-258-125-N.jpg"],*/
+  use_webaudio: false,
+  show_progress_bar: true,
+  on_finish: function(){
+    jsPsych.data.displayData();
+      // Make sure that participant id is the first response (thats what values[0] gets)
+    ptc_id = JSON.parse(jsPsych.data.get().select('responses').values[0])['participant id'];
+    saveData("SWELDERS_FNR_Session1_" + ptc_id + '_'+ Date.now().toString(), jsPsych.data.get().csv());},
+
+  });
+
+
+  </script>
+</html>

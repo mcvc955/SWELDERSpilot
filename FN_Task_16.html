@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>FNR</title>
+    <script src="https://unpkg.com/jspsych@8.2.1"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@2.1.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@2.1.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-survey-html-form@2.1.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-fullscreen@2.1.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-survey-text@2.1.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-cloze@2.1.0"></script>
+    <link href="https://unpkg.com/jspsych@8.2.1/css/jspsych.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body></body>
+  <script>
+
+
+  /* initialize jsPsych */
+var jsPsych = initJsPsych({
+  override_safe_mode: true,
+  extensions: [
+    {type: jsPsychExtensionMouseTracking, params: {...}}
+  ],
+  on_finish: function() {
+    jsPsych.data.displayData();
+  }
+});
+
+/* create timeline */
+var timeline = [];
+
+//                                       FACE FAMILIARIZATION (Just looking at them, no names or relationships yet)
+/*Initial face study phase: the test begins with an exposure to all 16 faces. Subjects are shown 4 faces to a page, one face in each quadrant.
+They are asked to look at each face for a total of 2 s until they have seen all 16 faces.*/
+
+
+var facesonly_instructions = {
+  type: jsPsychHtmlKeyboardResponse,
+  stimulus:'In the following task, you will be shown pictures of 16 faces, 4 at a time.' +
+  ' A red border will appear on one picture at a time, this indicates the picture you should focus on.' +
+  ' You do not need to press any buttons in this task. When you are ready, please press the spacebar to begin.',
+  choices: " ",
+  post_trial_gap: 1000,
+};
+
+timeline.push(facesonly_instructions);
+
+var allfaces = ["faces\AllFaces\CFD-AF-231-357-N.jpg", "faces\AllFaces\CFD-LF-219-223-N.jpg", "faces/AllFaces\CFD-BF-209-172-N.jpg", "faces\AllFaces\CFD-WF-008-002-N.jpg", "faces\AllFaces\CFD-WF-245-084-N.jpg",
+"faces\AllFaces\CFD-LF-241-188-N.jpg", "faces\AllFaces\CFD-BF-019-001-N.jpg", "faces\AllFaces\CFD-BF-009-002-N.jpg","faces\AllFaces\CFD-WF-011-002-N.jpg", "faces\AllFaces\CFD-AF-201-060-N.jpg","faces\AllFaces\CFD-WF-017-003-N.jpg",
+ "faces\AllFaces\CFD-BF-214-308-N.jpg", "faces\AllFaces\CFD-LF-238-154-N.jpg", "faces\AllFaces\CFD-BF-254-201-N.jpg", "faces\AllFaces\CFD-BF-253-202-N.jpg", "faces\AllFaces\CFD-LF-202-065-N.jpg", "faces\AllFaces\CFD-AF-230-193-N.jpg",
+"faces\AllFaces\CFD-LF-210-220-N.jpg", "faces\AllFaces\CFD-AF-236-145-N.jpg", "faces\AllFaces\CFD-AF-202-122-N.jpg", "faces\AllFaces\CFD-AF-214-139-N.jpg", "faces\AllFaces\CFD-LF-220-120-N.jpg", "faces\AllFaces\CFD-WF-205-006-N.jpg",
+ "faces\AllFaces\CFD-BF-244-231-N.jpg", "faces\AllFaces\CFD-AF-200-228-N.jpg", "faces\AllFaces\CFD-WF-022-017-N.jpg", "faces\AllFaces\CFD-AF-222-134-N.jpg", "faces\AllFaces\CFD-WF-236-107-N.jpg", "faces\AllFaces\CFD-BF-225-192-N.jpg",
+"faces\AllFaces\CFD-LF-227-054-N.jpg", "faces\AllFaces\CFD-WF-213-031-N.jpg", "faces\AllFaces\CFD-LF-233-277-N.jpg", "faces\AllFaces\CFD-WM-019-003-N.jpg", "faces\AllFaces\CFD-WM-201-063-N.jpg", "faces\AllFaces\CFD-LM-216-082-N.jpg",
+ "faces\AllFaces\CFD-BM-013-002-N.jpg", "faces\AllFaces\CFD-AM-246-184-N.jpg", "faces\AllFaces\CFD-WM-018-002-N.jpg", "faces\AllFaces\CFD-BM-011-016-N.jpg", "faces\AllFaces\CFD-LM-251-073-N.jpg", "faces\AllFaces\CFD-WM-029-023-N.jpg",
+"faces\AllFaces\CFD-AM-249-163-N.jpg", "faces\AllFaces\CFD-WM-258-125-N.jpg", "faces\AllFaces\CFD-AM-210-035-N.jpg", "faces\AllFaces\CFD-AM-223-138-N.jpg", "faces\AllFaces\CFD-AM-212-050-N.jpg", "faces\AllFaces\CFD-AM-238-269-N.jpg",
+"faces\AllFaces\CFD-BM-044-001-N.jpg", "faces\AllFaces\CFD-WM-023-001-N.jpg", "faces\AllFaces\CFD-BM-027-001-N.jpg", "faces\AllFaces\CFD-LM-237-264-N.jpg", "faces\AllFaces\CFD-BM-019-002-N.jpg", "faces\AllFaces\CFD-LM-232-204-N.jpg",
+"faces\AllFaces\CFD-LM-206-204-N.jpg", "faces\AllFaces\CFD-WM-034-030-N.jpg", "faces\AllFaces\CFD-AM-219-101-N.jpg", "faces\AllFaces\CFD-LM-222-239-N.jpg", "faces\AllFaces\CFD-BM-249-235-N.jpg", "faces\AllFaces\CFD-AM-233-236-N.jpg",
+"faces\AllFaces\CFD-LM-246-087-N.jpg", "faces\AllFaces\CFD-BM-029-024-N.jpg", "faces\AllFaces\CFD-LM-248-089-N.jpg", "faces\AllFaces\CFD-BM-017-021-N.jpg", "faces\AllFaces\CFD-WM-210-057-N.jpg"];
+
+// shuffle faces
+var allfacesshuffled = jsPsych.randomization.shuffle(allfaces);
+console.log('allfacesshuffled:', allfacesshuffled)
+
+// split into 16 sets of 4
+var facesonly_set1 = allfacesshuffled.slice(0, 4);
+var facesonly_set2 = allfacesshuffled.slice(4, 8);
+var facesonly_set3 = allfacesshuffled.slice(8, 12);
+var facesonly_set4 = allfacesshuffled.slice(12, 16);
+var facesonly_set5 = allfacesshuffled.slice(16, 20);
+var facesonly_set6 = allfacesshuffled.slice(20, 24);
+var facesonly_set7 = allfacesshuffled.slice(24, 28);
+var facesonly_set8 = allfacesshuffled.slice(28, 32);
+var facesonly_set9 = allfacesshuffled.slice(32, 36);
+var facesonly_set10 = allfacesshuffled.slice(36, 40);
+var facesonly_set11 = allfacesshuffled.slice(40, 44);
+var facesonly_set12 = allfacesshuffled.slice(44, 48);
+var facesonly_set13 = allfacesshuffled.slice(48, 52);
+var facesonly_set14 = allfacesshuffled.slice(52, 56);
+var facesonly_set15 = allfacesshuffled.slice(56, 60);
+var facesonly_set16 = allfacesshuffled.slice(60, 64);
+
+console.log("Set 1:", faces_set1);
+console.log("Set 2:", faces_set2);
+console.log("Set 3:", faces_set3);
+console.log("Set 4:", faces_set4);
+
+/*Display faces passively, four at a time. Indicator stays on each face for 2 secs before moving
+onto the next face.*/
+
+// border for images
+function makeGridWithBorder(images, highlightIndex) {
+  return `
+    <div style="display: grid; gap:20px; grid-template-columns: repeat(4, 1fr); justify-content:center;">
+      ${images.map((f, i) => `
+        <img src="${f}"
+             style="width:300px; height:400px; object-fit:cover; border:${i === highlightIndex ? '5px solid red' : 'none'}; border-radius:10px;">
+      `).join("")}
+    </div>
+  `;
+}
+
+
+var set1trial = {
+  timeline: facesonly_set1.map((f, i) => ({
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: makeGridWithBorder(facesonly_set1, i),
+    trial_duration: 2000,
+    render_on_canvas: true,
+    choices: "NO_KEYS"
+  }))
+};
+timeline.push(set1trial);
+
+var set2trial = {
+  timeline: facesonly_set2.map((f, i) => ({
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: makeGridWithBorder(facesonly_set2, i),
+    trial_duration: 2000,
+    render_on_canvas: true,
+    choices: "NO_KEYS"
+  }))
+};
+timeline.push(set2trial);
+
+var set3trial = {
+  timeline: facesonly_set3.map((f, i) => ({
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: makeGridWithBorder(facesonly_set, i),
+    trial_duration: 2000,
+    render_on_canvas: true,
+    choices: "NO_KEYS"
+  }))
+};
+timeline.push(set3trial);
+
+var set4trial = {
+  timeline: facesonly_set4.map((f, i) => ({
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: makeGridWithBorder(facesonly_set4, i),
+    trial_duration: 2000,
+    render_on_canvas: true,
+    choices: "NO_KEYS"
+  }))
+};
+timeline.push(set4trial);
+
+var set5trial = {
+timeline: facesonly_set5.map((f, i) => ({
+  type: jsPsychHtmlKeyboardResponse,
+  stimulus: makeGridWithBorder(facesonly_set5, i),
+  trial_duration: 2000,
+  render_on_canvas: true,
+  choices: "NO_KEYS"
+}))
+};
+timeline.push(set5trial);
+
+var set6trial = {
+timeline: facesonly_set6.map((f, i) => ({
+  type: jsPsychHtmlKeyboardResponse,
+  stimulus: makeGridWithBorder(facesonly_set6, i),
+  trial_duration: 2000,
+  render_on_canvas: true,
+  choices: "NO_KEYS"
+}))
+};
+timeline.push(set6trial);
+
+var set7trial = {
+timeline: facesonly_set7.map((f, i) => ({
+  type: jsPsychHtmlKeyboardResponse,
+  stimulus: makeGridWithBorder(facesonly_set7, i),
+  trial_duration: 2000,
+  render_on_canvas: true,
+  choices: "NO_KEYS"
+}))
+};
+timeline.push(set7trial);
+
+var set8trial = {
+timeline: facesonly_set8.map((f, i) => ({
+  type: jsPsychHtmlKeyboardResponse,
+  stimulus: makeGridWithBorder(facesonly_set8, i),
+  trial_duration: 2000,
+  render_on_canvas: true,
+  choices: "NO_KEYS"
+}))
+};
+timeline.push(set8trial);
+
+var set9trial = {
+timeline: facesonly_set9.map((f, i) => ({
+  type: jsPsychHtmlKeyboardResponse,
+  stimulus: makeGridWithBorder(facesonly_set9, i),
+  trial_duration: 2000,
+  render_on_canvas: true,
+  choices: "NO_KEYS"
+}))
+};
+timeline.push(set9trial);
+
+var set10trial = {
+timeline: facesonly_set10.map((f, i) => ({
+  type: jsPsychHtmlKeyboardResponse,
+  stimulus: makeGridWithBorder(facesonly_set10, i),
+  trial_duration: 2000,
+  render_on_canvas: true,
+  choices: "NO_KEYS"
+}))
+};
+timeline.push(set10trial);
+
+var set11trial = {
+timeline: facesonly_set11.map((f, i) => ({
+  type: jsPsychHtmlKeyboardResponse,
+  stimulus: makeGridWithBorder(facesonly_set11, i),
+  trial_duration: 2000,
+  render_on_canvas: true,
+  choices: "NO_KEYS"
+}))
+};
+timeline.push(set11trial);
+
+var set12trial = {
+timeline: facesonly_set12.map((f, i) => ({
+  type: jsPsychHtmlKeyboardResponse,
+  stimulus: makeGridWithBorder(facesonly_set12, i),
+  trial_duration: 2000,
+  render_on_canvas: true,
+  choices: "NO_KEYS"
+}))
+};
+timeline.push(set12trial);
+
+var set13trial = {
+timeline: facesonly_set13.map((f, i) => ({
+  type: jsPsychHtmlKeyboardResponse,
+  stimulus: makeGridWithBorder(facesonly_set13, i),
+  trial_duration: 2000,
+  render_on_canvas: true,
+  choices: "NO_KEYS"
+}))
+};
+timeline.push(set13trial);
+
+var set14trial = {
+timeline: facesonly_set14.map((f, i) => ({
+  type: jsPsychHtmlKeyboardResponse,
+  stimulus: makeGridWithBorder(facesonly_set14, i),
+  trial_duration: 2000,
+  render_on_canvas: true,
+  choices: "NO_KEYS"
+}))
+};
+timeline.push(set14trial);
+
+var set15trial = {
+timeline: facesonly_set15.map((f, i) => ({
+  type: jsPsychHtmlKeyboardResponse,
+  stimulus: makeGridWithBorder(facesonly_set15, i),
+  trial_duration: 2000,
+  render_on_canvas: true,
+  choices: "NO_KEYS"
+}))
+};
+timeline.push(set15trial);
+
+var set16trial = {
+timeline: facesonly_set16.map((f, i) => ({
+  type: jsPsychHtmlKeyboardResponse,
+  stimulus: makeGridWithBorder(facesonly_set16, i),
+  trial_duration: 2000,
+  render_on_canvas: true,
+  choices: "NO_KEYS"
+}))
+};
+timeline.push(set16trial);
+/* Initial study of face-name pairs: subjects are then presented the same faces with names underneath
+and asked to study the name that goes with the face. To ensure that the subject is
+learning the face-name pairs, the examiner points to the face and asks the subject
+to read the name associated with that face. After all 4 items are correctly identiﬁed;
+another 4 face-name pairs are presented until all 16 face-name pairs are studied.
+Subjects are given only one exposure to learn all 16 face-name pairs. */
+
+var facenames_instructions = {
+  type: jsPsychHtmlKeyboardResponse,
+  stimulus:'<p> <strong> Well done! </strong><p>' +
+  ' Your next task will involve learning the names of the people in the pictures you just saw.'+
+  ' As before, a red border will appear on one picture at a time, this indicates the picture you should focus on.' +
+  ' You do not need to press any buttons in this task. When you are ready, please press the spacebar to begin.',
+  choices: " ",
+  post_trial_gap: 1000,
+};
+
+timeline.push(facenames_instructions)
+
+
+var facenamepairs = [
+{stimulus: `<div class="face-container"><img src="C:\Users\mcvc9\Desktop\Cognitive Tasks for SWELDERS\FNR_64\faces\AllFaces\CFD-AF-231-357-N.jpg" class="face-img"><div class="face-name">Charlotte</div></div>`,},
+{stimulus: `<div class="face-container"><img src="C:\Users\mcvc9\Desktop\Cognitive Tasks for SWELDERS\FNR_64\faces\AllFaces\CFD-LF-219-223-N.jpg" class="face-img"><div class="face-name">Avery</div></div>`,},
+{stimulus: `<div class="face-container"><img src="C:\Users\mcvc9\Desktop\Cognitive Tasks for SWELDERS\FNR_64\faces\AllFaces\CFD-BF-209-172-N.jpg" class="face-img"><div class="face-name">Hazel</div></div>`,},
+{stimulus: `<div class="face-container"><img src="C:\Users\mcvc9\Desktop\Cognitive Tasks for SWELDERS\FNR_64\faces\AllFaces\CFD-WF-008-002-N.jpg" class="face-img"><div class="face-name">Layla</div></div>`,},
+{stimulus: `<div class="face-container"><img src="C:\Users\mcvc9\Desktop\Cognitive Tasks for SWELDERS\FNR_64\faces\AllFaces\CFD-WF-245-084-N.jpg" class="face-img"><div class="face-name">Amelia</div></div>`,},
+{stimulus: `<div class="face-container"><img src="C:\Users\mcvc9\Desktop\Cognitive Tasks for SWELDERS\FNR_64\faces\AllFaces\CFD-LF-241-188-N.jpg" class="face-img"><div class="face-name">Emma</div></div>`,},
+{stimulus: `<div class="face-container"><img src="C:\Users\mcvc9\Desktop\Cognitive Tasks for SWELDERS\FNR_64\faces\AllFaces\CFD-BF-019-001-N.jpg" class="face-img"><div class="face-name">Ivy</div></div>`,},
+{stimulus: `<div class="face-container"><img src="C:\Users\mcvc9\Desktop\Cognitive Tasks for SWELDERS\FNR_64\faces\AllFaces\CFD-BF-009-002-N.jpg" class="face-img"><div class="face-name">Nova</div></div>`,},
+{stimulus: `<div class="face-container"><img src="C:\Users\mcvc9\Desktop\Cognitive Tasks for SWELDERS\FNR_64\faces\AllFaces\CFD-WF-011-002-N.jpg" class="face-img"><div class="face-name">Genesis</div></div>`,},
+{stimulus: `<div class="face-container"><img src="C:\Users\mcvc9\Desktop\Cognitive Tasks for SWELDERS\FNR_64\faces\AllFaces\CFD-AF-201-060-N.jpg" class="face-img"><div class="face-name">Victoria</div></div>`,},
+{stimulus: `<div class="face-container"><img src="C:\Users\mcvc9\Desktop\Cognitive Tasks for SWELDERS\FNR_64\faces\AllFaces\CFD-WF-017-003-N.jpg" class="face-img"><div class="face-name">Maya</div></div>`,},
+{stimulus: `<div class="face-container"><img src="C:\Users\mcvc9\Desktop\Cognitive Tasks for SWELDERS\FNR_64\faces\AllFaces\CFD-BF-214-308-N.jpg" class="face-img"><div class="face-name">Sadie</div></div>`,},
+{stimulus: `<div class="face-container"><img src="C:\Users\mcvc9\Desktop\Cognitive Tasks for SWELDERS\FNR_64\faces\AllFaces\CFD-LF-238-154-N.jpg" class="face-img"><div class="face-name">Lillian</div></div>`,},
+{stimulus: `<div class="face-container"><img src="C:\Users\mcvc9\Desktop\Cognitive Tasks for SWELDERS\FNR_64\faces\AllFaces\CFD-BF-254-201-N.jpg" class="face-img"><div class="face-name">Emily</div></div>`,},
+{stimulus: `<div class="face-container"><img src="C:\Users\mcvc9\Desktop\Cognitive Tasks for SWELDERS\FNR_64\faces\AllFaces\CFD-BF-253-202-N.jpg" class="face-img"><div class="face-name">Sophie</div></div>`,},
+{stimulus: `<div class="face-container"><img src="C:\Users\mcvc9\Desktop\Cognitive Tasks for SWELDERS\FNR_64\faces\AllFaces\CFD-LF-202-065-N.jpg" class="face-img"><div class="face-name">Isabella</div></div>`,},
+{stimulus: `<div class="face-container"><img src="C:\Users\mcvc9\Desktop\Cognitive Tasks for SWELDERS\FNR_64\faces\AllFaces\CFD-AF-230-193-N.jpg" class="face-img"><div class="face-name">Mila</div></div>`,},
+{stimulus: `<div class="face-container"><img src="C:\Users\mcvc9\Desktop\Cognitive Tasks for SWELDERS\FNR_64\faces\AllFaces\CFD-LF-210-220-N.jpg" class="face-img"><div class="face-name">Eliana</div></div>`,},
+{stimulus: `<div class="face-container"><img src="C:\Users\mcvc9\Desktop\Cognitive Tasks for SWELDERS\FNR_64\faces\AllFaces\CFD-AF-236-145-N.jpg" class="face-img"><div class="face-name">Lucy</div></div>`,},
+{stimulus: `<div class="face-container"><img src="C:\Users\mcvc9\Desktop\Cognitive Tasks for SWELDERS\FNR_64\faces\AllFaces\CFD-AF-202-122-N.jpg" class="face-img"><div class="face-name">Lily</div></div>`,},
+{stimulus: `<div class="face-container"><img src="C:\Users\mcvc9\Desktop\Cognitive Tasks for SWELDERS\FNR_64\faces\AllFaces\CFD-AF-214-139-N.jpg" class="face-img"><div class="face-name">Nora</div></div>`,},
+{stimulus: `<div class="face-container"><img src="C:\Users\mcvc9\Desktop\Cognitive Tasks for SWELDERS\FNR_64\faces\AllFaces\CFD-LF-220-120-N.jpg" class="face-img"><div class="face-name">Delilah</div></div>`,},
+{stimulus: `<div class="face-container"><img src="C:\Users\mcvc9\Desktop\Cognitive Tasks for SWELDERS\FNR_64\faces\AllFaces\CFD-WF-205-006-N.jpg" class="face-img"><div class="face-name">Riley</div></div>`,},
+{stimulus: `<div class="face-container"><img src="C:\Users\mcvc9\Desktop\Cognitive Tasks for SWELDERS\FNR_64\faces\AllFaces\CFD-BF-244-231-N.jpg" class="face-img"><div class="face-name">Aria</div></div>`,},
+{stimulus: `<div class="face-container"><img src="C:\Users\mcvc9\Desktop\Cognitive Tasks for SWELDERS\FNR_64\faces\AllFaces\CFD-AF-200-228-N.jpg" class="face-img"><div class="face-name">Luna</div></div>`,},
+{stimulus: `<div class="face-container"><img src="C:\Users\mcvc9\Desktop\Cognitive Tasks for SWELDERS\FNR_64\faces\AllFaces\CFD-WF-022-017-N.jpg" class="face-img"><div class="face-name">Valentina</div></div>`,},
+{stimulus: `<div class="face-container"><img src="C:\Users\mcvc9\Desktop\Cognitive Tasks for SWELDERS\FNR_64\faces\AllFaces\CFD-AF-222-134-N.jpg" class="face-img"><div class="face-name">Ava</div></div>`,},
+{stimulus: `<div class="face-container"><img src="C:\Users\mcvc9\Desktop\Cognitive Tasks for SWELDERS\FNR_64\faces\AllFaces\CFD-WF-236-107-N.jpg" class="face-img"><div class="face-name">Chloe</div></div>`,},
+{stimulus: `<div class="face-container"><img src="C:\Users\mcvc9\Desktop\Cognitive Tasks for SWELDERS\FNR_64\faces\AllFaces\CFD-BF-225-192-N.jpg" class="face-img"><div class="face-name">Camila</div></div>`,},
+{stimulus: `<div class="face-container"><img src="C:\Users\mcvc9\Desktop\Cognitive Tasks for SWELDERS\FNR_64\faces\AllFaces\CFD-LF-227-054-N.jpg" class="face-img"><div class="face-name">Penelope</div></div>`,},
+{stimulus: `<div class="face-container"><img src="C:\Users\mcvc9\Desktop\Cognitive Tasks for SWELDERS\FNR_64\faces\AllFaces\CFD-WF-213-031-N.jpg" class="face-img"><div class="face-name">Violet</div></div>`,},
+{stimulus: `<div class="face-container"><img src="C:\Users\mcvc9\Desktop\Cognitive Tasks for SWELDERS\FNR_64\faces\AllFaces\CFD-LF-233-277-N.jpg" class="face-img"><div class="face-name">Zoe</div></div>`,},
+{stimulus: `<div class="face-container"><img src="C:\Users\mcvc9\Desktop\Cognitive Tasks for SWELDERS\FNR_64\faces\AllFaces\CFD-WM-019-003-N.jpg" class="face-img"><div class="face-name">Liam</div></div>`,},
+{stimulus: `<div class="face-container"><img src="C:\Users\mcvc9\Desktop\Cognitive Tasks for SWELDERS\FNR_64\faces\AllFaces\CFD-WM-201-063-N.jpg" class="face-img"><div class="face-name">Matthew</div></div>`,},
+{stimulus: `<div class="face-container"><img src="C:\Users\mcvc9\Desktop\Cognitive Tasks for SWELDERS\FNR_64\faces\AllFaces\CFD-LM-216-082-N.jpg" class="face-img"><div class="face-name">Carter</div></div>`,},
+{stimulus: `<div class="face-container"><img src="C:\Users\mcvc9\Desktop\Cognitive Tasks for SWELDERS\FNR_64\faces\AllFaces\CFD-BM-013-002-N.jpg" class="face-img"><div class="face-name">Theodore</div></div>`,},
+{stimulus: `<div class="face-container"><img src="C:\Users\mcvc9\Desktop\Cognitive Tasks for SWELDERS\FNR_64\faces\AllFaces\CFD-AM-246-184-N.jpg" class="face-img"><div class="face-name">Alexander</div></div>`,},
+{stimulus: `<div class="face-container"><img src="C:\Users\mcvc9\Desktop\Cognitive Tasks for SWELDERS\FNR_64\faces\AllFaces\CFD-WM-018-002-N.jpg" class="face-img"><div class="face-name">Wesley</div></div>`,},
+{stimulus: `<div class="face-container"><img src="C:\Users\mcvc9\Desktop\Cognitive Tasks for SWELDERS\FNR_64\faces\AllFaces\CFD-BM-011-016-N.jpg" class="face-img"><div class="face-name">Oliver</div></div>`,},
+{stimulus: `<div class="face-container"><img src="C:\Users\mcvc9\Desktop\Cognitive Tasks for SWELDERS\FNR_64\faces\AllFaces\CFD-LM-251-073-N.jpg" class="face-img"><div class="face-name">Mason</div></div>`,},
+{stimulus: `<div class="face-container"><img src="C:\Users\mcvc9\Desktop\Cognitive Tasks for SWELDERS\FNR_64\faces\AllFaces\CFD-WM-029-023-N.jpg" class="face-img"><div class="face-name">Leo</div></div>`,},
+{stimulus: `<div class="face-container"><img src="C:\Users\mcvc9\Desktop\Cognitive Tasks for SWELDERS\FNR_64\faces\AllFaces\CFD-AM-249-163-N.jpg" class="face-img"><div class="face-name">Noah</div></div>`,},
+{stimulus: `<div class="face-container"><img src="C:\Users\mcvc9\Desktop\Cognitive Tasks for SWELDERS\FNR_64\faces\AllFaces\CFD-WM-258-125-N.jpg" class="face-img"><div class="face-name">Nathan</div></div>`,},
+{stimulus: `<div class="face-container"><img src="C:\Users\mcvc9\Desktop\Cognitive Tasks for SWELDERS\FNR_64\faces\AllFaces\CFD-AM-210-035-N.jpg" class="face-img"><div class="face-name">Aiden</div></div>`,},
+{stimulus: `<div class="face-container"><img src="C:\Users\mcvc9\Desktop\Cognitive Tasks for SWELDERS\FNR_64\faces\AllFaces\CFD-AM-223-138-N.jpg" class="face-img"><div class="face-name">Roman</div></div>`,},
+{stimulus: `<div class="face-container"><img src="C:\Users\mcvc9\Desktop\Cognitive Tasks for SWELDERS\FNR_64\faces\AllFaces\CFD-AM-212-050-N.jpg" class="face-img"><div class="face-name">Cooper</div></div>`,},
+{stimulus: `<div class="face-container"><img src="C:\Users\mcvc9\Desktop\Cognitive Tasks for SWELDERS\FNR_64\faces\AllFaces\CFD-AM-238-269-N.jpg" class="face-img"><div class="face-name">Michael</div></div>`,},
+{stimulus: `<div class="face-container"><img src="C:\Users\mcvc9\Desktop\Cognitive Tasks for SWELDERS\FNR_64\faces\AllFaces\CFD-BM-044-001-N.jpg" class="face-img"><div class="face-name">Isaac</div></div>`,},
+{stimulus: `<div class="face-container"><img src="C:\Users\mcvc9\Desktop\Cognitive Tasks for SWELDERS\FNR_64\faces\AllFaces\CFD-WM-023-001-N.jpg" class="face-img"><div class="face-name">Grayson</div></div>`,},
+{stimulus: `<div class="face-container"><img src="C:\Users\mcvc9\Desktop\Cognitive Tasks for SWELDERS\FNR_64\faces\AllFaces\CFD-BM-027-001-N.jpg" class="face-img"><div class="face-name">Santiago</div></div>`,},
+{stimulus: `<div class="face-container"><img src="C:\Users\mcvc9\Desktop\Cognitive Tasks for SWELDERS\FNR_64\faces\AllFaces\CFD-LM-237-264-N.jpg" class="face-img"><div class="face-name">Samuel</div></div>`,},
+{stimulus: `<div class="face-container"><img src="C:\Users\mcvc9\Desktop\Cognitive Tasks for SWELDERS\FNR_64\faces\AllFaces\CFD-BM-019-002-N.jpg" class="face-img"><div class="face-name">Luke</div></div>`,},
+{stimulus: `<div class="face-container"><img src="C:\Users\mcvc9\Desktop\Cognitive Tasks for SWELDERS\FNR_64\faces\AllFaces\CFD-LM-232-204-N.jpg" class="face-img"><div class="face-name">Daniel</div></div>`,},
+{stimulus: `<div class="face-container"><img src="C:\Users\mcvc9\Desktop\Cognitive Tasks for SWELDERS\FNR_64\faces\AllFaces\CFD-LM-206-204-N.jpg" class="face-img"><div class="face-name">Thomas</div></div>`,},
+{stimulus: `<div class="face-container"><img src="C:\Users\mcvc9\Desktop\Cognitive Tasks for SWELDERS\FNR_64\faces\AllFaces\CFD-WM-034-030-N.jpg" class="face-img"><div class="face-name">James</div></div>`,},
+{stimulus: `<div class="face-container"><img src="C:\Users\mcvc9\Desktop\Cognitive Tasks for SWELDERS\FNR_64\faces\AllFaces\CFD-AM-219-101-N.jpg" class="face-img"><div class="face-name">Julian</div></div>`,},
+{stimulus: `<div class="face-container"><img src="C:\Users\mcvc9\Desktop\Cognitive Tasks for SWELDERS\FNR_64\faces\AllFaces\CFD-LM-222-239-N.jpg" class="face-img"><div class="face-name">Benjamin</div></div>`,},
+{stimulus: `<div class="face-container"><img src="C:\Users\mcvc9\Desktop\Cognitive Tasks for SWELDERS\FNR_64\faces\AllFaces\CFD-BM-249-235-N.jpg" class="face-img"><div class="face-name">Henry</div></div>`,},
+{stimulus: `<div class="face-container"><img src="C:\Users\mcvc9\Desktop\Cognitive Tasks for SWELDERS\FNR_64\faces\AllFaces\CFD-AM-233-236-N.jpg" class="face-img"><div class="face-name">Cameron</div></div>`,},
+{stimulus: `<div class="face-container"><img src="C:\Users\mcvc9\Desktop\Cognitive Tasks for SWELDERS\FNR_64\faces\AllFaces\CFD-LM-246-087-N.jpg" class="face-img"><div class="face-name">Thiago</div></div>`,},
+{stimulus: `<div class="face-container"><img src="C:\Users\mcvc9\Desktop\Cognitive Tasks for SWELDERS\FNR_64\faces\AllFaces\CFD-BM-029-024-N.jpg" class="face-img"><div class="face-name">Dylan</div></div>`,},
+{stimulus: `<div class="face-container"><img src="C:\Users\mcvc9\Desktop\Cognitive Tasks for SWELDERS\FNR_64\faces\AllFaces\CFD-LM-248-089-N.jpg" class="face-img"><div class="face-name">Ezra</div></div>`,},
+{stimulus: `<div class="face-container"><img src="C:\Users\mcvc9\Desktop\Cognitive Tasks for SWELDERS\FNR_64\faces\AllFaces\CFD-BM-017-021-N.jpg" class="face-img"><div class="face-name">Gabriel</div></div>`,},
+{stimulus: `<div class="face-container"><img src="C:\Users\mcvc9\Desktop\Cognitive Tasks for SWELDERS\FNR_64\faces\AllFaces\CFD-WM-210-057-N.jpg" class="face-img"><div class="face-name">Luca</div></div>`,},
+]
+
+// shuffle face/names
+var facenamepairs_shuffled = jsPsych.randomization.shuffle(facenamepairs);
+console.log('facenamepairs_shuffled:', facenamepairs_shuffled)
+
+// split into 16 sets of 4
+var facenames_set1 = facenamepairs_shuffled.slice(0, 4);
+var facenames_set2 = facenamepairs_shuffled.slice(4, 8);
+var facenames_set3 = facenamepairs_shuffled.slice(8, 12);
+var facenames_set4 = facenamepairs_shuffled.slice(12, 16);
+var facenames_set5 = facenamepairs_shuffled.slice(16, 20);
+var facenames_set6 = facenamepairs_shuffled.slice(20, 24);
+var facenames_set7 = facenamepairs_shuffled.slice(24, 28);
+var facenames_set8 = facenamepairs_shuffled.slice(28, 32);
+var facenames_set9 = facenamepairs_shuffled.slice(32, 36);
+var facenames_set10 = facenamepairs_shuffled.slice(36, 40);
+var facenames_set11 = facenamepairs_shuffled.slice(40, 44);
+var facenames_set12 = facenamepairs_shuffled.slice(44, 48);
+var facenames_set13 = facenamepairs_shuffled.slice(48, 52);
+var facenames_set14 = facenamepairs_shuffled.slice(52, 56);
+var facenames_set15 = facenamepairs_shuffled.slice(56, 60);
+var facenames_set16 = facenamepairs_shuffled.slice(60, 64);
+
+
+console.log("FaceNames Set 1:", facenames_set1);
+console.log("FaceNames Set 2:", facenames_set2);
+console.log("FaceNames Set 3:", facenames_set3);
+console.log("FaceNames Set 4:", facenames_set4);
+
+
+var facename_set1trial = {
+  timeline: facenames_set1.map((f, i) => ({
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: makeGridWithBorder(facenames_set1, i),
+    trial_duration: 2000,
+    render_on_canvas: true,
+    choices: "NO_KEYS"
+  }))
+};
+timeline.push(facename_set1trial);
+
+var facename_set2trial = {
+  timeline: facenames_set2.map((f, i) => ({
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: makeGridWithBorder(facenames_set2, i),
+    trial_duration: 2000,
+    render_on_canvas: true,
+    choices: "NO_KEYS"
+  }))
+};
+timeline.push(facename_set2trial);
+
+var facename_set3trial = {
+  timeline: facenames_set3.map((f, i) => ({
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: makeGridWithBorder(facenames_set3, i),
+    trial_duration: 2000,
+    render_on_canvas: true,
+    choices: "NO_KEYS"
+  }))
+};
+timeline.push(facename_set3trial);
+
+var facename_set4trial = {
+  timeline: facenames_set4.map((f, i) => ({
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: makeGridWithBorder(facenames_set4, i),
+    trial_duration: 2000,
+    render_on_canvas: true,
+    choices: "NO_KEYS"
+  }))
+};
+timeline.push(facename_set4trial);
+
+var facename_set5trial = {
+  timeline: facenames_set5.map((f, i) => ({
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: makeGridWithBorder(facenames_set5, i),
+    trial_duration: 2000,
+    render_on_canvas: true,
+    choices: "NO_KEYS"
+  }))
+};
+timeline.push(facename_set5trial);
+
+var facename_set6trial = {
+  timeline: facenames_set6.map((f, i) => ({
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: makeGridWithBorder(facenames_set6, i),
+    trial_duration: 2000,
+    render_on_canvas: true,
+    choices: "NO_KEYS"
+  }))
+};
+timeline.push(facename_set6trial);
+
+var facename_set7trial = {
+  timeline: facenames_set7.map((f, i) => ({
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: makeGridWithBorder(facenames_set7, i),
+    trial_duration: 2000,
+    render_on_canvas: true,
+    choices: "NO_KEYS"
+  }))
+};
+timeline.push(facename_set7trial);
+
+var facename_set8trial = {
+  timeline: facenames_set8.map((f, i) => ({
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: makeGridWithBorder(facenames_set8, i),
+    trial_duration: 2000,
+    render_on_canvas: true,
+    choices: "NO_KEYS"
+  }))
+};
+timeline.push(facename_set8trial);
+
+var facename_set9trial = {
+  timeline: facenames_set9.map((f, i) => ({
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: makeGridWithBorder(facenames_set9, i),
+    trial_duration: 2000,
+    render_on_canvas: true,
+    choices: "NO_KEYS"
+  }))
+};
+timeline.push(facename_set9trial);
+
+var facename_set10trial = {
+  timeline: facenames_set10.map((f, i) => ({
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: makeGridWithBorder(facenames_set10, i),
+    trial_duration: 2000,
+    render_on_canvas: true,
+    choices: "NO_KEYS"
+  }))
+};
+timeline.push(facename_set10trial);
+
+var facename_set11trial = {
+  timeline: facenames_set11.map((f, i) => ({
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: makeGridWithBorder(facenames_set11, i),
+    trial_duration: 2000,
+    render_on_canvas: true,
+    choices: "NO_KEYS"
+  }))
+};
+timeline.push(facename_set11trial);
+
+var facename_set12trial = {
+  timeline: facenames_set12.map((f, i) => ({
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: makeGridWithBorder(facenames_set12, i),
+    trial_duration: 2000,
+    render_on_canvas: true,
+    choices: "NO_KEYS"
+  }))
+};
+timeline.push(facename_set12trial);
+
+var facename_set13trial = {
+  timeline: facenames_set13.map((f, i) => ({
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: makeGridWithBorder(facenames_set13, i),
+    trial_duration: 2000,
+    render_on_canvas: true,
+    choices: "NO_KEYS"
+  }))
+};
+timeline.push(facename_set13trial);
+
+var facename_set14trial = {
+  timeline: facenames_set14.map((f, i) => ({
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: makeGridWithBorder(facenames_set14, i),
+    trial_duration: 2000,
+    render_on_canvas: true,
+    choices: "NO_KEYS"
+  }))
+};
+timeline.push(facename_set14trial);
+
+var facename_set15trial = {
+  timeline: facenames_set15.map((f, i) => ({
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: makeGridWithBorder(facenames_set15, i),
+    trial_duration: 2000,
+    render_on_canvas: true,
+    choices: "NO_KEYS"
+  }))
+};
+timeline.push(facename_set15trial);
+
+var facename_set16trial = {
+  timeline: facenames_set16.map((f, i) => ({
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: makeGridWithBorder(facenames_set16, i),
+    trial_duration: 2000,
+    render_on_canvas: true,
+    choices: "NO_KEYS"
+  }))
+};
+timeline.push(facename_set16trial);
+
+/*Initial recall of face-name pairs: the subjects are then shown the face and asked to recall the name
+that goes with the face. The correct number of face-name pairs is recorded as an
+initial learning score for names (ILN).*/
+/* Followed Nathan's paper for this part. This is a training session to ensure they have learnt
+the task before the recall - which will happen after one of the other tasks eg trial making or RT*/
+
+
+
+var error_faces =[];
+
+
+var facename_test_instructions = {
+  type: jsPsychHtmlKeyboardResponse,
+  stimulus:'<p> <strong> Well done! </strong><p>' +
+  ' You will now be shown a picture of one of the faces you saw and asked to remember the name that goes with the face.'+
+  ' Please type the name in the text box provided and click the "next" button when you are ready to move on to the next picture.' +
+  ' Do not leave any responses blank, write a response even if you are unsure if it is correct.'+
+  ' When you are ready, please press the spacebar to begin.',
+  choices: " ",
+  post_trial_gap: 1000,
+};
+timeline.push(facename_test_instructions);
+
+
+
+let allfaces_withdata = [
+{text: "<img src='faces\AllFaces\CFD-AF-231-357-N.jpg}' style='width:400px; height:auto;> Name: % Charlotte %", repeats: 0},
+{text: "<img src='faces\AllFaces\CFD-LF-219-223-N.jpg}' style='width:400px; height:auto;> Name: % Avery %", repeats: 0},
+{text: "<img src='faces\AllFaces\CFD-BF-209-172-N.jpg}' style='width:400px; height:auto;> Name: % Hazel %", repeats: 0},
+{text: "<img src='faces\AllFaces\CFD-WF-008-002-N.jpg}' style='width:400px; height:auto;> Name: % Layla %", repeats: 0},
+{text: "<img src='faces\AllFaces\CFD-WF-245-084-N.jpg}' style='width:400px; height:auto;> Name: % Amelia %", repeats: 0},
+{text: "<img src='faces\AllFaces\CFD-LF-241-188-N.jpg}' style='width:400px; height:auto;> Name: % Emma %", repeats: 0},
+{text: "<img src='faces\AllFaces\CFD-BF-019-001-N.jpg}' style='width:400px; height:auto;> Name: % Ivy %", repeats: 0},
+{text: "<img src='faces\AllFaces\CFD-BF-009-002-N.jpg}' style='width:400px; height:auto;> Name: % Nova %", repeats: 0},
+{text: "<img src='faces\AllFaces\CFD-WF-011-002-N.jpg}' style='width:400px; height:auto;> Name: % Genesis %", repeats: 0},
+{text: "<img src='faces\AllFaces\CFD-AF-201-060-N.jpg}' style='width:400px; height:auto;> Name: % Victoria %", repeats: 0},
+{text: "<img src='faces\AllFaces\CFD-WF-017-003-N.jpg}' style='width:400px; height:auto;> Name: % Maya %", repeats: 0},
+{text: "<img src='faces\AllFaces\CFD-BF-214-308-N.jpg}' style='width:400px; height:auto;> Name: % Sadie %", repeats: 0},
+{text: "<img src='faces\AllFaces\CFD-LF-238-154-N.jpg}' style='width:400px; height:auto;> Name: % Lillian %", repeats: 0},
+{text: "<img src='faces\AllFaces\CFD-BF-254-201-N.jpg}' style='width:400px; height:auto;> Name % Emily %", repeats: 0},
+{text: "<img src='faces\AllFaces\CFD-BF-253-202-N.jpg}' style='width:400px; height:auto;> Name % Sophie %", repeats: 0},
+{text: "<img src='faces\AllFaces\CFD-LF-202-065-N.jpg}' style='width:400px; height:auto;> Name % Isabella %", repeats: 0},
+{text: "<img src='faces\AllFaces\CFD-AF-230-193-N.jpg}' style='width:400px; height:auto;> Name % Mila %", repeats: 0},
+{text: "<img src='faces\AllFaces\CFD-LF-210-220-N.jpg}' style='width:400px; height:auto;> Name % Eliana %", repeats: 0},
+{text: "<img src='faces\AllFaces\CFD-AF-236-145-N.jpg}' style='width:400px; height:auto;> Name % Lucy %", repeats: 0},
+{text: "<img src='faces\AllFaces\CFD-AF-202-122-N.jpg}' style='width:400px; height:auto;> Name % Lily %", repeats: 0},
+{text: "<img src='faces\AllFaces\CFD-AF-214-139-N.jpg}' style='width:400px; height:auto;> Name % Nora %", repeats: 0},
+{text: "<img src='faces\AllFaces\CFD-LF-220-120-N.jpg}' style='width:400px; height:auto;> Name % Delilah %", repeats: 0},
+{text: "<img src='faces\AllFaces\CFD-WF-205-006-N.jpg}' style='width:400px; height:auto;> Name % Riley %", repeats: 0},
+{text: "<img src='faces\AllFaces\CFD-BF-244-231-N.jpg}' style='width:400px; height:auto;> Name % Aria %", repeats: 0},
+{text: "<img src='faces\AllFaces\CFD-AF-200-228-N.jpg}' style='width:400px; height:auto;> Name % Luna %", repeats: 0},
+{text: "<img src='faces\AllFaces\CFD-WF-022-017-N.jpg}' style='width:400px; height:auto;> Name % Valentina %", repeats: 0},
+{text: "<img src='faces\AllFaces\CFD-AF-222-134-N.jpg}' style='width:400px; height:auto;> Name % Ava %", repeats: 0},
+{text: "<img src='faces\AllFaces\CFD-WF-236-107-N.jpg}' style='width:400px; height:auto;> Name % Chloe %", repeats: 0},
+{text: "<img src='faces\AllFaces\CFD-BF-225-192-N.jpg}' style='width:400px; height:auto;> Name % Camila %", repeats: 0},
+{text: "<img src='faces\AllFaces\CFD-LF-227-054-N.jpg}' style='width:400px; height:auto;> Name % Penelope %", repeats: 0},
+{text: "<img src='faces\AllFaces\CFD-WF-213-031-N.jpg}' style='width:400px; height:auto;> Name % Violet %", repeats: 0},
+{text: "<img src='faces\AllFaces\CFD-LF-233-277-N.jpg}' style='width:400px; height:auto;> Name % Zoe %", repeats: 0},
+{text: "<img src='faces\AllFaces\CFD-WM-019-003-N.jpg}' style='width:400px; height:auto;> Name % Liam %", repeats: 0},
+{text: "<img src='faces\AllFaces\CFD-WM-201-063-N.jpg}' style='width:400px; height:auto;> Name % Matthew %", repeats: 0},
+{text: "<img src='faces\AllFaces\CFD-LM-216-082-N.jpg}' style='width:400px; height:auto;> Name % Carter %", repeats: 0},
+{text: "<img src='faces\AllFaces\CFD-BM-013-002-N.jpg}' style='width:400px; height:auto;> Name % Theodore %", repeats: 0},
+{text: "<img src='faces\AllFaces\CFD-WM-018-002-N.jpg}' style='width:400px; height:auto;> Name: % Alexander %", repeats: 0},
+{text: "<img src='faces\AllFaces\CFD-BM-011-016-N.jpg}' style='width:400px; height:auto;> Name: % Oliver %", repeats: 0},
+{text: "<img src='faces\AllFaces\CFD-LM-251-073-N.jpg}' style='width:400px; height:auto;> Name: % Mason %", repeats: 0},
+{text: "<img src='faces\AllFaces\CFD-WM-029-023-N.jpg}' style='width:400px; height:auto;> Name: % Leo %", repeats: 0},
+{text: "<img src='faces\AllFaces\CFD-AM-249-163-N.jpg}' style='width:400px; height:auto;> Name: % Noah %", repeats: 0},
+{text: "<img src='faces\AllFaces\CFD-WM-258-125-N.jpg}' style='width:400px; height:auto;> Name: % Nathan %", repeats: 0},
+{text: "<img src='faces\AllFaces\CFD-AM-210-035-N.jpg}' style='width:400px; height:auto;> Name: % Aiden %", repeats: 0},
+{text: "<img src='faces\AllFaces\CFD-AM-223-138-N.jpg}' style='width:400px; height:auto;> Name: % Roman %", repeats: 0},
+{text: "<img src='faces\AllFaces\CFD-AM-212-050-N.jpg}' style='width:400px; height:auto;> Name: % Cooper %", repeats: 0},
+{text: "<img src='faces\AllFaces\CFD-AM-238-269-N.jpg}' style='width:400px; height:auto;> Name: % Michael %", repeats: 0},
+{text: "<img src='faces\AllFaces\CFD-BM-044-001-N.jpg}' style='width:400px; height:auto;> Name: % Isaac %", repeats: 0},
+{text: "<img src='faces\AllFaces\CFD-WM-023-001-N.jpg}' style='width:400px; height:auto;> Name: % Grayson %", repeats: 0},
+{text: "<img src='faces\AllFaces\CFD-BM-027-001-N.jpg}' style='width:400px; height:auto;> Name: % Santiago %", repeats: 0},
+{text: "<img src='faces\AllFaces\CFD-LM-237-264-N.jpg}' style='width:400px; height:auto;> Name: % Samuel %", repeats: 0},
+{text: "<img src='faces\AllFaces\CFD-BM-019-002-N.jpg}' style='width:400px; height:auto;> Name: % Luke %", repeats: 0},
+{text: "<img src='faces\AllFaces\CFD-LM-232-204-N.jpg}' style='width:400px; height:auto;> Name: % Daniel %", repeats: 0},
+{text: "<img src='faces\AllFaces\CFD-LM-206-204-N.jpg}' style='width:400px; height:auto;> Name: % Thomas %", repeats: 0},
+{text: "<img src='faces\AllFaces\CFD-WM-034-030-N.jpg}' style='width:400px; height:auto;> Name: % James %",}, repeats: 0
+{text: "<img src='faces\AllFaces\CFD-AM-219-101-N.jpg}' style='width:400px; height:auto;> Name: % Julian %", repeats: 0},
+{text: "<img src='faces\AllFaces\CFD-LM-222-239-N.jpg}' style='width:400px; height:auto;> Name: % Benjamin %", repeats: 0},
+{text: "<img src='faces\AllFaces\CFD-BM-249-235-N.jpg}' style='width:400px; height:auto;> Name: % Henry %", repeats: 0},
+{text: "<img src='faces\AllFaces\CFD-AM-233-236-N.jpg}' style='width:400px; height:auto;> Name: % Cameron %", repeats: 0},
+{text: "<img src='faces\AllFaces\CFD-LM-246-087-N.jpg}' style='width:400px; height:auto;> Name: % Thiago %", repeats: 0},
+{text: "<img src='faces\AllFaces\CFD-BM-029-024-N.jpg}' style='width:400px; height:auto;> Name: % Dylan %", repeats: 0},
+{text: "<img src='faces\AllFaces\CFD-LM-248-089-N.jpg}' style='width:400px; height:auto;> Name: % Ezra %", repeats: 0},
+{text: "<img src='faces\AllFaces\CFD-BM-017-021-N.jpg}' style='width:400px; height:auto;> Name: % Gabriel %", repeats: 0},
+{text: "<img src='faces\AllFaces\CFD-WM-210-057-N.jpg}' style='width:400px; height:auto;> Name: % Luca %", repeats: 0},
+];
+
+var allfaceswithdata_shuffled_fortest = jsPsych.randomization.shuffle(allfaceswithdata);
+
+var MAX_REPEATS = 1;
+
+var facename_test = {
+  timeline: allfaceswithdata_shuffled_fortest.map((f, i) => {
+    let correct_name = f.text.match(/%([^%]+)%/)[1].trim();
+    return {
+      type: 'cloze',
+      text: f.text,
+      check_answers: true,
+      button_text: 'Next',
+      mistake_fn: function(){
+        alert(`Incorrect answer. The correct answer is ${correct_name}.`);
+        on_finish: function(data){
+          if(!data.correct){
+            if(f.repeats < MAX_REPEATS){
+              f.repeats++;
+              let rand_index = Math.floor(
+                Math.random() * (allfaceswithdata_shuffled_fortest.length - i)
+              ) + i + 1;
+            allfaceswithdata_shuffled_fortest.splice(rand_index, 0, f);          if(!data.correct){
+            // random position in the remaining timeline
+            let rand_index = Math.floor(Math.random() * allfaceswithdata_shuffled_fortest.length);
+            // reinsert stimulus at that position
+            allfaceswithdata_shuffled_fortestt.splice(rand_index, 0, f);
+          },
+        },
+      },
+    },
+
+timeline.push(facename_test);
+
+// Insert a different task HERE
+
+// face name pairs test (baseline meansure)
+
+var allfaceswithdata_shuffled_fortest2 = jsPsych.randomization.shuffle(allfaceswithdata);
+
+var facename_baselinetest = {
+  timeline: allfaceswithdata_shuffled_fortest2.map((f, i) => {
+    let correct_name = f.text.match(/%([^%]+)%/)[1].trim();
+    return {
+      type: 'cloze',
+      text: f.text,
+      check_answers: true,
+      button_text: 'Next',
+          },
+        },
+      },
+
+timeline.push(facename_baselinetest);
+
+
+jsPsych.run(timeline)
+console.log('timeline:', timeline),
+initJsPsych({
+  timeline: timeline,
+  preload_images: allfaces, /*["faces/AllFaces/CFD-AF-200-228-N.jpg", "faces/AllFaces/CFD-AF-236-145-N.jpg", "faces/AllFaces/CFD-AM-223-138-N.jpg", "faces/AllFaces/CFD-BF-225-192-N.jpg", "faces/AllFaces/CFD-BM-019-002-N.jpg",
+  "faces/AllFaces/CFD-BM-044-001-N.jpg", "faces/AllFaces/CFD-LF-219-223-N.jpg", "faces/AllFaces/CFD-LF-241-188-N.jpg", "faces/AllFaces/CFD-LM-251-073-N.jpg", "faces/AllFaces/CFD-WF-245-084-N.jpg",
+  "faces/AllFaces/CFD-WM-023-001-N.jpg", "faces/AllFaces/CFD-WM-258-125-N.jpg"],*/
+  use_webaudio: false,
+  show_progress_bar: true,
+  on_finish: function(){
+    jsPsych.data.displayData();
+      // Make sure that participant id is the first response (thats what values[0] gets)
+    ptc_id = JSON.parse(jsPsych.data.get().select('responses').values[0])['participant id'];
+    saveData("SWELDERS_FNR_Session1_" + ptc_id + '_'+ Date.now().toString(), jsPsych.data.get().csv());},
+
+  });
+
+
+  </script>
+</html>

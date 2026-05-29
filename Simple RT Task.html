@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Reaction Time Task</title>
+    <script src="https://unpkg.com/jspsych@8.2.1"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@2.1.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@2.1.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-survey-html-form@2.1.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-fullscreen@2.1.0"></script>
+    <link href="https://unpkg.com/jspsych@8.2.1/css/jspsych.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body></body>
+  <script>
+
+
+  /* initialize jsPsych */
+var jsPsych = initJsPsych({
+  override_safe_mode: true,
+  on_finish: function() {
+    jsPsych.data.displayData();
+  }
+
+});
+
+/* create timeline */
+var timeline = [];
+
+/* preload images */
+/*var preload = {
+  type: jsPsychPreload,
+  images: ['RTrepo\LightsOff.png', 'RTrepo\GreenLight.png', 'C:\Users\mcvc9\Desktop\Cognitive Tasks for SWELDERS Pilot\RTrepo\RedLight.png']
+
+};
+timeline.push(preload);*/
+
+// need this for file saving
+var participant_id = {
+  type: jsPsychSurveyHtmlForm,
+  html:
+  "<p> Before we begin the study please type:" +
+  "<p> Your participant ID <input name='participant id' type='text'>" +
+  "<p> Once you have done this, press continue. The next screen will ask you "+
+  "<p> if you want to switch to fullscreen mode. Please allow the change.</p>",
+	test_part: 'id'
+};
+
+var full = {
+ type: jsPsychFullscreen,
+ fullscreen_mode: true,
+};
+timeline.push(full);
+
+/* define welcome message trial */
+var welcome = {
+  type: jsPsychHtmlKeyboardResponse,
+  stimulus: "Welcome! The following is a reaction time task, we will be testing the speed of your responses. Press any key to continue."
+};
+timeline.push(welcome);
+
+
+/* define instructions trial */
+var instructions = {
+  type: jsPsychHtmlKeyboardResponse,
+  stimulus: `
+
+    <p>In the following task a stop light will appear on the screen.</p>
+    <p>If the light is <strong><font color="green"> GREEN </strong></font> press the <strong><font color="green"> P KEY </strong></font>
+    with your <strong>right index finger</strong> as fast as you can. Think of this key as your gas pedal.</p>
+<div style='width: 1000px;'>
+    <div style='float: left;'><img src='RTStimuli/RHand_Green_Q.png' style="width:500px;height:300px;"></img></div>
+    <div style='float: right;'><img src='RTStimuli/GreenLight.png' style="width:500px;height:300px;"></img></div>
+</div>
+    <p>If the light is <strong><font color="red"> RED</strong></font>, press the <strong><font color="red">Q KEY</strong></font>
+    with your <strong>left index finger</strong> as fast as you can, think of this as your brake pedal.</p>
+<div style='width: 1000px;'>
+    <div style='float: left;'><img src='RTStimuli/RedLight.png' style="width:500px;height:300px;"></img></div>
+    <div style='float: right;'><img src='RTStimuli/LHand_Red_P.png'style="width:500px;height:300px;"></img></div>
+</div>
+<div style='width: 1000px;'>
+    <p>If the lights are <strong> OFF </strong>, do not press any keys.</p>
+</div>
+    <div style='float: center;'><img src='RTStimuli/LightsOff.png'style="width:500px;height:300px;"></img></div>
+    <p> Let's have a practice run! When you are ready to start practicing, press the <strong>SPACEBAR.</strong></p>
+
+  `,
+  choices: " ",
+  post_trial_gap: 1000
+};
+timeline.push(instructions);
+
+
+
+var practice = {
+    type: jsPsychImageKeyboardResponse,
+    //post_trial_gap: 300,
+    render_on_canvas: true,
+    //response_ends_trial: true,
+    timeline: [
+      {stimulus:'RTStimuli/GreenLight.png', choices: ['p'], response_ends_trial: true, data: { test_part: 'practice', correct_response: 'p' }, },
+      {stimulus:'RTStimuli/LightsOff.png', choices: "NO_KEYS", trial_duration: 500, data: { test_part: 'practice', correct_response:"NO_KEYS",choices: "NO_KEYS" }, },
+      {stimulus:'RTStimuli/RedLight.png', choices: ['q'], response_ends_trial: true, data: { test_part: 'practice', correct_response: 'q' }, },
+      {stimulus:'RTStimuli/LightsOff.png', choices: "NO_KEYS", trial_duration: 500, data: { test_part: 'practice', correct_response:"NO_KEYS", choices: "NO_KEYS" }, },
+      {stimulus:'RTStimuli/GreenLight.png',  choices: ['p'], response_ends_trial: true, data: { test_part: 'practice', correct_response: 'p' }, },
+      {stimulus:'RTStimuli/LightsOff.png', choices: "NO_KEYS", trial_duration: 500, data: { test_part: 'practice', correct_response:"NO_KEYS", choices: "NO_KEYS" }, },
+      {stimulus:'RTStimuli/RedLight.png', choices: ['q'], response_ends_trial: true, data: { test_part: 'practice', correct_response: 'q' }, },
+],
+};
+timeline.push(practice);
+
+var instructions_2 = {
+  type: jsPsychHtmlKeyboardResponse,
+  stimulus: `
+    <p></strong> Well done! </p></strong>
+    <p>You are now ready to move on to the task. It will be the same as the practice task but longer.</p>
+    <p>When you are ready to start the task, press the <strong>SPACEBAR.</strong></p>
+  `,
+  choices: " ",
+  post_trial_gap: 1000
+};
+timeline.push(instructions_2);
+
+/*var RT_Task = {
+    type: jsPsychImageKeyboardResponse,
+    post_trial_gap: 300,
+    render_on_canvas: true,
+    response_ends_trial: true,
+    timeline: [
+      {stimulus:'RTStimuli/GreenLight.png', choices: ['p'], data: { test_part: 'practice', correct_response: 'p' }, },
+      {stimulus:'RTStimuli/RedLight.png', choices: ['q'], data: { test_part: 'practice', correct_response: 'q' }, },
+      {stimulus:'RTStimuli/GreenLight.png',  choices: ['p'], data: { test_part: 'practice', correct_response: 'p' }, },
+      {stimulus:'RTStimuli/RedLight.png', choices: ['q'], data: { test_part: 'practice', correct_response: 'q' }, },
+    ],
+  repetitions: 5,
+  randomize_order: true
+};
+timeline.push(RT_Task);*/
+
+/* define fixation and test trials */
+var test_stimuli = [
+    { stimulus: "RTStimuli/GreenLight.png", choices: ['p', 'q'], correct_response: 'p', data: {task: 'response_green'},}, /*, correct_response: jsPsych.timelineVariable('correct_response')},},*/
+    { stimulus: "RTStimuli/RedLight.png",  choices: ['p', 'q'], correct_response: 'q', data: {task: 'response_red'},}, /*correct_response: jsPsych.timelineVariable('correct_response')},},*/
+];
+
+var flat_test_stimuli = test_stimuli.flat();
+
+var light_off = {
+  type: jsPsychImageKeyboardResponse,
+  stimulus: 'RTStimuli/LightsOff.png',
+  choices: "NO_KEYS",
+  trial_duration: function(){
+    return jsPsych.randomization.sampleWithoutReplacement([250, 500, 750, 1000, 1250, 1500, 1750, 2000], 1)[0];
+  },
+  data: {
+    task: 'light_off'
+  }
+};
+
+var lights_on = {
+  type: jsPsychImageKeyboardResponse,
+  stimulus: jsPsych.timelineVariable('stimulus'),
+  choices: ['p', 'q'],
+  data: {
+    task: 'response',
+    correct_response: jsPsych.timelineVariable('correct_response')
+  },
+  on_finish: function(data){
+    data.correct = jsPsych.pluginAPI.compareKeys(data.response, data.correct_response);
+  }
+}
+
+/* define test procedure */
+var RT_Task = {
+  type: jsPsychImageKeyboardResponse,
+  timeline: [light_off, lights_on],
+  timeline_variables: test_stimuli,
+  repetitions: 5,
+  randomize_order: true,
+};
+timeline.push(RT_Task);
+
+jsPsych.run(timeline)
+console.log('timeline:', timeline),
+initJsPsych({
+  // For this experiment, just use the timeline that we just built
+  timeline: timeline,
+
+  preload_images: ['RTStimuli/GreenLight.png', 'RTStimuli/RedLight.png', 'RTStimuli/LightsOff.png'],
+    //preload_audio: ["emotion_sounds/SB_1.wav", "emotion_sounds/SB_2.wav","emotion_sounds/SB_3.wav","emotion_sounds/SB_4.wav","emotion_sounds/R1.wav","emotion_sounds/R2.wav","emotion_sounds/R3.wav","emotion_sounds/R4.wav","emotion_sounds/C1.wav","emotion_sounds/C2.wav","emotion_sounds/C3.wav","emotion_sounds/C4.wav"],
+  use_webaudio: false,
+  show_progress_bar: true,
+  on_finish: function(){
+    jsPsych.data.displayData();
+      // Make sure that participant id is the first response (thats what values[0] gets)
+    ptc_id = JSON.parse(jsPsych.data.get().select('responses').values[0])['participant id'];
+    saveData("SWELDERS_RT_Session1_" + ptc_id + '_'+ Date.now().toString(), jsPsych.data.get().csv());},
+
+  });
+
+
+  </script>
+</html>

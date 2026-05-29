@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+    .face-container {
+      text-align: center;
+    }
+
+    .face-img {
+      width: 300px;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+    }
+
+    .face-name {
+      margin-top: 10px;
+      font-size: 20px;
+      font-weight: bold;
+    }
+    </style>
+    <title>FNR</title>
+    <script src="https://unpkg.com/jspsych@8.2.1"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@2.1.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@2.1.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-survey-html-form@2.1.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-fullscreen@2.1.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-survey-text@2.1.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-cloze@2.1.0"></script>
+    <link href="https://unpkg.com/jspsych@8.2.1/css/jspsych.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body></body>
+  <script>
+
+
+  /* initialize jsPsych */
+var jsPsych = initJsPsych({
+  override_safe_mode: true,
+/*  extensions: [
+    {type: jsPsychExtensionMouseTracking, params: {...}},
+  ],
+  */
+  on_finish: function() {
+    jsPsych.data.displayData();
+  }
+});
+
+/* create timeline */
+var timeline = [];
+
+var error_faces =[];
+
+
+var facename_test_instructions = {
+  type: jsPsychHtmlKeyboardResponse,
+  stimulus:'<p> <strong> Well done! </strong><p>' +
+  ' You will now be shown a picture of one of the faces you saw and asked to remember the name that goes with the face.'+
+  ' Please type the name in the text box provided and click the "next" button when you are ready to move on to the next picture.' +
+  ' Do not leave any responses blank, write a response even if you are unsure if it is correct.'+
+  ' When you are ready, please press the spacebar to begin.',
+  choices: " ",
+  post_trial_gap: 1000,
+};
+timeline.push(facename_test_instructions);
+
+
+let allfaces_withdata = [
+  {text: `<img src="faces/AllFaces/CFD-BF-209-172-N.jpg" style="width:400px; height:auto;"><p>Name: %Hazel%</p>`, correct_once: false},
+  {text: `<img src="faces/AllFaces/CFD-WF-245-084-N.jpg" style="width:400px; height:auto;"><p>Name: %Amelia%</p>`, correct_once: false},
+  {text: `<img src="faces/AllFaces/CFD-LF-241-188-N.jpg" style="width:400px; height:auto;"><p>Name: %Emma%</p>`, correct_once: false},
+  {text: `<img src="faces/AllFaces/CFD-BF-009-002-N.jpg" style="width:400px; height:auto;"><p>Name: %Nova%</p>`, correct_once: false},
+  {text: `<img src="faces/AllFaces/CFD-AF-201-060-N.jpg" style="width:400px; height:auto;"><p>Name: %Victoria%</p>`, correct_once: false},
+  {text: `<img src="faces/AllFaces/CFD-LF-238-154-N.jpg" style="width:400px; height:auto;"><p>Name: %Lillian%</p>`, correct_once: false},
+  {text: `<img src="faces/AllFaces/CFD-BF-253-202-N.jpg" style="width:400px; height:auto;"><p>Name: %Sophie%</p>`, correct_once: false},
+  {text: `<img src="faces/AllFaces/CFD-AF-230-193-N.jpg" style="width:400px; height:auto;"><p>Name: %Mila%</p>`, correct_once: false},
+  {text: `<img src="faces/AllFaces/CFD-AF-236-145-N.jpg" style="width:400px; height:auto;"><p>Name: %Lucy%</p>`, correct_once: false},
+  {text: `<img src="faces/AllFaces/CFD-AF-214-139-N.jpg" style="width:400px; height:auto;"><p>Name: %Nora%</p>`, correct_once: false},
+  {text: `<img src="faces/AllFaces/CFD-WF-205-006-N.jpg" style="width:400px; height:auto;"><p>Name: %Riley%</p>`, correct_once: false},
+  {text: `<img src="faces/AllFaces/CFD-AF-200-228-N.jpg" style="width:400px; height:auto;"><p>Name: %Luna%</p>`, correct_once: false},
+  {text: `<img src="faces/AllFaces/CFD-AF-222-134-N.jpg" style="width:400px; height:auto;"><p>Name: %Ava%</p>`, correct_once: false},
+  {text: `<img src="faces/AllFaces/CFD-BF-225-192-N.jpg" style="width:400px; height:auto;"><p>Name: %Camila%</p>`, correct_once: false},
+  {text: `<img src="faces/AllFaces/CFD-WF-213-031-N.jpg" style="width:400px; height:auto;"><p>Name: %Violet%</p>`, correct_once: false},
+  {text: `<img src="faces/AllFaces/CFD-WM-019-003-N.jpg" style="width:400px; height:auto;"><p>Name: %Liam%</p>`, correct_once: false},
+  {text: `<img src="faces/AllFaces/CFD-LM-216-082-N.jpg" style="width:400px; height:auto;"><p>Name: %Carter%</p>`, correct_once: false},
+  {text: `<img src="faces/AllFaces/CFD-WM-018-002-N.jpg" style="width:400px; height:auto;"><p>Name: %Alexander%</p>`, correct_once: false},
+  {text: `<img src="faces/AllFaces/CFD-BM-011-016-N.jpg" style="width:400px; height:auto;"><p>Name: %Oliver%</p>`, correct_once: false},
+  {text: `<img src="faces/AllFaces/CFD-WM-029-023-N.jpg" style="width:400px; height:auto;"><p>Name: %Leo%</p>`, correct_once: false},
+  {text: `<img src="faces/AllFaces/CFD-WM-258-125-N.jpg" style="width:400px; height:auto;"><p>Name: %Nathan%</p>`, correct_once: false},
+  {text: `<img src="faces/AllFaces/CFD-AM-223-138-N.jpg" style="width:400px; height:auto;"><p>Name: %Roman%</p>`, correct_once: false},
+  {text: `<img src="faces/AllFaces/CFD-AM-238-269-N.jpg" style="width:400px; height:auto;"><p>Name: %Michael%</p>`, correct_once: false},
+  {text: `<img src="faces/AllFaces/CFD-WM-023-001-N.jpg" style="width:400px; height:auto;"><p>Name: %Grayson%</p>`, correct_once: false},
+  {text: `<img src="faces/AllFaces/CFD-LM-237-264-N.jpg" style="width:400px; height:auto;"><p>Name: %Samuel%</p>`, correct_once: false},
+  {text: `<img src="faces/AllFaces/CFD-LM-232-204-N.jpg" style="width:400px; height:auto;"><p>Name: %Daniel%</p>`, correct_once: false},
+  {text: `<img src="faces/AllFaces/CFD-WM-034-030-N.jpg" style="width:400px; height:auto;"><p>Name: %James%</p>`, correct_once: false},
+  {text: `<img src="faces/AllFaces/CFD-LM-222-239-N.jpg" style="width:400px; height:auto;"><p>Name: %Benjamin%</p>`, correct_once: false},
+  {text: `<img src="faces/AllFaces/CFD-AM-233-236-N.jpg" style="width:400px; height:auto;"><p>Name: %Cameron%</p>`, correct_once: false},
+  {text: `<img src="faces/AllFaces/CFD-BM-029-024-N.jpg" style="width:400px; height:auto;"><p>Name: %Dylan%</p>`, correct_once: false},
+  {text: `<img src="faces/AllFaces/CFD-BM-017-021-N.jpg" style="width:400px; height:auto;"><p>Name: %Gabriel%</p>`, correct_once: false},
+];
+
+var allfaceswithdata_shuffled_fortest = jsPsych.randomization.shuffle(allfaces_withdata);
+
+// --------------------
+// 3. TRIAL
+// --------------------
+var face_trial = {
+  type: jsPsychCloze,
+
+  text: function(){
+    return allfaceswithdata_shuffled_fortest[0].text; // always show next face
+  },
+
+  check_answers: true,
+  button_text: 'Next',
+
+  mistake_fn: function(){
+    let correct_name =allfaceswithdata_shuffled_fortest[0].text.match(/%([^%]+)%/)[1].trim();
+    alert(`Incorrect. The correct answer is ${correct_name}.`);
+  },
+
+  on_finish: function(data){
+
+    let f = allfaceswithdata_shuffled_fortest.shift(); // remove current face
+
+    if(data.correct){
+      f.correct_once = true;
+    } else {
+
+      // reinsert at random future position
+      let rand_index = Math.floor(Math.random() * allfaceswithdata_shuffled_fortest.length);
+
+      allfaceswithdata_shuffled_fortest.splice(rand_index, 0, f);
+
+    }
+
+  }
+};
+
+// --------------------
+// 4. LOOP UNTIL ALL CORRECT
+// --------------------
+var facename_test = {
+  type: jsPsychCloze,
+  timeline: [face_trial],
+
+  loop_function: function(){
+
+    // remove faces already learned
+    face_queue = allfaceswithdata_shuffled_fortest.filter(f => !f.correct_once);
+
+    console.log("Remaining:", allfaceswithdata_shuffled_fortest.length);
+
+    return allfaceswithdata_shuffled_fortest.length > 0;
+
+  }
+};
+
+
+timeline.push(facename_test);
+
+// Insert a different task HERE
+
+// face name pairs test (baseline meansure)
+
+var allfaceswithdata_shuffled_fortest2 = jsPsych.randomization.shuffle(allfaces_withdata);
+
+var facename_baselinetest = {
+  timeline: allfaceswithdata_shuffled_fortest2.map((f, i) => {
+
+    let correct_name = f.text.match(/%([^%]+)%/)[1].trim();
+
+    return {
+      type: jsPsychCloze,
+      text: f.text,
+      check_answers: true,
+      button_text: 'Next'
+    };
+
+  })
+};
+
+timeline.push(facename_baselinetest);
+
+
+jsPsych.run(timeline)
+console.log('timeline:', timeline),
+initJsPsych({
+  timeline: timeline,
+  /*preload_images: allfaces, /*["faces/AllFaces/CFD-AF-200-228-N.jpg", "faces/AllFaces/CFD-AF-236-145-N.jpg", "faces/AllFaces/CFD-AM-223-138-N.jpg", "faces/AllFaces/CFD-BF-225-192-N.jpg", "faces/AllFaces/CFD-BM-019-002-N.jpg",
+  "faces/AllFaces/CFD-BM-044-001-N.jpg", "faces/AllFaces/CFD-LF-219-223-N.jpg", "faces/AllFaces/CFD-LF-241-188-N.jpg", "faces/AllFaces/CFD-LM-251-073-N.jpg", "faces/AllFaces/CFD-WF-245-084-N.jpg",
+  "faces/AllFaces/CFD-WM-023-001-N.jpg", "faces/AllFaces/CFD-WM-258-125-N.jpg"],*/
+  use_webaudio: false,
+  show_progress_bar: true,
+  on_finish: function(){
+    jsPsych.data.displayData();
+      // Make sure that participant id is the first response (thats what values[0] gets)
+    ptc_id = JSON.parse(jsPsych.data.get().select('responses').values[0])['participant id'];
+    saveData("SWELDERS_FNR_Session1_" + ptc_id + '_'+ Date.now().toString(), jsPsych.data.get().csv());},
+
+  });
+
+
+  </script>
+</html>

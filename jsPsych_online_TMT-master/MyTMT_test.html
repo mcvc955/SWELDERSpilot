@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <head>
+
+        <!-- jQuery -->
+        <!-- jsPsych library -->
+        <script src="jspsych/jspsych.js"></script>
+        <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
+        <script src="C:\Users\mcvc9\Desktop\Cognitive Tasks for SWELDERS\jsPsych_online_TMT-master\jspsych\plugins\virtual_chin_dependencies\jquery.min.js"></script>
+        <script src="C:\Users\mcvc9\Desktop\Cognitive Tasks for SWELDERS\jsPsych_online_TMT-master\jspsych\plugins\jspsych-resize_modified_v7compatible.js"></script>
+        <script src="C:\Users\mcvc9\Desktop\Cognitive Tasks for SWELDERS\jsPsych_online_TMT-master\jspsych\plugins\jspsych-psychophysics_modified_v7compatible.js"></script>
+        <script src="C:\Users\mcvc9\Desktop\Cognitive Tasks for SWELDERS\jsPsych_online_TMT-master\jspsych\plugins\jspsych-psychophysics_modified_v7compatible.js"></script>
+        <script src="C:\Users\mcvc9\Desktop\Cognitive Tasks for SWELDERS\jsPsych_online_TMT-master\jspsych\plugins\jspsych-psychophysics_modified_v7compatible.js"></script>
+        <!-- <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script> -->
+        <script src="C:\Users\mcvc9\Desktop\Cognitive Tasks for SWELDERS\jsPsych_online_TMT-master\jspsych\plugins\virtual_chin_dependencies\jquery-ui.min.js"></script>
+
+        <!-- virtual chin css -->
+       <!--<link href="C:\Users\Gustavo\Desktop\librerias_virtualChin\styles.css" rel="stylesheet" type="text/css">-->
+
+        <!-- <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"> -->
+        <link href= "C:\Users\mcvc9\Desktop\Cognitive Tasks for SWELDERS\jsPsych_online_TMT-masterT\jspsych\plugins\virtual_chin_dependencies\bootstrap.min.css">
+
+        <!-- <link href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"> -->
+        <link href="C:\Users\mcvc9\Desktop\Cognitive Tasks for SWELDERS\jsPsych_online_TMT-master\jspsych\plugins\virtual_chin_dependencies\jquery-ui.css" rel="stylesheet" type="text/css">
+
+        <link rel="stylesheet" href='C:\Users\mcvc9\Desktop\Cognitive Tasks for SWELDERS\jsPsych_online_TMT-master\jspsych\css/jspsych.css'>
+
+        <!-- SVG.js -->
+
+        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/svg.js/2.6.3/svg.min.js"></script> -->
+        <script src="C:\Users\mcvc9\Desktop\Cognitive Tasks for SWELDERS\jsPsych_online_TMT-master\jspsych\plugins\virtual_chin_dependencies\svg.min.js"></script>
+
+
+
+        <!-- jsPsych plugins-->
+        <!-- <script src="jspsych/plugins/jspsych-call-function.js"></script> -->
+        <script src="jspsych/plugins/jspsych-fullscreen.js"></script>
+        <script src="jspsych/plugins/jspsych-resize_modified_v7compatible.js"></script>
+        <script src="jspsych/plugins/jspsych-psychophysics_modified_v7compatible.js"></script>
+        <script src="jspsych/plugins/jspsych-survey-html-form.js"></script>
+        <script src= 'jspsych/plugins/jspsych-virtual-chin-copy.js'></script>
+        <script src="jspsych/plugins/jspsych-html-keyboard-response.js"></script>
+        <script src="jspsych/plugins/jspsych-html-button-response.js"></script>
+        <script src="jspsych/plugins/jspsych-instructions_modified.js"></script>
+
+        <!-- For local saving of the data in CSV format -->
+        <script src="utils.js"></script>
+    <style>
+    .face-container {
+      text-align: center;
+    }
+
+    .face-img {
+      width: 300px;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+    }
+
+    .face-name {
+      margin-top: 10px;
+      font-size: 20px;
+      font-weight: bold;
+    }
+    </style>
+<!--
+  <title>FNR</title>
+    <script src="https://unpkg.com/jspsych@8.2.1"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@2.1.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@2.1.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-button-response@2.1.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-survey-html-form@2.1.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-fullscreen@2.1.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-survey-text@2.1.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-cloze@2.1.0"></script>
+    -->
+    <link href="https://unpkg.com/jspsych@8.2.1/css/jspsych.css" rel="stylesheet" type="text/css" />
+
+  </head>
+  <body></body>
+  <script>
+
+
+  /* initialize jsPsych
+var jsPsych = initJsPsych({
+  override_safe_mode: true,
+/*  extensions: [
+    {type: jsPsychExtensionMouseTracking, params: {...}},
+  ],
+
+  on_finish: function() {
+    jsPsych.data.displayData();
+  }
+});
+*/
+
+/* create timeline */
+var timeline = [];
+
+//Intro to full task
+
+
+// TMT
+// Intro and INSTRUCTIONS
+var TMT_instructions = {
+  type: 'html-keyboard-response',
+  stimulus:'In the following task, you will be shown pictures of 16 faces, 4 at a time.' +
+  ' A red border will appear on one picture at a time, this indicates the picture you should focus on.' +
+  ' You do not need to press any buttons in this task. When you are ready, please press the spacebar to begin.',
+  choices: " ",
+  post_trial_gap: 1000,
+};
+
+timeline.push(TMT_instructions);
+
+// let pixel_unit
+
+var w = window.innerWidth;
+var h = window.innerHeight;
+
+// Mouse coordinates (x , y)
+let x = 0;
+let y = 0;
+isDrawing = false;
+
+// To avoid scroll down when press space bar
+window.onkeydown = function(e) {
+return e.keyCode !== 32;
+};
+
+// disable scrolling page
+function disableScroll() {
+        // Get the current page scroll position
+        scrollTop =
+        window.pageYOffset || document.documentElement.scrollTop;
+        scrollLeft =
+        window.pageXOffset || document.documentElement.scrollLeft,
+
+            // if any scroll is attempted,
+            // set this to the previous value
+            window.onscroll = function() {
+                window.scrollTo(scrollLeft, scrollTop);
+            };
+    }
+
+
+disableScroll();
+
+//Shuffle using Fisher-Yates
+function shuffle(array) {
+        var currentIndex = array.length, temporaryValue, randomIndex;
+
+        // While there remain elements to shuffle...
+        while (0 !== currentIndex) {
+
+            // Pick a remaining element...
+            randomIndex = Math.floor(Math.random() * currentIndex);
+            currentIndex -= 1;
+
+            // And swap it with the current element.
+            temporaryValue = array[currentIndex];
+            array[currentIndex] = array[randomIndex];
+            array[randomIndex] = temporaryValue;
+        }
+
+        return array;
+    }
+
+
+    // presentation time of the fixation cross
+    var delayInMilliseconds = 1000; // it´s an indirect way to control the momento of presentation of images
+
+    //For loading all images, but we'll present half
+
+    images = [ "./stimuli/NumbersAndLetters_TMT/stim_2_B.jpg",  "./stimuli/NumbersAndLetters_TMT/stim_4_B.jpg",  "./stimuli/NumbersAndLetters_TMT/stim_6_B.jpg",  "./stimuli/NumbersAndLetters_TMT/stim_8_B.jpg",  "./stimuli/NumbersAndLetters_TMT/stim_10_B.jpg"];
+    /*
+              "./stimuli/cond1/stim_11_A.jpg", "./stimuli/cond1/stim_12_B.jpg", "./stimuli/cond1/stim_13_A.jpg", "./stimuli/cond1/stim_14_B.jpg", "./stimuli/cond1/stim_15_A.jpg",
+              "./stimuli/cond1/stim_16_B.jpg", "./stimuli/cond1/stim_17_A.jpg", "./stimuli/cond1/stim_18_B.jpg", "./stimuli/cond1/stim_19_A.jpg", "./stimuli/cond1/stim_20_B.jpg",
+              "./stimuli/cond2/stim_2_A.jpg", "./stimuli/cond2/stim_1_B.jpg", "./stimuli/cond2/stim_4_A.jpg", "./stimuli/cond2/stim_3_B.jpg", "./stimuli/cond2/stim_6_A.jpg",
+              "./stimuli/cond2/stim_5_B.jpg", "./stimuli/cond2/stim_8_A.jpg", "./stimuli/cond2/stim_7_B.jpg", "./stimuli/cond2/stim_10_A.jpg","./stimuli/cond2/stim_9_B.jpg",
+              "./stimuli/cond2/stim_12_A.jpg","./stimuli/cond2/stim_11_B.jpg","./stimuli/cond2/stim_14_A.jpg","./stimuli/cond2/stim_13_B.jpg","./stimuli/cond2/stim_16_A.jpg",
+              "./stimuli/cond2/stim_15_B.jpg", "./stimuli/cond2/stim_18_A.jpg", "./stimuli/cond2/stim_17_B.jpg","./stimuli/cond2/stim_20_A.jpg", "./stimuli/cond2/stim_19_B.jpg"] */
+
+
+var session1_TMTimages_all_shuffled = shuffle(images);
+var session1_chosen_TMT_images = jsPsych.randomization.sampleWithoutReplacement (session1_TMTimages_all_shuffled, 2);
+console.log('session1_chosen_TMT_images:', session1_chosen_TMT_images)
+jsPsych.pluginAPI.preloadImages(session1_chosen_TMT_images);
+
+/*var showed_image = {
+  obj_type: 'image',
+  file: jsPsych.timelineVariable('fileName'),
+  startX: 'center',
+  startY: 'center',
+  drawFunc: function (stimulus, canvas, context) {
+    setTimeout(function () {
+      context.drawImage(
+        stimulus.img,
+        0, 0,
+        stimulus.img.width,
+        stimulus.img.height,
+        document.getElementById('myCanvas').width / 2 - 512,
+        document.getElementById('myCanvas').height / 2 - 384,
+        stimulus.img.width,
+        stimulus.img.height
+      );
+    }, delayInMilliseconds);
+  }
+}; */
+
+let pixel_factor = 0.75;
+
+var showed_image = {
+
+  drawFunc: function(stimulus, canvas, context) {
+
+    let file = jsPsych.timelineVariable('fileName', true);
+
+    let img = new Image();
+
+    img.onload = function() {
+
+      let scale = pixel_factor || 1;
+
+      let drawWidth = img.width * scale;
+      let drawHeight = img.height * scale;
+
+      context.drawImage(
+        img,
+        canvas.width / 2 - drawWidth / 2,
+        canvas.height / 2 - drawHeight / 2,
+        drawWidth,
+        drawHeight
+      );
+    };
+
+    img.src = file;
+  }
+};
+
+//fixation cross
+var extra_cross = {
+obj_type: 'cross', // fixation
+line_length: 20, // pixels
+line_width: 4,
+
+drawFunc: function(stimulus, canvas, context){
+    canvas.addEventListener('mousedown', e => {
+    // console.log('entro a mousedown');
+
+x = e.offsetX;
+y = e.offsetY;
+
+isDrawing = true;
+});
+
+{
+
+context.beginPath();
+context.lineWidth = stimulus.line_width;
+context.lineJoin = stimulus.lineJoin;
+context.miterLimit = stimulus.miterLimit;
+//
+context.strokeStyle = 'white';
+const x1 = stimulus.currentX;
+const y1 = stimulus.currentY - stimulus.line_length/2;
+const x2 = stimulus.currentX;
+const y2 = stimulus.currentY + stimulus.line_length/2;
+context.moveTo(x1, y1);
+context.lineTo(x2, y2);
+const x3 = stimulus.currentX - stimulus.line_length/2;
+const y3 = stimulus.currentY;
+const x4 = stimulus.currentX + stimulus.line_length/2;
+const y4 = stimulus.currentY;
+context.moveTo(x3, y3);
+context.lineTo(x4, y4);
+// ctx.closePath();
+context.stroke();
+}
+}
+};
+
+// Resize trial with credit card firts measurement
+
+//if it's bigger, the image displayed is bigger too
+//let pixel_factor = 0.75;
+
+var resize_trial = {
+  type: 'resize_modified',
+  item_width: 3 + 3/8, //Width of credit card in inches
+  item_height: 2 + 1/8, //Heigth of credit card in inches
+//   prompt: "<p>Click and drag the lower right corner of the box until the box is the same size as a credit card held up to the screen.</p>",
+prompt: `<p style='font-size:120%;color:black'> Por favor coloque una tarjeta sobre la pantalla (puede ser crédito, débito, SUBE o cualquiera que tenga tamaño
+            estándar 8.56 x 5.4 cm),<br> luego haga click sobre el recuadro rojo que se encuentra en la esquina inferior derecha
+            hasta que sean del mismo tamaño que su tarjeta <br> Asegúrese de poner la tarjeta sobre la pantalla<br><br>
+            Esto nos sirve para estimar el tamaño de su pantalla comparándolo con un objeto de tamaño conocido.</p>`,
+//   pixels_per_unit: 642/4, // After the scaling factor is applied, this many pixels will equal one unit of measurement.
+//   pixels_per_unit: pixel_unit, // After the scaling factor is applied, this many pixels will equal one unit of measurement.
+  pixels_per_unit: (642/4)*pixel_factor, // After the scaling factor is applied, this many pixels will equal one unit of measurement.
+  button_label: 'Continuar'
+};
+
+// TMT experimental trials
+/*var trial = {
+  timeline: [
+    {
+      type: jsPsychPsychophysicsModified,
+      stimuli: [extra_cross, showed_image],
+      response_type: 'mouse',
+      background_color: 'white',
+      data: {
+        file_name: jsPsych.timelineVariable('fileName')
+      }
+    }
+  ],
+  timeline_variables: session1_chosen_TMT_images.map(f => ({
+    fileName: f
+  }))
+};
+*/
+var trial = {
+  timeline: [
+    {
+      type: 'psychophysics_modified',
+
+      stimuli: [
+        showed_image,
+        extra_cross
+      ],
+
+      response_type: 'mouse',
+      background_color: 'white',
+
+      data: {
+        file_name: jsPsych.timelineVariable('fileName')
+      }
+    }
+  ],
+
+  timeline_variables: session1_chosen_TMT_images.map(f => ({
+    fileName: f
+  })),
+
+  repetitions: 1,
+  randomize_order: false
+};
+
+    /*timeline_variables:
+
+        timelineVariables,
+        repetitions: 1,
+        randomize_order: false //We randomize at top of script 'manually'
+*/
+timeline.push(resize_trial, trial)
+
+///DEBRIEF
+var debrief = {
+  type : 'html-button-response',
+  stimulus: "<p><strong> You Are Now Done! <p><strong>"+
+  "<p><strong> Thank You for Taking the Time to Complete These Tasks <p><strong>"+
+  "<p> You are now ready may now click the button below to finish this part of the study. "+
+  "<p><strong> please Remember to Complete Part II in 12 hours. <p><strong>"+
+  "We will send you a reminder via Prolific, but please be ready to start the task as close to 12 hours from now as possible. <p>",
+  choices: ['Done!'],
+  };
+timeline.push(debrief);
+
+
+
+//jsPsych.run(timeline),
+console.log('timeline:', timeline),
+//initJsPsych({
+jsPsych.init({
+  timeline: timeline,
+ /*preload_images: allfaces, /*["faces/AllFaces/CFD-AF-200-228-N.jpg", "faces/AllFaces/CFD-AF-236-145-N.jpg", "faces/AllFaces/CFD-AM-223-138-N.jpg", "faces/AllFaces/CFD-BF-225-192-N.jpg", "faces/AllFaces/CFD-BM-019-002-N.jpg",
+  "faces/AllFaces/CFD-BM-044-001-N.jpg", "faces/AllFaces/CFD-LF-219-223-N.jpg", "faces/AllFaces/CFD-LF-241-188-N.jpg", "faces/AllFaces/CFD-LM-251-073-N.jpg", "faces/AllFaces/CFD-WF-245-084-N.jpg",
+  "faces/AllFaces/CFD-WM-023-001-N.jpg", "faces/AllFaces/CFD-WM-258-125-N.jpg"],*/
+  use_webaudio: false,
+  override_safe_mode: true,
+  show_progress_bar: true,
+  on_finish: function(){
+    jsPsych.data.displayData();
+      // Make sure that participant id is the first response (thats what values[0] gets)
+    ptc_id = JSON.parse(jsPsych.data.get().select('responses').values[0])['participant id'];
+    saveData("SWELDERS_FNR_Session1_" + ptc_id + '_'+ Date.now().toString(), jsPsych.data.get().csv());},
+
+  });
+
+
+  </script>
+</html>

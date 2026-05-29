@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>FNR</title>
+    <script src="https://unpkg.com/jspsych@8.2.1"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@2.1.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@2.1.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-survey-html-form@2.1.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-fullscreen@2.1.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-survey-text@2.1.0"></script>
+    <link href="https://unpkg.com/jspsych@8.2.1/css/jspsych.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body></body>
+  <script>
+
+
+  /* initialize jsPsych */
+var jsPsych = initJsPsych({
+  override_safe_mode: true,
+  on_finish: function() {
+    jsPsych.data.displayData();
+  }
+});
+
+/* create timeline */
+var timeline = [];
+
+//                                       FACE FAMILIARIZATION (Just looking at them, no names or relationships yet)
+/*Initial face study phase: the test begins with an exposure to all 16 faces. Subjects are shown 4 faces to a page, one face in each quadrant.
+They are asked to look at each face for a total of 2 s until they have seen all 16 faces.*/
+
+
+var facesonly_instructions = {
+  type: jsPsychHtmlKeyboardResponse,
+  stimulus:'In the following task, you will be shown pictures of 12 faces, 4 at a time.' +
+  ' A red border will appear on one picture at a time, this indicates the picture you should focus on.' +
+  ' You do not need to press any buttons in this task. When you are ready, please press the spacebar to begin.',
+  choices: " ",
+  post_trial_gap: 1000,
+};
+
+timeline.push(facesonly_instructions);
+
+var allfaces = ["faces/AllFaces/CFD-AF-200-228-N.jpg", "faces/AllFaces/CFD-AF-236-145-N.jpg", "faces/AllFaces/CFD-AM-223-138-N.jpg", "faces/AllFaces/CFD-BF-225-192-N.jpg", "faces/AllFaces/CFD-BM-019-002-N.jpg",
+"faces/AllFaces/CFD-BM-044-001-N.jpg", "faces/AllFaces/CFD-LF-219-223-N.jpg", "faces/AllFaces/CFD-LF-241-188-N.jpg", "faces/AllFaces/CFD-LM-251-073-N.jpg", "faces/AllFaces/CFD-WF-245-084-N.jpg",
+"faces/AllFaces/CFD-WM-023-001-N.jpg", "faces/AllFaces/CFD-WM-258-125-N.jpg"];
+
+// shuffle faces
+var allfacesshuffled = jsPsych.randomization.shuffle(allfaces);
+console.log('allfacesshuffled:', allfacesshuffled)
+
+// split into 3 sets of 4
+var faces_set1 = allfacesshuffled.slice(0, 4);
+var faces_set2 = allfacesshuffled.slice(4, 8);
+var faces_set3 = allfacesshuffled.slice(8, 12);
+
+console.log("Set 1:", faces_set1);
+console.log("Set 2:", faces_set2);
+console.log("Set 3:", faces_set3);
+
+/*Display faces passively, four at a time. Indicator stays on each face for 2 secs before moving
+onto the next face.*/
+
+// border for images
+function makeGridWithBorder(images, highlightIndex) {
+  return `
+    <div style="display: grid; gap:20px; grid-template-columns: repeat(4, 1fr); justify-content:center;">
+      ${images.map((f, i) => `
+        <img src="${f}"
+             style="width:300px; height:400px; object-fit:cover; border:${i === highlightIndex ? '5px solid red' : 'none'}; border-radius:10px;">
+      `).join("")}
+    </div>
+  `;
+}
+
+var set1trial = {
+  timeline: faces_set1.map((f, i) => ({
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: makeGridWithBorder(faces_set1, i),
+    trial_duration: 2000,
+    render_on_canvas: true,
+    choices: "NO_KEYS"
+  }))
+};
+timeline.push(set1trial);
+
+var set2trial = {
+  timeline: faces_set2.map((f, i) => ({
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: makeGridWithBorder(faces_set2, i),
+    trial_duration: 2000,
+    render_on_canvas: true,
+    choices: "NO_KEYS"
+  }))
+};
+timeline.push(set2trial);
+
+var set3trial = {
+  timeline: faces_set3.map((f, i) => ({
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: makeGridWithBorder(faces_set3, i),
+    trial_duration: 2000,
+    render_on_canvas: true,
+    choices: "NO_KEYS"
+  }))
+};
+timeline.push(set3trial);
+
+/* Initial study of face-name pairs: subjects are then presented the same faces with names underneath
+and asked to study the name that goes with the face. To ensure that the subject is
+learning the face-name pairs, the examiner points to the face and asks the subject
+to read the name associated with that face. After all 4 items are correctly identiﬁed;
+another 4 face-name pairs are presented until all 16 face-name pairs are studied.
+Subjects are given only one exposure to learn all 16 face-name pairs. */
+
+var facenames_instructions = {
+  type: jsPsychHtmlKeyboardResponse,
+  stimulus:'<p> <strong> Well done! </strong><p>' +
+  ' Your next task will involve learning the names of the people in the pictures you just saw.'+
+  ' As before, a red border will appear on one picture at a time, this indicates the picture you should focus on.' +
+  ' You do not need to press any buttons in this task. When you are ready, please press the spacebar to begin.',
+  choices: " ",
+  post_trial_gap: 1000,
+};
+
+timeline.push(facenames_instructions)
+
+var facenamepairs = ["FaceNames/Amelia.png", "FaceNames/Ava.png", "FaceNames/Charlotte.png", "FaceNames/Elija.png", "FaceNames/Emma.png",
+"FaceNames/James.png", "FaceNames/Liam.png", "FaceNames/Mia.png", "FaceNames/Noah.png", "FaceNames/Sophia.png",
+"FaceNames/Theodore.png", "FaceNames/William.png"];
+
+// shuffle face/names
+var facenamepairs_shuffled = jsPsych.randomization.shuffle(facenamepairs);
+console.log('facenamepairs_shuffled:', facenamepairs_shuffled)
+
+// split into 3 sets of 4
+var facenames_set1 = facenamepairs_shuffled.slice(0, 4);
+var facenames_set2 = facenamepairs_shuffled.slice(4, 8);
+var facenames_set3 = facenamepairs_shuffled.slice(8, 12);
+
+console.log("FaceNames Set 1:", facenames_set1);
+console.log("FaceNames Set 2:", facenames_set2);
+console.log("FaceNames Set 3:", facenames_set3);
+
+var facename_set1trial = {
+  timeline: facenames_set1.map((f, i) => ({
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: makeGridWithBorder(facenames_set1, i),
+    trial_duration: 2000,
+    render_on_canvas: true,
+    choices: "NO_KEYS"
+  }))
+};
+timeline.push(facename_set1trial);
+
+var facename_set2trial = {
+  timeline: facenames_set2.map((f, i) => ({
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: makeGridWithBorder(facenames_set2, i),
+    trial_duration: 2000,
+    render_on_canvas: true,
+    choices: "NO_KEYS"
+  }))
+};
+timeline.push(facename_set2trial);
+
+var facename_set3trial = {
+  timeline: facenames_set3.map((f, i) => ({
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: makeGridWithBorder(facenames_set3, i),
+    trial_duration: 2000,
+    render_on_canvas: true,
+    choices: "NO_KEYS"
+  }))
+};
+timeline.push(facename_set3trial);
+
+
+/*Initial recall of face-name pairs: the subjects are then shown the face and asked to recall the name
+that goes with the face. The correct number of face-name pairs is recorded as an
+initial learning score for names (ILN).*/
+
+var facename_test_instructions = {
+  type: jsPsychHtmlKeyboardResponse,
+  stimulus:'<p> <strong> Well done! </strong><p>' +
+  ' You will now be shown a picture of one of the faces you saw and asked to remember the name that goes with the face.'+
+  ' Please type the name in the text box provided and click the "next" button when you are ready to move on to the next picture.' +
+  ' Do not leave any responses blank, write a response even if you are unsure if it is correct.'+
+  ' When you are ready, please press the spacebar to begin.',
+  choices: " ",
+  post_trial_gap: 1000,
+};
+timeline.push(facename_test_instructions);
+
+// shuffle faces for test
+var allfacesshuffled_fortest = jsPsych.randomization.shuffle(allfaces);
+console.log('allfacesshuffled_fortest:', allfacesshuffled_fortest)
+
+var facename_test = {
+  timeline: allfacesshuffled_fortest.map((f, i) => ({
+  type: jsPsychSurveyText,
+  preamble: `<img src="${f}" style="width:400px; height:auto;">`,
+  questions: [
+    {prompt: "What is this person's name?", rows: 1, button_label: ["Next"]},
+  ],
+}))
+};
+
+timeline.push(facename_test);
+
+/*Subjects are then shown the same faces but this time with occupations under-
+neath. The face-occupation pairs are presented in the same manner as the face-name
+pairs until all 16 face-occupation pairs are studied.*/
+/*CHANGEd to relationships*/
+
+// SHOULD PRESENTATION TIMES BE LONGER FOR FACE/RELATIONSHIPS?
+
+var face_relationship_pairs = ["faces_relationships/PairA.png","faces_relationships/PairB.png", "faces_relationships/PairC.png",
+"faces_relationships/PairD.png","faces_relationships/PairE.png", "faces_relationships/PairF.png", "faces_relationships/PairG.png",
+"faces_relationships/PairH.png", "faces_relationships/PairI.png", "faces_relationships/PairJ.png", "faces_relationships/PairK.png",
+"faces_relationships/PairL.png", "faces_relationships/PairM.png", "faces_relationships/PairN.png"];
+
+var face_relationships_shuffled = jsPsych.randomization.shuffle(face_relationships_shuffled);
+console.log('face_relationships_shuffled:', face_relationships_shuffled);
+
+var face_relationships_set1 = face_relationships_shuffledd.slice(0, 4);
+var face_relationships_set2 = face_relationships_shuffled.slice(4, 8);
+var face_relationships_set3 = face_relationships_shuffled.slice(8, 12);
+
+console.log("face_relationships_set1:", face_relationships_set1);
+console.log("face_relationships_set2:", face_relationships_set2);
+console.log("face_relationships_set3:", face_relationships_set3);
+
+var face_relationships_set1trial = {
+  timeline: face_relationships_set1.map((f, i) => ({
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: makeGridWithBorder(face_relationships_set1, i),
+    trial_duration: 2000,
+    render_on_canvas: true,
+    choices: "NO_KEYS"
+  }))
+};
+timeline.push(face_relationships_set1trial);
+
+var face_relationships_set2trial = {
+  timeline: face_relationships_set2.map((f, i) => ({
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: makeGridWithBorder(face_relationships_set2, i),
+    trial_duration: 2000,
+    render_on_canvas: true,
+    choices: "NO_KEYS"
+  }))
+};
+timeline.push(face_relationships_set2trial);
+
+var face_relationships_set3trial = {
+  timeline: face_relationships_set3.map((f, i) => ({
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: makeGridWithBorder(face_relationships_set3, i),
+    trial_duration: 2000,
+    render_on_canvas: true,
+    choices: "NO_KEYS"
+  }))
+};
+timeline.push(face_relationships_set3trial);
+
+// FACE-RELATIONSHIP TEST INSTRUCTIONS
+
+/* Initial recall of face-occupation pairs:
+subjects are again shown the face and asked to recall the occupation that goes
+with the face. Correct recall of faces and occupations are tabulated as initial learning
+of occupations (ILO).*/
+
+var facerelationship_test_instructions = {
+  type: jsPsychHtmlKeyboardResponse,
+  stimulus:'<p> <strong> Well done! </strong><p>' +
+  ' You will now be shown a picture the pairs of faces you saw and asked to remember the relationship between the two people.'+
+  ' Please type the relationship in the text box provided and click the "next" button when you are ready to move on to the next picture.' +
+  ' Do not leave any responses blank, write a response even if you are unsure if it is correct.'+
+  ' When you are ready, please press the spacebar to begin.',
+  choices: " ",
+  post_trial_gap: 1000,
+};
+timeline.push(facerelationship_test_instruction);
+
+// FACE RELATIONSHIP TEST
+
+//stimuli with just face pairs, no relationship
+var facepairs_relationshiptest = ['FacePairsforRelationshipTest/Pair1.png', 'FacePairsforRelationshipTest/Pair2.png', 'FacePairsforRelationshipTest/Pair3.png',
+'FacePairsforRelationshipTest/Pair4.png', 'FacePairsforRelationshipTest/Pair5.png','FacePairsforRelationshipTest/Pair6.png', 'FacePairsforRelationshipTest/Pair7.png',
+'FacePairsforRelationshipTest/Pair8.png',
+];
+
+// shuffle face/relationship pairs for test
+var relationshipfaces_shuffled_fortest = jsPsych.randomization.shuffle(facepairs_relationshiptest);
+console.log('relationshipfaces_shuffled_fortest:', relationshipfaces_shuffled_fortest);
+
+// Face-relationship test
+
+var face_relationships = {
+  timeline: relationshipfaces_shuffled_fortest.map((f, i) => ({
+  type: jsPsychSurveyText,
+  preamble: `<img src="${f}" style="width:400px; height:auto;">`,
+  questions: [
+    {prompt: "What is the relationship between these people?", rows: 1, button_label: "Next"},
+  ],
+}))
+};
+timeline.push(face_relationships);
+
+
+jsPsych.run(timeline)
+console.log('timeline:', timeline),
+initJsPsych({
+  timeline: timeline,
+  preload_images: allfaces, /*["faces/AllFaces/CFD-AF-200-228-N.jpg", "faces/AllFaces/CFD-AF-236-145-N.jpg", "faces/AllFaces/CFD-AM-223-138-N.jpg", "faces/AllFaces/CFD-BF-225-192-N.jpg", "faces/AllFaces/CFD-BM-019-002-N.jpg",
+  "faces/AllFaces/CFD-BM-044-001-N.jpg", "faces/AllFaces/CFD-LF-219-223-N.jpg", "faces/AllFaces/CFD-LF-241-188-N.jpg", "faces/AllFaces/CFD-LM-251-073-N.jpg", "faces/AllFaces/CFD-WF-245-084-N.jpg",
+  "faces/AllFaces/CFD-WM-023-001-N.jpg", "faces/AllFaces/CFD-WM-258-125-N.jpg"],*/
+  use_webaudio: false,
+  show_progress_bar: true,
+  on_finish: function(){
+    jsPsych.data.displayData();
+      // Make sure that participant id is the first response (thats what values[0] gets)
+    ptc_id = JSON.parse(jsPsych.data.get().select('responses').values[0])['participant id'];
+    saveData("SWELDERS_FNR_Session1_" + ptc_id + '_'+ Date.now().toString(), jsPsych.data.get().csv());},
+
+  });
+
+
+  </script>
+</html>
