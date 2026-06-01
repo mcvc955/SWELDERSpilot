@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+  <title>Session1_Behavior</title>
+  <html>
+  <head>
+
+    <!-- jsPsych CSS -->
+    <link href="jspsych/dist/jspsych.css" rel="stylesheet" type="text/css" />
+
+    <!-- jsPsych core -->
+    <script src="jspsych/dist/jspsych.js"></script>
+
+    <!-- Plugins -->
+    <script src="jspsych/dist/plugin-html-keyboard-response.js"></script>
+    <script src="jspsych/dist/plugin-html-button-response.js"></script>
+    <script src="jspsych/dist/plugin-image-keyboard-response.js"></script>
+    <script src="jspsych/dist/plugin-survey-html-form.js"></script>
+    <script src="jspsych/dist/plugin-fullscreen.js"></script>
+    <script src="jspsych/dist/plugin-cloze.js"></script>
+
+  </head>
+
+  <body></body>
+  <style>
+
+
+  .face-container {
+    text-align: center;
+  }
+
+  .face-img {
+    width: 300px;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+  }
+
+  .face-name {
+    margin-top: 10px;
+    font-size: 20px;
+    font-weight: bold;
+  }
+
+  html, body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.tmt-wrapper{
+  width: 100vw;
+  height: 100vh;
+
+  display:flex;
+  justify-content:center;
+  align-items:center;
+
+  overflow:hidden;
+}
+
+.tmt-board{
+  position:relative;
+  width:900px;
+  height:700px;
+
+  transform-origin: center center;
+}
+  </style>
+  <script>
+
+/*  initialize jsPsych */
+
+  var jsPsych = initJsPsych({
+    override_safe_mode: true,
+     show_progress_bar: true,
+    on_finish: function() {
+      jsPsych.data.displayData();
+      // Make sure that participant id is the first response (thats what values[0] gets)
+          ptc_id = JSON.parse(jsPsych.data.get().select('responses').values[0])['participant id'];
+          saveData("SWELDERS_RT_Session1_" + ptc_id + '_'+ Date.now().toString(), jsPsych.data.get().csv());},
+    });
+
+
+/* create timeline */
+var timeline = [];
+
+var participant_id = {
+  type: jsPsychSurveyHtmlForm,
+  html:
+  "<p> Before we begin the study please type:" +
+  "<p> Your prolific ID <input name='participant id' type='text'>" +
+  "<p> Once you have done this, press continue. </p>",
+	test_part: 'id'
+};
+timeline.push(participant_id);
+
+// RT INSTRUCTIONS
+var RT_instructions = {
+  type: jsPsychHtmlKeyboardResponse,
+  stimulus: `
+
+    <p>In the following task a stop light will appear on the screen.</p>
+    <p>If the light is <strong><font color="green"> GREEN </strong></font> press the <strong><font color="green"> P KEY </strong></font>
+    with your <strong>right index finger</strong> as fast as you can. Think of this key as your gas pedal.</p>
+<div style='width: 1000px;'>
+    <div style='float: left;'><img src='RTStimuli/RHand_Green_Q.png' style="width:500px;height:300px;"></img></div>
+    <div style='float: right;'><img src='RTStimuli/GreenLight.png' style="width:500px;height:300px;"></img></div>
+</div>
+    <p>If the light is <strong><font color="red"> RED</strong></font>, press the <strong><font color="red">Q KEY</strong></font>
+    with your <strong>left index finger</strong> as fast as you can, think of this as your brake pedal.</p>
+<div style='width: 1000px;'>
+    <div style='float: left;'><img src='RTStimuli/RedLight.png' style="width:500px;height:300px;"></img></div>
+    <div style='float: right;'><img src='RTStimuli/LHand_Red_P.png'style="width:500px;height:300px;"></img></div>
+</div>
+<div style='width: 1000px;'>
+    <p>If the lights are <strong> OFF </strong>, do not press any keys.</p>
+</div>
+    <div style='float: center;'><img src='RTStimuli/LightsOff.png'style="width:500px;height:300px;"></img></div>
+    <p> There will be no practice run this time. When you are ready to start the task, press the <strong>SPACEBAR.</strong></p>
+
+  `,
+  choices: " ",
+  post_trial_gap: 1000
+};
+timeline.push(RT_instructions);
+
+var light_off = {
+  type: jsPsychImageKeyboardResponse,
+  stimulus: 'RTStimuli/LightsOff.png',
+  choices: "NO_KEYS",
+  trial_duration: function(){
+    return jsPsych.randomization.sampleWithoutReplacement([250, 500, 750, 1000, 1250, 1500, 1750, 2000], 1)[0];
+  },
+  data: {
+    task: 'light_off'
+  }
+};
+
+var test_stimuli = [
+  { stimulus: "RTStimuli/RedLight.png",  choices: ['p', 'q'], correct_response: 'p', data: {task: 'response_red'}},
+  { stimulus: "RTStimuli/GreenLight.png",  choices: ['p', 'q'], correct_response: 'q',  data: {task: 'response_green'}}
+];
+
+var RT_test = {
+      type: jsPsychImageKeyboardResponse,
+      stimulus: jsPsych.timelineVariable('stimulus'),
+      choices: ['q', 'p'],
+      data: {
+        task: 'response',
+        correct_response: jsPsych.timelineVariable('correct_response')
+      },
+      on_finish: function(data){
+        data.correct = jsPsych.pluginAPI.compareKeys(data.response, data.correct_response);
+      }
+    };
+
+    /* define test procedure */
+    var RT_Task = {
+      timeline: [light_off, RT_test],
+      timeline_variables: test_stimuli,
+      repetitions: 40,
+      randomize_order: true
+    };
+
+timeline.push(RT_Task);
+
+var TMT_instructions1 = {
+  type: jsPsychHtmlKeyboardResponse,
+  stimulus:
+    '<p><strong>Well done!</strong></p>' +
+    '<p>The next test  measures your processing speed and accuracy.</p>'+
+    "<p>When you press the spacebar, you'll see an arrangement of letters and numbers like the one below.</p>"+
+    "<img src='TMT_example.png'></img>"+
+    "<p>Tap them in the following sequence 1 -> A -> 2 -> B -> 3 -> C... and so on The boxes will turn green when you get them correct.</p>"+
+    "<p>Try to be as fast and accurate as possible. If you get one wrong the box will not turn red--in this case you can try again.</p>"+
+    "<p>Continue until all the letters and numbers are green--after this the screen will automatically advance.</p>" +
+    "<p>There will be no practice run. When you are ready, press the spacebar to begin.</p>",
+  choices: [" "],
+  post_trial_gap: 1000,
+};
+
+timeline.push(TMT_instructions1);
+
+/* ============================================
+LAYOUT 3
+============================================ */
+const TMT_layout3 = [
+  {label:"1",  x:80,  y:140},
+  {label:"A",  x:300, y:90},
+  {label:"2",  x:560, y:130},
+  {label:"B",  x:790, y:100},
+  {label:"3",  x:870, y:250},
+  {label:"C",  x:660, y:340},
+  {label:"4",  x:420, y:300},
+  {label:"D",  x:180, y:260},
+  {label:"5",  x:60,  y:380},
+  {label:"E",  x:250, y:470},
+  {label:"6",  x:500, y:430},
+  {label:"F",  x:740, y:390},
+  {label:"7",  x:860, y:560},
+  {label:"G",  x:620, y:640},
+  {label:"8",  x:360, y:590},
+  {label:"H",  x:130, y:640},
+  {label:"9",  x:90,  y:520},
+  {label:"I",  x:340, y:360},
+  {label:"10", x:600, y:220},
+  {label:"J",  x:820, y:320},
+  {label:"11", x:690, y:500},
+  {label:"K",  x:450, y:670},
+  {label:"12", x:210, y:570},
+  {label:"L",  x:140, y:430},
+  {label:"13", x:390, y:170},
+  {label:"M",  x:650, y:80}
+];
+
+
+/* ============================================
+LAYOUT 4
+============================================ */
+const TMT_layout4 = [
+  {label:"1",  x:100, y:70},
+  {label:"A",  x:340, y:140},
+  {label:"2",  x:620, y:80},
+  {label:"B",  x:860, y:150},
+  {label:"3",  x:760, y:300},
+  {label:"C",  x:520, y:260},
+  {label:"4",  x:260, y:220},
+  {label:"D",  x:70,  y:300},
+  {label:"5",  x:140, y:470},
+  {label:"E",  x:390, y:520},
+  {label:"6",  x:670, y:470},
+  {label:"F",  x:860, y:380},
+  {label:"7",  x:780, y:580},
+  {label:"G",  x:540, y:660},
+  {label:"8",  x:290, y:620},
+  {label:"H",  x:90,  y:580},
+  {label:"9",  x:170, y:390},
+  {label:"I",  x:430, y:340},
+  {label:"10", x:700, y:210},
+  {label:"J",  x:840, y:60},
+  {label:"11", x:630, y:360},
+  {label:"K",  x:390, y:690},
+  {label:"12", x:180, y:660},
+  {label:"L",  x:60,  y:430},
+  {label:"13", x:290, y:100},
+  {label:"M",  x:560, y:140}
+];
+
+const correct_sequence = ["1","A","2","B","3","C","4","D","5","E","6","F","7","G","8","H","9","I","10","J","11","K","12",
+"L","13","M"];
+
+let current_index = 0;
+let total_errors = 0;
+let tmt_responses_tmt1 = [];
+let tmt_responses_tmt2 = [];
+
+var TMT1 = {
+
+  type: jsPsychHtmlKeyboardResponse,
+
+  stimulus: function(){
+
+    return `
+    <div class="tmt-wrapper">
+
+      <div class="tmt-board" id="tmt-board">
+
+      ${TMT_layout3.map(node => `
+        <button class="tmt-btn"
+                data-label="${node.label}"
+                style="
+                  position:absolute;
+                  left:${node.x}px;
+                  top:${node.y}px;
+                  width:70px;
+                  height:70px;
+                  border-radius:50%;
+                ">
+          ${node.label}
+        </button>
+      `).join("")}
+
+      </div>
+
+    </div>
+    `;
+  },
+
+  choices: "NO_KEYS",
+
+  on_load: function(){
+    const board =
+  document.getElementById("tmt-board");
+
+const scaleX =
+  window.innerWidth / 1000;
+
+const scaleY =
+  window.innerHeight / 800;
+
+const scale =
+  Math.min(scaleX, scaleY, 1);
+
+board.style.transform =
+  `scale(${scale})`;
+
+    current_index = 0;
+    total_errors = 0;
+    tmt_responses_tmt1 = [];
+
+    document.querySelectorAll(".tmt-btn")
+      .forEach(function(btn){
+
+        btn.addEventListener("click", function(){
+
+          let clicked_label = this.dataset.label;
+
+          let expected_label =
+            correct_sequence[current_index];
+
+          // CORRECT
+          if(clicked_label === expected_label){
+
+            tmt_responses_tmt1.push({
+
+              event: "correct",
+              clicked_button: clicked_label,
+              expected_button: expected_label,
+              sequence_position: current_index,
+              correct: true,
+              rt: performance.now()
+
+            });
+
+            this.style.backgroundColor =
+              "lightgreen";
+
+            current_index++;
+
+            // END TRIAL
+            if(current_index ===
+               correct_sequence.length){
+
+              jsPsych.finishTrial({
+
+                completed: true,
+                total_errors: total_errors,
+                responses: tmt_responses_tmt1
+
+              });
+            }
+
+          }
+
+          // INCORRECT
+          else {
+
+            total_errors++;
+
+            tmt_responses_tmt1.push({
+
+              event: "incorrect",
+              clicked_button: clicked_label,
+              expected_button: expected_label,
+              sequence_position: current_index,
+              correct: false,
+              total_errors: total_errors,
+              rt: performance.now()
+
+            });
+
+            this.style.backgroundColor =
+              "salmon";
+          }
+
+        });
+
+      });
+
+  }
+
+};
+timeline.push(TMT1);
+
+var TMT2 = {
+
+  type: jsPsychHtmlKeyboardResponse,
+
+  stimulus: function(){
+
+    return `
+    <div class="tmt-wrapper">
+
+      <div class="tmt-board" id="tmt-board">
+
+      ${TMT_layout4.map(node => `
+        <button class="tmt-btn"
+                data-label="${node.label}"
+                style="
+                  position:absolute;
+                  left:${node.x}px;
+                  top:${node.y}px;
+                  width:70px;
+                  height:70px;
+                  border-radius:50%;
+                ">
+          ${node.label}
+        </button>
+      `).join("")}
+
+      </div>
+
+    </div>
+    `;
+  },
+
+  choices: "NO_KEYS",
+
+  on_load: function(){
+    const board =
+  document.getElementById("tmt-board");
+
+const scaleX =
+  window.innerWidth / 1000;
+
+const scaleY =
+  window.innerHeight / 800;
+
+const scale =
+  Math.min(scaleX, scaleY, 1);
+
+board.style.transform =
+  `scale(${scale})`;
+
+    current_index = 0;
+    total_errors = 0;
+    tmt_responses_tmt2 = [];
+
+    document.querySelectorAll(".tmt-btn")
+      .forEach(function(btn){
+
+        btn.addEventListener("click", function(){
+
+          let clicked_label = this.dataset.label;
+
+          let expected_label =
+            correct_sequence[current_index];
+
+          // CORRECT
+          if(clicked_label === expected_label){
+
+            tmt_responses_tmt2.push({
+
+              event: "correct",
+              clicked_button: clicked_label,
+              expected_button: expected_label,
+              sequence_position: current_index,
+              correct: true,
+              rt: performance.now()
+
+            });
+
+            this.style.backgroundColor =
+              "lightgreen";
+
+            current_index++;
+
+            // END TRIAL
+            if(current_index ===
+               correct_sequence.length){
+
+              jsPsych.finishTrial({
+
+                completed: true,
+                total_errors: total_errors,
+                responses: tmt_responses_tmt2
+
+              });
+            }
+
+          }
+
+          // INCORRECT
+          else {
+
+            total_errors++;
+
+            tmt_responses_tmt2.push({
+
+              event: "incorrect",
+              clicked_button: clicked_label,
+              expected_button: expected_label,
+              sequence_position: current_index,
+              correct: false,
+              total_errors: total_errors,
+              rt: performance.now()
+
+            });
+
+            this.style.backgroundColor =
+              "salmon";
+          }
+
+        });
+
+      });
+
+  }
+
+};
+timeline.push(TMT2);
+
+var facename_baseline_instructions = {
+  type: jsPsychHtmlKeyboardResponse,
+  stimulus:
+    '<p><strong>Well done!</strong></p>' +
+    '<p>For your final task of this session, you will be shown pictures the faces you saw in session 1 and asked to type in the name associated with that face. </p>'+
+    "<p>You will not be told whether you got it right or wrong.</p>"+
+    "<p>If you would like a hint (the first letter of the correct name) you can press the 'hint button.'</p>"+
+    "<p>There is no limit to how many hints you can ask for, but try to remember the names without the hints as much as you can.</p>" +
+    "<p>There will be no practice session.</p>"+
+    "<p> When you are ready, press the spacebar to begin.</p>",
+  choices: [" "],
+  post_trial_gap: 1000,
+};
+
+timeline.push(facename_baseline_instructions);
+
+let allfaces_withdata = [
+  {
+    image: "FNR_64/faces/AllFaces/CFD-AF-231-357-N.jpg",
+    answer: "Charlotte",
+    correct_count: 0
+  },
+
+  {
+    image: "FNR_64/faces/AllFaces/CFD-AF-222-134-N.jpg",
+    answer: "Ava",
+    correct_count: 0
+  },
+
+  {
+    image: "FNR_64/faces/AllFaces/CFD-LF-219-223-N.jpg",
+    answer: "Avery",
+    correct_count: 0
+  },
+
+  {
+    image: "FNR_64/faces/AllFaces/CFD-LF-233-277-N.jpg",
+    answer: "Zoe",
+    correct_count: 0
+  },
+
+  {
+    image: "FNR_64/faces/AllFaces/CFD-BF-209-172-N.jpg",
+    answer: "Hazel",
+    correct_count: 0
+  },
+
+  {
+    image: "FNR_64/faces/AllFaces/CFD-BF-244-231-N.jpg",
+    answer: "Aria",
+    correct_count: 0
+  },
+
+  {
+    image: "FNR_64/faces/AllFaces/CFD-WF-245-084-N.jpg",
+    answer: "Amelia",
+    correct_count: 0
+  },
+
+  {
+    image: "FNR_64/faces/AllFaces/CFD-WF-205-006-N.jpg",
+    answer: "Riley",
+    correct_count: 0
+  },
+
+  {
+    image: "FNR_64/faces/AllFaces/CFD-AM-246-184-N.jpg",
+    answer: "Alexander",
+    correct_count: 0
+  },
+
+  {
+    image: "FNR_64/faces/AllFaces/CFD-AM-249-163-N.jpg",
+    answer: "Noah",
+    correct_count: 0
+  },
+
+  {
+    image: "FNR_64/faces/AllFaces/CFD-LM-216-082-N.jpg",
+    answer: "Carter",
+    correct_count: 0
+  },
+
+  {
+    image: "FNR_64/faces/AllFaces/CFD-LM-237-264-N.jpg",
+    answer: "Samuel",
+    correct_count: 0
+  },
+
+  {
+    image: "FNR_64/faces/AllFaces/CFD-BM-013-002-N.jpg",
+    answer: "Theodore",
+    correct_count: 0
+  },
+
+  {
+    image: "FNR_64/faces/AllFaces/CFD-BM-017-021-N.jpg",
+    answer: "Gabriel",
+    correct_count: 0
+  },
+
+  {
+    image: "FNR_64/faces/AllFaces/CFD-WM-019-003-N.jpg",
+    answer: "Liam",
+    correct_count: 0
+  },
+
+  {
+    image: "FNR_64/faces/AllFaces/CFD-WM-034-030-N.jpg",
+    answer: "James",
+    correct_count: 0
+  }
+
+  ];
+
+
+var allfaceswithdata_shuffled_fortest2 = jsPsych.randomization.shuffle(allfaces_withdata);
+
+
+var allfaceswithdata_shuffled_fortest2 =
+  jsPsych.randomization.shuffle(
+    [...allfaces_withdata]
+  );
+
+var hint_used = false;
+var hint_count = 0;
+
+var facename_baselinetest = {
+
+  type: jsPsychSurveyHtmlForm,
+
+  html: function(){
+
+  let current =
+    allfaceswithdata_shuffled_fortest2[0];
+
+  let first_letter =
+    current.answer.charAt(0);
+
+  // reset hint tracking EACH trial
+  hint_used = false;
+  hint_count = 0;
+
+  return `
+
+    <div style="text-align:center;">
+
+      <button
+        type="button"
+        id="hint-btn"
+        style="
+          font-size:18px;
+          padding:8px 14px;
+          margin-bottom:20px;
+        "
+      >
+        Hint
+      </button>
+
+      <br>
+
+      <img src="${current.image}"
+           style="width:400px; height:auto;">
+
+      <p>Name:</p>
+
+      <input
+        name="response"
+        type="text"
+        autocomplete="off"
+        required
+        style="
+          font-size:20px;
+          padding:5px;
+        "
+      >
+
+    </div>
+
+  `;
+},
+
+  button_label: "Next",
+
+  on_load: function(){
+
+    let current =
+      allfaceswithdata_shuffled_fortest2[0];
+
+    let first_letter =
+      current.answer.charAt(0);
+
+    document
+      .getElementById("hint-btn")
+      .addEventListener("click", function(){
+
+        hint_used = true;
+
+        hint_count++;
+
+        alert(
+          `Hint: The first letter is "${first_letter}"`
+        );
+
+      });
+
+  },
+
+  on_finish: function(data){
+
+    let f =
+      allfaceswithdata_shuffled_fortest2.shift();
+
+    let typed =
+      data.response.response
+        .trim()
+        .toLowerCase();
+
+    let correct =
+      f.answer
+        .trim()
+        .toLowerCase();
+
+    // =========================
+    // SAVE DATA
+    // =========================
+
+    data.correct =
+      (typed === correct);
+
+    data.correct_answer =
+      f.answer;
+
+    data.face_image =
+      f.image;
+
+    data.hint_used =
+      hint_used;
+
+    data.hint_count =
+      hint_count;
+
+    // =========================
+    // REINSERT IF WRONG
+    // =========================
+
+    if(!data.correct){
+
+      let rand_index =
+        Math.floor(
+          Math.random() *
+          (allfaceswithdata_shuffled_fortest2.length + 1)
+        );
+
+      allfaceswithdata_shuffled_fortest2.splice(
+        rand_index,
+        0,
+        f
+      );
+
+    }
+
+  }
+
+};
+
+var facename_baseline_loop = {
+
+  timeline: [facename_baselinetest],
+
+  loop_function: function(){
+
+    return allfaceswithdata_shuffled_fortest2.length > 0;
+
+  }
+
+};
+
+timeline.push(facename_baseline_loop);
+
+//DEBRIEF
+var debrief = {
+  type : jsPsychHtmlButtonResponse,
+  stimulus: "<p><strong> You Are Now Done! <p><strong>"+
+  "<p><strong> Thank You for Taking the Time to Complete These Tasks <p><strong>"+
+  "<p> You are now ready may now click the button below to finish this part of the study. ",
+
+  choices: ['Done!'],
+  };
+timeline.push(debrief);
+
+  console.log('timeline:', timeline);
+  jsPsych.run(timeline);
+
+  </script>
+</html>
