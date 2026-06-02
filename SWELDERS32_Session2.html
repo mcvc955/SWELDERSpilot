@@ -289,100 +289,100 @@ var RT_instructions = {
 
     choices: "NO_KEYS",
 
-    on_load: function(){
-      const board =
-    document.getElementById("tmt-board");
+      on_load: function(){
+    const board =
+  document.getElementById("tmt-board");
 
-  const scaleX =
-    window.innerWidth / 1000;
+const scaleX =
+  window.innerWidth / 1000;
 
-  const scaleY =
-    window.innerHeight / 800;
+const scaleY =
+  window.innerHeight / 800;
 
-  const scale =
-    Math.min(scaleX, scaleY, 1);
+const scale =
+  Math.min(scaleX, scaleY, 1);
 
-  board.style.transform =
-    `scale(${scale})`;
+board.style.transform =
+  `scale(${scale})`;
 
-      current_index = 0;
-      total_errors = 0;
-      tmt_responses_tmt1 = [];
+    current_index = 0;
+    total_errors = 0;
+    tmt_responses_tmt1 = [];
 
-      document.querySelectorAll(".tmt-btn")
-        .forEach(function(btn){
+    document.querySelectorAll(".tmt-btn")
+      .forEach(function(btn){
 
-          btn.addEventListener("click", function(){
+        btn.addEventListener("click", function(){
 
-            let clicked_label = this.dataset.label;
+          let clicked_label = this.dataset.label;
 
-            let expected_label =
-              correct_sequence[current_index];
+          let expected_label =
+            correct_sequence[current_index];
 
-            // CORRECT
-            if(clicked_label === expected_label){
+          // CORRECT
+          if(clicked_label === expected_label){
 
-              tmt_responses_tmt1.push({
+            tmt_responses_tmt1.push({
 
-                event: "correct",
-                clicked_button: clicked_label,
-                expected_button: expected_label,
-                sequence_position: current_index,
-                correct: true,
-                rt: performance.now()
+              event: "correct",
+              clicked_button: clicked_label,
+              expected_button: expected_label,
+              sequence_position: current_index,
+              correct: true,
+              rt: performance.now()
 
-              });
+            });
 
-              this.style.backgroundColor =
-                "lightgreen";
+            this.style.backgroundColor =
+              "lightgreen";
 
-              current_index++;
+            current_index++;
 
-              // END TRIAL
-              if(current_index ===
-                 correct_sequence.length){
+            // END TRIAL
+            if(current_index ===
+               correct_sequence.length){
 
-                jsPsych.finishTrial({
+              jsPsych.finishTrial({
 
-                  completed: true,
-                  total_errors: total_errors,
-                  responses: tmt_responses_tmt1
-
-                });
-              }
-
-            }
-
-            // INCORRECT
-            else {
-
-              total_errors++;
-
-              tmt_responses_tmt1.push({
-
-                event: "incorrect",
-                clicked_button: clicked_label,
-                expected_button: expected_label,
-                sequence_position: current_index,
-                correct: false,
+                completed: true,
                 total_errors: total_errors,
-                rt: performance.now()
+                responses: tmt_responses_tmt1
 
               });
-
-              this.style.backgroundColor =
-                "salmon";
             }
 
-          });
+          }
+
+          // INCORRECT
+          else {
+
+            total_errors++;
+
+            tmt_responses_tmt1.push({
+
+              event: "incorrect",
+              clicked_button: clicked_label,
+              expected_button: expected_label,
+              sequence_position: current_index,
+              correct: false,
+              total_errors: total_errors,
+              rt: performance.now()
+
+            });
+
+            this.style.backgroundColor =
+              "salmon";
+          }
 
         });
 
-    }
+      });
 
-  };
-  timeline.push(TMT1);
+  }
 
+};
+timeline.push(TMT1);
+	  
   var TMT2 = {
 
     type: jsPsychHtmlKeyboardResponse,
@@ -418,98 +418,99 @@ var RT_instructions = {
     choices: "NO_KEYS",
 
     on_load: function(){
-      const board =
-    document.getElementById("tmt-board");
+    const board =
+  document.getElementById("tmt-board");
 
-  const scaleX =
-    window.innerWidth / 1000;
+const scaleX =
+  window.innerWidth / 1000;
 
-  const scaleY =
-    window.innerHeight / 800;
+const scaleY =
+  window.innerHeight / 800;
 
-  const scale =
-    Math.min(scaleX, scaleY, 1);
+const scale =
+  Math.min(scaleX, scaleY, 1);
 
-  board.style.transform =
-    `scale(${scale})`;
+board.style.transform =
+  `scale(${scale})`;
 
-      current_index = 0;
-      total_errors = 0;
-      tmt_responses_tmt2 = [];
+    current_index = 0;
+    total_errors = 0;
+    tmt_responses_tmt2 = [];
 
-      document.querySelectorAll(".tmt-btn")
-        .forEach(function(btn){
+    document.querySelectorAll(".tmt-btn")
+      .forEach(function(btn){
 
-          btn.addEventListener("click", function(){
+        btn.addEventListener("click", function(){
 
-            let clicked_label = this.dataset.label;
+          let clicked_label = this.dataset.label;
 
-            let expected_label =
-              correct_sequence[current_index];
+          let expected_label =
+            correct_sequence[current_index];
 
-            // CORRECT
-            if(clicked_label === expected_label){
+          // CORRECT
+          if(clicked_label === expected_label){
 
-              tmt_responses_tmt2.push({
+            tmt_responses_tmt2.push({
 
-                event: "correct",
-                clicked_button: clicked_label,
-                expected_button: expected_label,
-                sequence_position: current_index,
-                correct: true,
-                rt: performance.now()
+              event: "correct",
+              clicked_button: clicked_label,
+              expected_button: expected_label,
+              sequence_position: current_index,
+              correct: true,
+              rt: performance.now()
 
-              });
+            });
 
-              this.style.backgroundColor =
-                "lightgreen";
+            this.style.backgroundColor =
+              "lightgreen";
 
-              current_index++;
+            current_index++;
 
-              // END TRIAL
-              if(current_index ===
-                 correct_sequence.length){
+            // END TRIAL
+            if(current_index ===
+               correct_sequence.length){
 
-                jsPsych.finishTrial({
+              jsPsych.finishTrial({
 
-                  completed: true,
-                  total_errors: total_errors,
-                  responses: tmt_responses_tmt2
-
-                });
-              }
-
-            }
-
-            // INCORRECT
-            else {
-
-              total_errors++;
-
-              tmt_responses_tmt2.push({
-
-                event: "incorrect",
-                clicked_button: clicked_label,
-                expected_button: expected_label,
-                sequence_position: current_index,
-                correct: false,
+                completed: true,
                 total_errors: total_errors,
-                rt: performance.now()
+                responses: tmt_responses_tmt2
 
               });
-
-              this.style.backgroundColor =
-                "salmon";
             }
 
-          });
+          }
+
+          // INCORRECT
+          else {
+
+            total_errors++;
+
+            tmt_responses_tmt2.push({
+
+              event: "incorrect",
+              clicked_button: clicked_label,
+              expected_button: expected_label,
+              sequence_position: current_index,
+              correct: false,
+              total_errors: total_errors,
+              rt: performance.now()
+
+            });
+
+            this.style.backgroundColor =
+              "salmon";
+          }
 
         });
 
-    }
+      });
 
-  };
-  timeline.push(TMT2);
+  }
+
+};
+timeline.push(TMT2);
+
 
   var facename_baseline_instructions = {
     type: jsPsychHtmlKeyboardResponse,
