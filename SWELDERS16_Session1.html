@@ -10,6 +10,7 @@
    <script src="Desktop/Cognitive Tasks for SWELDERS/jspsych/dist/jspsych.js"></script>
 
     <!-- Plugins -->
+	<script src="Desktop/Cognitive Tasks for SWELDERS/jspsych/dist/plugin-preload.js"></script> 
     <script src="Desktop/Cognitive Tasks for SWELDERS/jspsych/dist/plugin-html-keyboard-response.js"></script>
     <script src="Desktop/Cognitive Tasks for SWELDERS/jspsych/dist/plugin-html-button-response.js"></script>
     <script src="Desktop/Cognitive Tasks for SWELDERS/jspsych/dist/plugin-image-keyboard-response.js"></script>
@@ -82,6 +83,17 @@
 
 /* create timeline */
 var timeline = [];
+	  
+const preload_RTintro_images = {
+  type: jsPsychPreload,
+  images: [
+    'RTStimuli/RHand_Green_Q.png',
+    'RTStimuli/GreenLight.png',
+    'RTStimuli/RedLight.png',
+    'RTStimuli/LHand_Red_P.png',
+    'RTStimuli/LightsOff.png',
+  ]
+};	  
 
 //need this for file saving
 var participant_id = {
@@ -136,6 +148,7 @@ var RT_instructions = {
 };
 timeline.push(RT_instructions);
 
+	  
 var fixation = {
 
   type: jsPsychHtmlKeyboardResponse,
@@ -354,7 +367,36 @@ function addTrialWithFixation(trial){
 //FACE FAMILIARIZATION (Just looking at them, no names or relationships yet)
 /*Initial face study phase: the test begins with an exposure to all 16 faces. Subjects are shown 4 faces to a page, one face in each quadrant.
 They are asked to look at each face for a total of 2 s until they have seen all 16 faces.*/
+const preload_FNT_images = {
+  type: jsPsychPreload,
+  images: [
+    "FNR_64/faces/AllFaces/CFD-AF-231-357-N.jpg",
+    "FNR_64/faces/AllFaces/CFD-AF-222-134-N.jpg",
 
+    "FNR_64/faces/AllFaces/CFD-LF-219-223-N.jpg",
+    "FNR_64/faces/AllFaces/CFD-LF-233-277-N.jpg",
+
+    "FNR_64/faces/AllFaces/CFD-BF-209-172-N.jpg",
+    "FNR_64/faces/AllFaces/CFD-BF-244-231-N.jpg",
+
+    "FNR_64/faces/AllFaces/CFD-WF-245-084-N.jpg",
+    "FNR_64/faces/AllFaces/CFD-WF-205-006-N.jpg",
+
+    "FNR_64/faces/AllFaces/CFD-AM-246-184-N.jpg",
+    "FNR_64/faces/AllFaces/CFD-AM-249-163-N.jpg",
+
+    "FNR_64/faces/AllFaces/CFD-LM-216-082-N.jpg",
+    "FNR_64/faces/AllFaces/CFD-LM-237-264-N.jpg",
+
+    "FNR_64/faces/AllFaces/CFD-BM-013-002-N.jpg",
+    "FNR_64/faces/AllFaces/CFD-BM-017-021-N.jpg",
+
+    "FNR_64/faces/AllFaces/CFD-WM-019-003-N.jpg",
+    "FNR_64/faces/AllFaces/CFD-WM-034-030-N.jpg"
+  ]
+};
+
+timeline.push(preload_FNT_images);
 
 var facesonly_instructions = {
 type: jsPsychHtmlKeyboardResponse,
