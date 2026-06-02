@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-  <title>Session1_Behavior</title>
+  <title>Session2_Behavior</title>
   <html>
   <head>
 
@@ -10,6 +10,7 @@
     <script src="jspsych/dist/jspsych.js"></script>
 
     <!-- Plugins -->
+	<script src="jspsych/dist/plugin-preload.js"></script> 
     <script src="jspsych/dist/plugin-html-keyboard-response.js"></script>
     <script src="jspsych/dist/plugin-html-button-response.js"></script>
     <script src="jspsych/dist/plugin-image-keyboard-response.js"></script>
@@ -82,6 +83,19 @@
 
 /* create timeline */
 var timeline = [];
+
+const preload_RTintro_images = {
+  type: jsPsychPreload,
+  images: [
+    'RTStimuli/RHand_Green_Q.png',
+    'RTStimuli/GreenLight.png',
+    'RTStimuli/RedLight.png',
+    'RTStimuli/LHand_Red_P.png',
+    'RTStimuli/LightsOff.png',
+  ]
+};
+
+timeline.push(preload_RTintro_images);	  
 
 var participant_id = {
   type: jsPsychSurveyHtmlForm,
@@ -508,6 +522,38 @@ board.style.transform =
 
 };
 timeline.push(TMT2);
+
+const preload_FNT_images = {
+  type: jsPsychPreload,
+  images: [
+    "FNR_64/faces/AllFaces/CFD-AF-231-357-N.jpg",
+    "FNR_64/faces/AllFaces/CFD-AF-222-134-N.jpg",
+
+    "FNR_64/faces/AllFaces/CFD-LF-219-223-N.jpg",
+    "FNR_64/faces/AllFaces/CFD-LF-233-277-N.jpg",
+
+    "FNR_64/faces/AllFaces/CFD-BF-209-172-N.jpg",
+    "FNR_64/faces/AllFaces/CFD-BF-244-231-N.jpg",
+
+    "FNR_64/faces/AllFaces/CFD-WF-245-084-N.jpg",
+    "FNR_64/faces/AllFaces/CFD-WF-205-006-N.jpg",
+
+    "FNR_64/faces/AllFaces/CFD-AM-246-184-N.jpg",
+    "FNR_64/faces/AllFaces/CFD-AM-249-163-N.jpg",
+
+    "FNR_64/faces/AllFaces/CFD-LM-216-082-N.jpg",
+    "FNR_64/faces/AllFaces/CFD-LM-237-264-N.jpg",
+
+    "FNR_64/faces/AllFaces/CFD-BM-013-002-N.jpg",
+    "FNR_64/faces/AllFaces/CFD-BM-017-021-N.jpg",
+
+    "FNR_64/faces/AllFaces/CFD-WM-019-003-N.jpg",
+    "FNR_64/faces/AllFaces/CFD-WM-034-030-N.jpg"
+  ]
+};
+
+timeline.push(preload_FNT_images);
+
 
 var facename_baseline_instructions = {
   type: jsPsychHtmlKeyboardResponse,
