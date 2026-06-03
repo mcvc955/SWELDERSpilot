@@ -10,6 +10,7 @@
     <script src="jspsych/dist/jspsych.js"></script>
 
     <!-- Plugins -->
+	<script src="jspsych/dist/plugin-preload.js"></script>
     <script src="jspsych/dist/plugin-html-keyboard-response.js"></script>
     <script src="jspsych/dist/plugin-html-button-response.js"></script>
     <script src="jspsych/dist/plugin-image-keyboard-response.js"></script>
@@ -76,12 +77,26 @@
       jsPsych.data.displayData();
       // Make sure that participant id is the first response (thats what values[0] gets)
           ptc_id = JSON.parse(jsPsych.data.get().select('responses').values[0])['participant id'];
-          saveData("SWELDERS_RT_Session1_" + ptc_id + '_'+ Date.now().toString(), jsPsych.data.get().csv());},
+          saveData("SWELDERS_pilot64_Session2_" + ptc_id + '_'+ Date.now().toString(), jsPsych.data.get().csv());},
     });
 
 
 /* create timeline */
 var timeline = [];
+
+const preload_RTintro_images = {
+  type: jsPsychPreload,
+  images: [
+    'RTStimuli/RHand_Green_Q.png',
+    'RTStimuli/GreenLight.png',
+    'RTStimuli/RedLight.png',
+    'RTStimuli/LHand_Red_P.png',
+    'RTStimuli/LightsOff.png',
+  ]
+};
+
+timeline.push(preload_RTintro_images);	  
+
 
 //need this for file saving
 var participant_id = {
@@ -163,6 +178,79 @@ var RT_instructions = {
       };
 
   timeline.push(RT_Task);
+
+const preload_FNT_images = {
+  type: jsPsychPreload,
+  images: [
+"FNR_64/faces/AllFaces/CFD-AF-231-357-N.jpg",
+"FNR_64/faces/AllFaces/CFD-LF-219-223-N.jpg",
+"FNR_64/faces/AllFaces/CFD-BF-209-172-N.jpg",
+"FNR_64/faces/AllFaces/CFD-WF-008-002-N.jpg",
+"FNR_64/faces/AllFaces/CFD-WF-245-084-N.jpg",
+"FNR_64/faces/AllFaces/CFD-LF-241-188-N.jpg",
+"FNR_64/faces/AllFaces/CFD-BF-019-001-N.jpg",
+"FNR_64/faces/AllFaces/CFD-BF-009-002-N.jpg",
+"FNR_64/faces/AllFaces/CFD-WF-011-002-N.jpg",
+"FNR_64/faces/AllFaces/CFD-AF-201-060-N.jpg",
+"FNR_64/faces/AllFaces/CFD-WF-017-003-N.jpg",
+"FNR_64/faces/AllFaces/CFD-BF-214-308-N.jpg",
+"FNR_64/faces/AllFaces/CFD-LF-238-154-N.jpg",
+"FNR_64/faces/AllFaces/CFD-BF-254-201-N.jpg",
+"FNR_64/faces/AllFaces/CFD-BF-253-202-N.jpg",
+"FNR_64/faces/AllFaces/CFD-LF-202-065-N.jpg",
+"FNR_64/faces/AllFaces/CFD-AF-230-193-N.jpg",
+"FNR_64/faces/AllFaces/CFD-LF-210-220-N.jpg",
+"FNR_64/faces/AllFaces/CFD-AF-236-145-N.jpg",
+"FNR_64/faces/AllFaces/CFD-AF-202-122-N.jpg",
+"FNR_64/faces/AllFaces/CFD-AF-214-139-N.jpg",
+"FNR_64/faces/AllFaces/CFD-LF-220-120-N.jpg",
+"FNR_64/faces/AllFaces/CFD-WF-205-006-N.jpg",
+"FNR_64/faces/AllFaces/CFD-BF-244-231-N.jpg",
+"FNR_64/faces/AllFaces/CFD-AF-200-228-N.jpg",
+"FNR_64/faces/AllFaces/CFD-WF-022-017-N.jpg",
+"FNR_64/faces/AllFaces/CFD-AF-222-134-N.jpg",
+"FNR_64/faces/AllFaces/CFD-WF-236-107-N.jpg",
+"FNR_64/faces/AllFaces/CFD-BF-225-192-N.jpg",
+"FNR_64/faces/AllFaces/CFD-LF-227-054-N.jpg",
+"FNR_64/faces/AllFaces/CFD-WF-213-031-N.jpg",
+"FNR_64/faces/AllFaces/CFD-LF-233-277-N.jpg",
+"FNR_64/faces/AllFaces/CFD-WM-019-003-N.jpg",
+"FNR_64/faces/AllFaces/CFD-WM-201-063-N.jpg",
+"FNR_64/faces/AllFaces/CFD-LM-216-082-N.jpg",
+"FNR_64/faces/AllFaces/CFD-BM-013-002-N.jpg",
+"FNR_64/faces/AllFaces/CFD-AM-246-184-N.jpg",
+"FNR_64/faces/AllFaces/CFD-WM-018-002-N.jpg",
+"FNR_64/faces/AllFaces/CFD-BM-011-016-N.jpg",
+"FNR_64/faces/AllFaces/CFD-LM-251-073-N.jpg",
+"FNR_64/faces/AllFaces/CFD-WM-029-023-N.jpg",
+"FNR_64/faces/AllFaces/CFD-AM-249-163-N.jpg",
+"FNR_64/faces/AllFaces/CFD-WM-258-125-N.jpg",
+"FNR_64/faces/AllFaces/CFD-AM-210-035-N.jpg",
+"FNR_64/faces/AllFaces/CFD-AM-223-138-N.jpg",
+"FNR_64/faces/AllFaces/CFD-AM-212-050-N.jpg",
+"FNR_64/faces/AllFaces/CFD-AM-238-269-N.jpg",
+"FNR_64/faces/AllFaces/CFD-BM-044-001-N.jpg",
+"FNR_64/faces/AllFaces/CFD-WM-023-001-N.jpg",
+"FNR_64/faces/AllFaces/CFD-BM-027-001-N.jpg",
+"FNR_64/faces/AllFaces/CFD-LM-237-264-N.jpg",
+"FNR_64/faces/AllFaces/CFD-BM-019-002-N.jpg",
+"FNR_64/faces/AllFaces/CFD-LM-232-204-N.jpg",
+"FNR_64/faces/AllFaces/CFD-LM-206-204-N.jpg",
+"FNR_64/faces/AllFaces/CFD-WM-034-030-N.jpg",
+"FNR_64/faces/AllFaces/CFD-AM-219-101-N.jpg",
+"FNR_64/faces/AllFaces/CFD-LM-222-239-N.jpg",
+"FNR_64/faces/AllFaces/CFD-BM-249-235-N.jpg",
+"FNR_64/faces/AllFaces/CFD-AM-233-236-N.jpg",
+"FNR_64/faces/AllFaces/CFD-LM-246-087-N.jpg",
+"FNR_64/faces/AllFaces/CFD-BM-029-024-N.jpg",
+"FNR_64/faces/AllFaces/CFD-LM-248-089-N.jpg",
+"FNR_64/faces/AllFaces/CFD-BM-017-021-N.jpg",
+"FNR_64/faces/AllFaces/CFD-WM-210-057-N.jpg"
+
+  ]
+};
+
+timeline.push(preload_FNT_images);
 
 
   var TMT_instructions1 = {
