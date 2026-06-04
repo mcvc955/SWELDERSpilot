@@ -95,7 +95,7 @@ var jsPsych = initJsPsych({
       )['participant id'];
 
     const filename =
-      "SWELDERS_RT_Session1_" +
+      "SWELDERS_16_Session1_" +
       ptc_id +
       "_" +
       Date.now();
@@ -117,8 +117,8 @@ var jsPsych = initJsPsych({
     .catch(error => {
       console.error(error);
     });
-
-}
+  },
+});
 
 /* create timeline */
 var timeline = [];
