@@ -1836,10 +1836,7 @@ var allfaceswithdata_shuffled_fortest2 = jsPsych.randomization.shuffle(allfaces_
 
 timeline.push(facename_baselinetest);*/
 
-var allfaceswithdata_shuffled_fortest2 =
-  jsPsych.randomization.shuffle(
-    [...allfaces_withdata]
-  );
+var allfaceswithdata_shuffled_fortest2 = jsPsych.randomization.shuffle(allfaces_withdata);
 
 var hint_used = false;
 var hint_count = 0;
@@ -1963,7 +1960,7 @@ var facename_baselinetest = {
     // REINSERT IF WRONG
     // =========================
 
-    if(!data.correct){
+    /*if(!data.correct){
 
       let rand_index =
         Math.floor(
@@ -1979,22 +1976,9 @@ var facename_baselinetest = {
 
     }
 
-  }
+  }*/
 
 };
-
-var facename_baseline_loop = {
-
-  timeline: [facename_baselinetest],
-
-  loop_function: function(){
-
-    return allfaceswithdata_shuffled_fortest2.length > 0;
-
-  }
-
-};
-
 timeline.push(facename_baseline_loop);
 
 //DEBRIEF
