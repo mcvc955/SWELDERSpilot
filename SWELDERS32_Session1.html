@@ -1926,56 +1926,6 @@ timeline.push(facename_baseline_instructions);
 
 var allfaceswithdata_shuffled_fortest2 = jsPsych.randomization.shuffle(allfaces_withdata);
 
-/*var facename_baselinetest = {
-  type: jsPsychCloze,
-
-  text: function(){
-    let current = allfaceswithdata_shuffled_fortest2[0];
-    let correct_name = current.text.match(/%([^%]+)%/)[1].trim();
-    let first_letter = correct_name.charAt(0);
-
-    return `
-      ${current.text}
-      <button id="hint-btn">Hint</button>
-      <p id="hint-text" style="display:none; font-size:18px;">
-        First letter: ${first_letter}
-      </p>
-    `;
-  },
-
-  on_load: function(){
-    document.getElementById("hint-btn").addEventListener("click", function(){
-      document.getElementById("hint-text").style.display = "block";
-    });
-  },
-
-  check_answers: true,
-  button_text: 'Next',
-
-  mistake_fn: function(){
-    let correct_name = allfaceswithdata_shuffled_fortest2[0].text.match(/%([^%]+)%/)[1].trim();
-    alert(`Incorrect. The correct answer is ${correct_name}.`);
-  },
-
-  on_finish: function(data){
-    let f = allfaceswithdata_shuffled_fortest2.shift();
-
-    if(data.correct){
-      f.correct_once = true;
-    } else {
-      let rand_index = Math.floor(Math.random() * allfaceswithdata_shuffled_fortest2.length);
-      allfaceswithdata_shuffled_fortest2.splice(rand_index, 0, f);
-    }
-  }
-};
-
-timeline.push(facename_baselinetest);*/
-
-var allfaceswithdata_shuffled_fortest2 =
-  jsPsych.randomization.shuffle(
-    [...allfaces_withdata]
-  );
-
 var hint_used = false;
 var hint_count = 0;
 
@@ -2098,7 +2048,7 @@ var facename_baselinetest = {
     // REINSERT IF WRONG
     // =========================
 
-    if(!data.correct){
+    /*if(!data.correct){
 
       let rand_index =
         Math.floor(
@@ -2114,21 +2064,10 @@ var facename_baselinetest = {
 
     }
 
-  }
+  }*/
 
 };
 
-var facename_baseline_loop = {
-
-  timeline: [facename_baselinetest],
-
-  loop_function: function(){
-
-    return allfaceswithdata_shuffled_fortest2.length > 0;
-
-  }
-
-};
 
 timeline.push(facename_baseline_loop);
 
