@@ -686,16 +686,69 @@ timeline.push(TMT2);
     ];
 
 
-  var allfaceswithdata_shuffled_fortest2 = jsPsych.randomization.shuffle(allfaces_withdata);
+ var allfaceswithdata_shuffled_fortest2 = jsPsych.randomization.shuffle(allfaces_withdata);
 
-  var hint_used = false;
-  var hint_count = 0;
+var hint_used = false;
+var hint_count = 0;
 
-  var facename_baselinetest = {
+var facename_baselinetest = {
 
-    type: jsPsychSurveyHtmlForm,
+  type: jsPsychSurveyHtmlForm,
 
-    html: function(){
+  html: function(){
+
+  let current =
+    allfaceswithdata_shuffled_fortest2[0];
+
+  let first_letter =
+    current.answer.charAt(0);
+
+  // reset hint tracking EACH trial
+  hint_used = false;
+  hint_count = 0;
+
+  return `
+
+    <div style="text-align:center;">
+
+      <button
+        type="button"
+        id="hint-btn"
+        style="
+          font-size:18px;
+          padding:8px 14px;
+          margin-bottom:20px;
+        "
+      >
+        Hint
+      </button>
+
+      <br>
+
+      <img src="${current.image}"
+           style="width:400px; height:auto;">
+
+      <p>Name:</p>
+
+      <input
+        name="response"
+        type="text"
+        autocomplete="off"
+        required
+        style="
+          font-size:20px;
+          padding:5px;
+        "
+      >
+
+    </div>
+
+  `;
+},
+
+  button_label: "Next",
+
+  on_load: function(){
 
     let current =
       allfaceswithdata_shuffled_fortest2[0];
@@ -703,144 +756,90 @@ timeline.push(TMT2);
     let first_letter =
       current.answer.charAt(0);
 
-    // reset hint tracking EACH trial
-    hint_used = false;
-    hint_count = 0;
+    document
+      .getElementById("hint-btn")
+      .addEventListener("click", function(){
 
-    return `
+        hint_used = true;
 
-      <div style="text-align:center;">
+        hint_count++;
 
-        <button
-          type="button"
-          id="hint-btn"
-          style="
-            font-size:18px;
-            padding:8px 14px;
-            margin-bottom:20px;
-          "
-        >
-          Hint
-        </button>
-
-        <br>
-
-        <img src="${current.image}"
-             style="width:400px; height:auto;">
-
-        <p>Name:</p>
-
-        <input
-          name="response"
-          type="text"
-          autocomplete="off"
-          required
-          style="
-            font-size:20px;
-            padding:5px;
-          "
-        >
-
-      </div>
-
-    `;
-  },
-
-    button_label: "Next",
-
-    on_load: function(){
-
-      let current =
-        allfaceswithdata_shuffled_fortest2[0];
-
-      let first_letter =
-        current.answer.charAt(0);
-
-      document
-        .getElementById("hint-btn")
-        .addEventListener("click", function(){
-
-          hint_used = true;
-
-          hint_count++;
-
-          alert(
-            `Hint: The first letter is "${first_letter}"`
-          );
-
-        });
-
-    },
-
-    on_finish: function(data){
-
-      let f =
-        allfaceswithdata_shuffled_fortest2.shift();
-
-      let typed =
-        data.response.response
-          .trim()
-          .toLowerCase();
-
-      let correct =
-        f.answer
-          .trim()
-          .toLowerCase();
-
-      // =========================
-      // SAVE DATA
-      // =========================
-
-      data.correct =
-        (typed === correct);
-
-      data.correct_answer =
-        f.answer;
-
-      data.face_image =
-        f.image;
-
-      data.hint_used =
-        hint_used;
-
-      data.hint_count =
-        hint_count;
-
-      // =========================
-      // REINSERT IF WRONG
-      // =========================
-
-      if(!data.correct){
-
-        let rand_index =
-          Math.floor(
-            Math.random() *
-            (allfaceswithdata_shuffled_fortest2.length + 1)
-          );
-
-        allfaceswithdata_shuffled_fortest2.splice(
-          rand_index,
-          0,
-          f
+        alert(
+          `Hint: The first letter is "${first_letter}"`
         );
 
-      }
+      });
+
+  },
+
+  on_finish: function(data){
+
+    let f =
+      allfaceswithdata_shuffled_fortest2.shift();
+
+    let typed =
+      data.response.response
+        .trim()
+        .toLowerCase();
+
+    let correct =
+      f.answer
+        .trim()
+        .toLowerCase();
+
+    // =========================
+    // SAVE DATA
+    // =========================
+
+    data.correct =
+      (typed === correct);
+
+    data.correct_answer =
+      f.answer;
+
+    data.face_image =
+      f.image;
+
+    data.hint_used =
+      hint_used;
+
+    data.hint_count =
+      hint_count;
+
+    // =========================
+    // REINSERT IF WRONG
+    // =========================
+
+    /*if(!data.correct){
+
+      let rand_index =
+        Math.floor(
+          Math.random() *
+          (allfaceswithdata_shuffled_fortest2.length + 1)
+        );
+
+      allfaceswithdata_shuffled_fortest2.splice(
+        rand_index,
+        0,
+        f
+      );
 
     }
 
-  };
+  }*/
 
-  var facename_baseline_loop = {
+};
+var facename_baseline_loop = {
 
-    timeline: [facename_baselinetest],
+  timeline: [facename_baselinetest],
 
-    loop_function: function(){
+  loop_function: function(){
 
-      return allfaceswithdata_shuffled_fortest2.length > 0;
+    return allfaceswithdata_shuffled_fortest2.length > 0;
 
-    }
+  }
 
-  };
+};
 
   timeline.push(facename_baseline_loop);
 
