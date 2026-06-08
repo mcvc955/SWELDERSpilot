@@ -1,0 +1,28 @@
+# Node modules and dependencies
+node_modules/
+package-lock.json
+yarn.lock
+
+# Large jsPsych files (already in dist)
+jspsych/examples/
+jspsych_online_TMT-master/
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Data and logs
+*.log
+.env
+.env.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Large binary files
+cfd/

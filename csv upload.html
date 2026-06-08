@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+  <title>Session1_Behavior</title>
+  <html>
+  <head>
+
+    <!-- jsPsych CSS -->
+    <link href="jspsych/dist/jspsych.css" rel="stylesheet" type="text/css" />
+
+    <!-- jsPsych core -->
+    <script src="jspsych/dist/jspsych.js"></script>
+
+    <!-- Plugins -->
+    <script src="jspsych/dist/plugin-html-keyboard-response.js"></script>
+    <script src="jspsych/dist/plugin-html-button-response.js"></script>
+    <script src="jspsych/dist/plugin-image-keyboard-response.js"></script>
+    <script src="jspsych/dist/plugin-survey-html-form.js"></script>
+    <script src="jspsych/dist/plugin-fullscreen.js"></script>
+    <script src="jspsych/dist/plugin-cloze.js"></script>
+
+  </head>
+
+  <body></body>
+  <style>
+  .face-container {
+    text-align: center;
+  }
+
+  .face-img {
+    width: 300px;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+  }
+
+  .face-name {
+    margin-top: 10px;
+    font-size: 20px;
+    font-weight: bold;
+  }
+  html, body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.tmt-wrapper{
+  width: 100vw;
+  height: 100vh;
+
+  display:flex;
+  justify-content:center;
+  align-items:center;
+
+  overflow:hidden;
+}
+
+.tmt-board{
+  position:relative;
+  width:900px;
+  height:700px;
+
+  transform-origin: center center;
+}
+  </style>
+  <script>
+
+var jsPsych = initJsPsych({
+    override_safe_mode: true,
+     show_progress_bar: true,
+    on_finish: function() {
+
+    const ptc_id =
+      JSON.parse(
+        jsPsych.data.get()
+          .select('responses')
+          .values[0]
+      )['participant id'];
+
+    const filename =
+      "SWELDERS_RT_Session1_" +
+      ptc_id +
+      "_" +
+      Date.now();
+
+    fetch(GOOGLE_SCRIPT_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        filename: filename,
+        csv: jsPsych.data.get().csv()
+      })
+    })
+    .then(response => response.text())
+    .then(result => {
+      console.log("Saved:", result);
+    })
+    .catch(error => {
+      console.error(error);
+    });
+
+};
+
+</script>
+</html>

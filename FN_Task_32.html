@@ -40,6 +40,19 @@
   <body></body>
   <script>
 
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyzRSkOmjZk5vdQJgKJl3Q7CjyC8v2WduYAYF2cOzrGxx9EVzSl8Ng9noyDrOrJZQiI7A/exec';
+
+// Helper to send CSV data to a Google Apps Script web app
+function saveData(filename, csv) {
+  fetch(GOOGLE_SCRIPT_URL, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({ filename: filename, csv: csv })
+  })
+  .then(res => res.text())
+  .then(txt => console.log('Saved:', txt))
+  .catch(err => console.error('Save failed:', err));
+}
 
   /* initialize jsPsych */
 var jsPsych = initJsPsych({
@@ -136,7 +149,7 @@ var session1_chosen_TMT_images = jsPsych.randomization.sampleWithoutReplacement 
 console.log(session1_chosen_TMT_images);
 
 
-obj_type: 'image',
+/*obj_type: 'image',
 file: jsPsych.timelineVariable('fileName'),
 startX: 'center',// image position
 startY: 'center',
@@ -152,7 +165,7 @@ drawFunc: function (stimulus, canvas, context) { // 'This function enables to mo
     }, delayInMilliseconds);
 
 }
-}
+}*/
 
 //fixation cross
 var extra_cross = {
