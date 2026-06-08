@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-  <title>Session1_Behavior</title>
+  <title>Session2_Behavior</title>
   <html>
   <head>
 
@@ -10,6 +10,7 @@
     <script src="jspsych/dist/jspsych.js"></script>
 
     <!-- Plugins -->
+	<script src="jspsych/dist/plugin-preload.js"></script>  
     <script src="jspsych/dist/plugin-html-keyboard-response.js"></script>
     <script src="jspsych/dist/plugin-html-button-response.js"></script>
     <script src="jspsych/dist/plugin-image-keyboard-response.js"></script>
@@ -90,12 +91,25 @@ function saveData(filename, csv) {
       jsPsych.data.displayData();
       // Make sure that participant id is the first response (thats what values[0] gets)
           ptc_id = JSON.parse(jsPsych.data.get().select('responses').values[0])['participant id'];
-          saveData("SWELDERS_RT_Session1_" + ptc_id + '_'+ Date.now().toString(), jsPsych.data.get().csv());},
+          saveData("SWELDERS_pilot32_Session2_" + ptc_id + '_'+ Date.now().toString(), jsPsych.data.get().csv());},
     });
 
 
 /* create timeline */
 var timeline = [];
+
+const preload_RTintro_images = {
+  type: jsPsychPreload,
+  images: [
+    'RTStimuli/RHand_Green_Q.png',
+    'RTStimuli/GreenLight.png',
+    'RTStimuli/RedLight.png',
+    'RTStimuli/LHand_Red_P.png',
+    'RTStimuli/LightsOff.png',
+  ]
+};
+
+timeline.push(preload_RTintro_images);	  
 
 //need this for file saving
 var participant_id = {
@@ -114,13 +128,13 @@ var RT_instructions = {
   stimulus: `
 
       <p>In the following task a stop light will appear on the screen.</p>
-      <p>If the light is <strong><font color="green"> GREEN </strong></font> press the <strong><font color="green"> P KEY </strong></font>
+      <p>If the light is <strong><font color="green"> GREEN </strong></font> press the <strong><font color="green"> Q KEY </strong></font>
       with your <strong>right index finger</strong> as fast as you can. Think of this key as your gas pedal.</p>
   <div style='width: 1000px;'>
       <div style='float: left;'><img src='RTStimuli/RHand_Green_Q.png' style="width:500px;height:300px;"></img></div>
       <div style='float: right;'><img src='RTStimuli/GreenLight.png' style="width:500px;height:300px;"></img></div>
   </div>
-      <p>If the light is <strong><font color="red"> RED</strong></font>, press the <strong><font color="red">Q KEY</strong></font>
+      <p>If the light is <strong><font color="red"> RED</strong></font>, press the <strong><font color="red"> P KEY</strong></font>
       with your <strong>left index finger</strong> as fast as you can, think of this as your brake pedal.</p>
   <div style='width: 1000px;'>
       <div style='float: left;'><img src='RTStimuli/RedLight.png' style="width:500px;height:300px;"></img></div>
@@ -177,6 +191,54 @@ var RT_instructions = {
       };
 
   timeline.push(RT_Task);
+
+const preload_FNT_images = {
+  type: jsPsychPreload,
+  images: [
+"FNR_64/faces/AllFaces/CFD-AF-231-357-N.jpg",
+"FNR_64/faces/AllFaces/CFD-AF-201-060-N.jpg",
+"FNR_64/faces/AllFaces/CFD-AF-200-228-N.jpg",
+"FNR_64/faces/AllFaces/CFD-AF-222-134-N.jpg",
+
+"FNR_64/faces/AllFaces/CFD-LF-219-223-N.jpg",
+"FNR_64/faces/AllFaces/CFD-LF-241-188-N.jpg",
+"FNR_64/faces/AllFaces/CFD-LF-202-065-N.jpg",
+"FNR_64/faces/AllFaces/CFD-LF-233-277-N.jpg",
+
+"FNR_64/faces/AllFaces/CFD-BF-209-172-N.jpg",
+"FNR_64/faces/AllFaces/CFD-BF-019-001-N.jpg",
+"FNR_64/faces/AllFaces/CFD-BF-244-231-N.jpg",
+"FNR_64/faces/AllFaces/CFD-BF-225-192-N.jpg",
+
+"FNR_64/faces/AllFaces/CFD-WF-008-002-N.jpg",
+"FNR_64/faces/AllFaces/CFD-WF-245-084-N.jpg",
+"FNR_64/faces/AllFaces/CFD-WF-205-006-N.jpg",
+"FNR_64/faces/AllFaces/CFD-WF-213-031-N.jpg",
+
+"FNR_64/faces/AllFaces/CFD-AM-246-184-N.jpg",
+"FNR_64/faces/AllFaces/CFD-AM-249-163-N.jpg",
+"FNR_64/faces/AllFaces/CFD-AM-210-035-N.jpg",
+"FNR_64/faces/AllFaces/CFD-AM-238-269-N.jpg",
+
+"FNR_64/faces/AllFaces/CFD-LM-216-082-N.jpg",
+"FNR_64/faces/AllFaces/CFD-LM-251-073-N.jpg",
+"FNR_64/faces/AllFaces/CFD-LM-237-264-N.jpg",
+"FNR_64/faces/AllFaces/CFD-LM-222-239-N.jpg",
+
+"FNR_64/faces/AllFaces/CFD-BM-013-002-N.jpg",
+"FNR_64/faces/AllFaces/CFD-BM-011-016-N.jpg",
+"FNR_64/faces/AllFaces/CFD-BM-027-001-N.jpg",
+"FNR_64/faces/AllFaces/CFD-BM-017-021-N.jpg",
+
+"FNR_64/faces/AllFaces/CFD-WM-019-003-N.jpg",
+"FNR_64/faces/AllFaces/CFD-WM-201-063-N.jpg",
+"FNR_64/faces/AllFaces/CFD-WM-034-030-N.jpg",
+"FNR_64/faces/AllFaces/CFD-WM-258-125-N.jpg",
+  ]
+};
+
+timeline.push(preload_FNT_images);
+	  
 
 
   var TMT_instructions1 = {
@@ -303,100 +365,100 @@ var RT_instructions = {
 
     choices: "NO_KEYS",
 
-    on_load: function(){
-      const board =
-    document.getElementById("tmt-board");
+      on_load: function(){
+    const board =
+  document.getElementById("tmt-board");
 
-  const scaleX =
-    window.innerWidth / 1000;
+const scaleX =
+  window.innerWidth / 1000;
 
-  const scaleY =
-    window.innerHeight / 800;
+const scaleY =
+  window.innerHeight / 800;
 
-  const scale =
-    Math.min(scaleX, scaleY, 1);
+const scale =
+  Math.min(scaleX, scaleY, 1);
 
-  board.style.transform =
-    `scale(${scale})`;
+board.style.transform =
+  `scale(${scale})`;
 
-      current_index = 0;
-      total_errors = 0;
-      tmt_responses_tmt1 = [];
+    current_index = 0;
+    total_errors = 0;
+    tmt_responses_tmt1 = [];
 
-      document.querySelectorAll(".tmt-btn")
-        .forEach(function(btn){
+    document.querySelectorAll(".tmt-btn")
+      .forEach(function(btn){
 
-          btn.addEventListener("click", function(){
+        btn.addEventListener("click", function(){
 
-            let clicked_label = this.dataset.label;
+          let clicked_label = this.dataset.label;
 
-            let expected_label =
-              correct_sequence[current_index];
+          let expected_label =
+            correct_sequence[current_index];
 
-            // CORRECT
-            if(clicked_label === expected_label){
+          // CORRECT
+          if(clicked_label === expected_label){
 
-              tmt_responses_tmt1.push({
+            tmt_responses_tmt1.push({
 
-                event: "correct",
-                clicked_button: clicked_label,
-                expected_button: expected_label,
-                sequence_position: current_index,
-                correct: true,
-                rt: performance.now()
+              event: "correct",
+              clicked_button: clicked_label,
+              expected_button: expected_label,
+              sequence_position: current_index,
+              correct: true,
+              rt: performance.now()
 
-              });
+            });
 
-              this.style.backgroundColor =
-                "lightgreen";
+            this.style.backgroundColor =
+              "lightgreen";
 
-              current_index++;
+            current_index++;
 
-              // END TRIAL
-              if(current_index ===
-                 correct_sequence.length){
+            // END TRIAL
+            if(current_index ===
+               correct_sequence.length){
 
-                jsPsych.finishTrial({
+              jsPsych.finishTrial({
 
-                  completed: true,
-                  total_errors: total_errors,
-                  responses: tmt_responses_tmt1
-
-                });
-              }
-
-            }
-
-            // INCORRECT
-            else {
-
-              total_errors++;
-
-              tmt_responses_tmt1.push({
-
-                event: "incorrect",
-                clicked_button: clicked_label,
-                expected_button: expected_label,
-                sequence_position: current_index,
-                correct: false,
+                completed: true,
                 total_errors: total_errors,
-                rt: performance.now()
+                responses: tmt_responses_tmt1
 
               });
-
-              this.style.backgroundColor =
-                "salmon";
             }
 
-          });
+          }
+
+          // INCORRECT
+          else {
+
+            total_errors++;
+
+            tmt_responses_tmt1.push({
+
+              event: "incorrect",
+              clicked_button: clicked_label,
+              expected_button: expected_label,
+              sequence_position: current_index,
+              correct: false,
+              total_errors: total_errors,
+              rt: performance.now()
+
+            });
+
+            this.style.backgroundColor =
+              "salmon";
+          }
 
         });
 
-    }
+      });
 
-  };
-  timeline.push(TMT1);
+  }
 
+};
+timeline.push(TMT1);
+	  
   var TMT2 = {
 
     type: jsPsychHtmlKeyboardResponse,
@@ -432,98 +494,99 @@ var RT_instructions = {
     choices: "NO_KEYS",
 
     on_load: function(){
-      const board =
-    document.getElementById("tmt-board");
+    const board =
+  document.getElementById("tmt-board");
 
-  const scaleX =
-    window.innerWidth / 1000;
+const scaleX =
+  window.innerWidth / 1000;
 
-  const scaleY =
-    window.innerHeight / 800;
+const scaleY =
+  window.innerHeight / 800;
 
-  const scale =
-    Math.min(scaleX, scaleY, 1);
+const scale =
+  Math.min(scaleX, scaleY, 1);
 
-  board.style.transform =
-    `scale(${scale})`;
+board.style.transform =
+  `scale(${scale})`;
 
-      current_index = 0;
-      total_errors = 0;
-      tmt_responses_tmt2 = [];
+    current_index = 0;
+    total_errors = 0;
+    tmt_responses_tmt2 = [];
 
-      document.querySelectorAll(".tmt-btn")
-        .forEach(function(btn){
+    document.querySelectorAll(".tmt-btn")
+      .forEach(function(btn){
 
-          btn.addEventListener("click", function(){
+        btn.addEventListener("click", function(){
 
-            let clicked_label = this.dataset.label;
+          let clicked_label = this.dataset.label;
 
-            let expected_label =
-              correct_sequence[current_index];
+          let expected_label =
+            correct_sequence[current_index];
 
-            // CORRECT
-            if(clicked_label === expected_label){
+          // CORRECT
+          if(clicked_label === expected_label){
 
-              tmt_responses_tmt2.push({
+            tmt_responses_tmt2.push({
 
-                event: "correct",
-                clicked_button: clicked_label,
-                expected_button: expected_label,
-                sequence_position: current_index,
-                correct: true,
-                rt: performance.now()
+              event: "correct",
+              clicked_button: clicked_label,
+              expected_button: expected_label,
+              sequence_position: current_index,
+              correct: true,
+              rt: performance.now()
 
-              });
+            });
 
-              this.style.backgroundColor =
-                "lightgreen";
+            this.style.backgroundColor =
+              "lightgreen";
 
-              current_index++;
+            current_index++;
 
-              // END TRIAL
-              if(current_index ===
-                 correct_sequence.length){
+            // END TRIAL
+            if(current_index ===
+               correct_sequence.length){
 
-                jsPsych.finishTrial({
+              jsPsych.finishTrial({
 
-                  completed: true,
-                  total_errors: total_errors,
-                  responses: tmt_responses_tmt2
-
-                });
-              }
-
-            }
-
-            // INCORRECT
-            else {
-
-              total_errors++;
-
-              tmt_responses_tmt2.push({
-
-                event: "incorrect",
-                clicked_button: clicked_label,
-                expected_button: expected_label,
-                sequence_position: current_index,
-                correct: false,
+                completed: true,
                 total_errors: total_errors,
-                rt: performance.now()
+                responses: tmt_responses_tmt2
 
               });
-
-              this.style.backgroundColor =
-                "salmon";
             }
 
-          });
+          }
+
+          // INCORRECT
+          else {
+
+            total_errors++;
+
+            tmt_responses_tmt2.push({
+
+              event: "incorrect",
+              clicked_button: clicked_label,
+              expected_button: expected_label,
+              sequence_position: current_index,
+              correct: false,
+              total_errors: total_errors,
+              rt: performance.now()
+
+            });
+
+            this.style.backgroundColor =
+              "salmon";
+          }
 
         });
 
-    }
+      });
 
-  };
-  timeline.push(TMT2);
+  }
+
+};
+timeline.push(TMT2);
+
 
   var facename_baseline_instructions = {
     type: jsPsychHtmlKeyboardResponse,
@@ -738,16 +801,69 @@ var RT_instructions = {
     ];
 
 
-  var allfaceswithdata_shuffled_fortest2 = jsPsych.randomization.shuffle(allfaces_withdata);
+var allfaceswithdata_shuffled_fortest2 = jsPsych.randomization.shuffle(allfaces_withdata);
 
-  var hint_used = false;
-  var hint_count = 0;
+var hint_used = false;
+var hint_count = 0;
 
-  var facename_baselinetest = {
+var facename_baselinetest = {
 
-    type: jsPsychSurveyHtmlForm,
+  type: jsPsychSurveyHtmlForm,
 
-    html: function(){
+  html: function(){
+
+  let current =
+    allfaceswithdata_shuffled_fortest2[0];
+
+  let first_letter =
+    current.answer.charAt(0);
+
+  // reset hint tracking EACH trial
+  hint_used = false;
+  hint_count = 0;
+
+  return `
+
+    <div style="text-align:center;">
+
+      <button
+        type="button"
+        id="hint-btn"
+        style="
+          font-size:18px;
+          padding:8px 14px;
+          margin-bottom:20px;
+        "
+      >
+        Hint
+      </button>
+
+      <br>
+
+      <img src="${current.image}"
+           style="width:400px; height:auto;">
+
+      <p>Name:</p>
+
+      <input
+        name="response"
+        type="text"
+        autocomplete="off"
+        required
+        style="
+          font-size:20px;
+          padding:5px;
+        "
+      >
+
+    </div>
+
+  `;
+},
+
+  button_label: "Next",
+
+  on_load: function(){
 
     let current =
       allfaceswithdata_shuffled_fortest2[0];
@@ -755,144 +871,93 @@ var RT_instructions = {
     let first_letter =
       current.answer.charAt(0);
 
-    // reset hint tracking EACH trial
-    hint_used = false;
-    hint_count = 0;
+    document
+      .getElementById("hint-btn")
+      .addEventListener("click", function(){
 
-    return `
+        hint_used = true;
 
-      <div style="text-align:center;">
+        hint_count++;
 
-        <button
-          type="button"
-          id="hint-btn"
-          style="
-            font-size:18px;
-            padding:8px 14px;
-            margin-bottom:20px;
-          "
-        >
-          Hint
-        </button>
-
-        <br>
-
-        <img src="${current.image}"
-             style="width:400px; height:auto;">
-
-        <p>Name:</p>
-
-        <input
-          name="response"
-          type="text"
-          autocomplete="off"
-          required
-          style="
-            font-size:20px;
-            padding:5px;
-          "
-        >
-
-      </div>
-
-    `;
-  },
-
-    button_label: "Next",
-
-    on_load: function(){
-
-      let current =
-        allfaceswithdata_shuffled_fortest2[0];
-
-      let first_letter =
-        current.answer.charAt(0);
-
-      document
-        .getElementById("hint-btn")
-        .addEventListener("click", function(){
-
-          hint_used = true;
-
-          hint_count++;
-
-          alert(
-            `Hint: The first letter is "${first_letter}"`
-          );
-
-        });
-
-    },
-
-    on_finish: function(data){
-
-      let f =
-        allfaceswithdata_shuffled_fortest2.shift();
-
-      let typed =
-        data.response.response
-          .trim()
-          .toLowerCase();
-
-      let correct =
-        f.answer
-          .trim()
-          .toLowerCase();
-
-      // =========================
-      // SAVE DATA
-      // =========================
-
-      data.correct =
-        (typed === correct);
-
-      data.correct_answer =
-        f.answer;
-
-      data.face_image =
-        f.image;
-
-      data.hint_used =
-        hint_used;
-
-      data.hint_count =
-        hint_count;
-
-      // =========================
-      // REINSERT IF WRONG
-      // =========================
-
-      if(!data.correct){
-
-        let rand_index =
-          Math.floor(
-            Math.random() *
-            (allfaceswithdata_shuffled_fortest2.length + 1)
-          );
-
-        allfaceswithdata_shuffled_fortest2.splice(
-          rand_index,
-          0,
-          f
+        alert(
+          `Hint: The first letter is "${first_letter}"`
         );
 
-      }
+      });
+
+  },
+
+  on_finish: function(data){
+
+    let f =
+      allfaceswithdata_shuffled_fortest2.shift();
+
+    let typed =
+      data.response.response
+        .trim()
+        .toLowerCase();
+
+    let correct =
+      f.answer
+        .trim()
+        .toLowerCase();
+
+    // =========================
+    // SAVE DATA
+    // =========================
+
+    data.correct =
+      (typed === correct);
+
+    data.correct_answer =
+      f.answer;
+
+    data.face_image =
+      f.image;
+
+    data.hint_used =
+      hint_used;
+
+    data.hint_count =
+      hint_count;
+
+    // =========================
+    // REINSERT IF WRONG
+    // =========================
+
+    /*if(!data.correct){
+
+      let rand_index =
+        Math.floor(
+          Math.random() *
+          (allfaceswithdata_shuffled_fortest2.length + 1)
+        );
+
+      allfaceswithdata_shuffled_fortest2.splice(
+        rand_index,
+        0,
+        f
+      );
 
     }
 
-  };
+  }*/
 
-  var facename_baseline_loop = {
+  }
 
-    timeline: [facename_baselinetest],
+};
 
-    loop_function: function(){
+var facename_baseline_loop = {
 
-      return allfaceswithdata_shuffled_fortest2.length > 0;
+  timeline: [facename_baselinetest],
 
-    }
+  loop_function: function(){
 
-  };
+    return allfaceswithdata_shuffled_fortest2.length > 0;
+
+  }
+
+};
 
   timeline.push(facename_baseline_loop);
 

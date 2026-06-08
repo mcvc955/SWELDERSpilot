@@ -10,6 +10,7 @@
     <script src="jspsych/dist/jspsych.js"></script>
 
     <!-- Plugins -->
+	<script src="jspsych/dist/plugin-preload.js"></script>  
     <script src="jspsych/dist/plugin-html-keyboard-response.js"></script>
     <script src="jspsych/dist/plugin-html-button-response.js"></script>
     <script src="jspsych/dist/plugin-image-keyboard-response.js"></script>
@@ -89,12 +90,26 @@ function saveData(filename, csv) {
       jsPsych.data.displayData();
       // Make sure that participant id is the first response (thats what values[0] gets)
           ptc_id = JSON.parse(jsPsych.data.get().select('responses').values[0])['participant id'];
-          saveData("SWELDERS_RT_Session1_" + ptc_id + '_'+ Date.now().toString(), jsPsych.data.get().csv());},
+          saveData("SWELDERS_pilot32_Session1_" + ptc_id + '_'+ Date.now().toString(), jsPsych.data.get().csv());},
     });
 
 
 /* create timeline */
 var timeline = [];
+	  
+const preload_RTintro_images = {
+  type: jsPsychPreload,
+  images: [
+    'RTStimuli/RHand_Green_Q.png',
+    'RTStimuli/GreenLight.png',
+    'RTStimuli/RedLight.png',
+    'RTStimuli/LHand_Red_P.png',
+    'RTStimuli/LightsOff.png',
+  ]
+};
+
+timeline.push(preload_RTintro_images);
+	  
 
 //need this for file saving
 var participant_id = {
@@ -124,13 +139,13 @@ var RT_instructions = {
   stimulus: `
 
     <p>In the following task a stop light will appear on the screen.</p>
-    <p>If the light is <strong><font color="green"> GREEN </strong></font> press the <strong><font color="green"> P KEY </strong></font>
+    <p>If the light is <strong><font color="green"> GREEN </strong></font> press the <strong><font color="green"> Q KEY </strong></font>
     with your <strong>right index finger</strong> as fast as you can. Think of this key as your gas pedal.</p>
 <div style='width: 1000px;'>
     <div style='float: left;'><img src='RTStimuli/RHand_Green_Q.png' style="width:500px;height:300px;"></img></div>
     <div style='float: right;'><img src='RTStimuli/GreenLight.png' style="width:500px;height:300px;"></img></div>
 </div>
-    <p>If the light is <strong><font color="red"> RED</strong></font>, press the <strong><font color="red">Q KEY</strong></font>
+    <p>If the light is <strong><font color="red"> RED</strong></font>, press the <strong><font color="red"> P KEY</strong></font>
     with your <strong>left index finger</strong> as fast as you can, think of this as your brake pedal.</p>
 <div style='width: 1000px;'>
     <div style='float: left;'><img src='RTStimuli/RedLight.png' style="width:500px;height:300px;"></img></div>
@@ -303,6 +318,55 @@ var RT_test = {
     };
 
 timeline.push(RT_Task);
+
+const preload_FNT_images = {
+  type: jsPsychPreload,
+  images: [
+
+"FNR_64/faces/AllFaces/CFD-AF-231-357-N.jpg",
+"FNR_64/faces/AllFaces/CFD-AF-201-060-N.jpg",
+"FNR_64/faces/AllFaces/CFD-AF-200-228-N.jpg",
+"FNR_64/faces/AllFaces/CFD-AF-222-134-N.jpg",
+
+"FNR_64/faces/AllFaces/CFD-LF-219-223-N.jpg",
+"FNR_64/faces/AllFaces/CFD-LF-241-188-N.jpg",
+"FNR_64/faces/AllFaces/CFD-LF-202-065-N.jpg",
+"FNR_64/faces/AllFaces/CFD-LF-233-277-N.jpg",
+
+"FNR_64/faces/AllFaces/CFD-BF-209-172-N.jpg",
+"FNR_64/faces/AllFaces/CFD-BF-019-001-N.jpg",
+"FNR_64/faces/AllFaces/CFD-BF-244-231-N.jpg",
+"FNR_64/faces/AllFaces/CFD-BF-225-192-N.jpg",
+
+"FNR_64/faces/AllFaces/CFD-WF-008-002-N.jpg",
+"FNR_64/faces/AllFaces/CFD-WF-245-084-N.jpg",
+"FNR_64/faces/AllFaces/CFD-WF-205-006-N.jpg",
+"FNR_64/faces/AllFaces/CFD-WF-213-031-N.jpg",
+
+"FNR_64/faces/AllFaces/CFD-AM-246-184-N.jpg",
+"FNR_64/faces/AllFaces/CFD-AM-249-163-N.jpg",
+"FNR_64/faces/AllFaces/CFD-AM-210-035-N.jpg",
+"FNR_64/faces/AllFaces/CFD-AM-238-269-N.jpg",
+
+"FNR_64/faces/AllFaces/CFD-LM-216-082-N.jpg",
+"FNR_64/faces/AllFaces/CFD-LM-251-073-N.jpg",
+"FNR_64/faces/AllFaces/CFD-LM-237-264-N.jpg",
+"FNR_64/faces/AllFaces/CFD-LM-222-239-N.jpg",
+
+"FNR_64/faces/AllFaces/CFD-BM-013-002-N.jpg",
+"FNR_64/faces/AllFaces/CFD-BM-011-016-N.jpg",
+"FNR_64/faces/AllFaces/CFD-BM-027-001-N.jpg",
+"FNR_64/faces/AllFaces/CFD-BM-017-021-N.jpg",
+
+"FNR_64/faces/AllFaces/CFD-WM-019-003-N.jpg",
+"FNR_64/faces/AllFaces/CFD-WM-201-063-N.jpg",
+"FNR_64/faces/AllFaces/CFD-WM-034-030-N.jpg",
+"FNR_64/faces/AllFaces/CFD-WM-258-125-N.jpg",
+
+  ]
+};
+
+timeline.push(preload_FNT_images);
 
 //
 //FACE FAMILIARIZATION (Just looking at them, no names or relationships yet)
@@ -517,7 +581,7 @@ post_trial_gap: 1000,
 timeline.push(facenames_instructions)
 
 
-  ];
+  
 
   var facenamepairs = [
 
@@ -1631,6 +1695,7 @@ var TMT1 = {
     </div>
     `;
   },
+
   choices: "NO_KEYS",
 
   on_load: function(){
@@ -1752,7 +1817,9 @@ var TMT2 = {
           ${node.label}
         </button>
       `).join("")}
-    </div>
+
+      </div>
+
     </div>
     `;
   },
@@ -1760,6 +1827,20 @@ var TMT2 = {
   choices: "NO_KEYS",
 
   on_load: function(){
+    const board =
+  document.getElementById("tmt-board");
+
+const scaleX =
+  window.innerWidth / 1000;
+
+const scaleY =
+  window.innerHeight / 800;
+
+const scale =
+  Math.min(scaleX, scaleY, 1);
+
+board.style.transform =
+  `scale(${scale})`;
 
     current_index = 0;
     total_errors = 0;
@@ -1858,56 +1939,6 @@ var facename_baseline_instructions = {
 timeline.push(facename_baseline_instructions);
 
 var allfaceswithdata_shuffled_fortest2 = jsPsych.randomization.shuffle(allfaces_withdata);
-
-/*var facename_baselinetest = {
-  type: jsPsychCloze,
-
-  text: function(){
-    let current = allfaceswithdata_shuffled_fortest2[0];
-    let correct_name = current.text.match(/%([^%]+)%/)[1].trim();
-    let first_letter = correct_name.charAt(0);
-
-    return `
-      ${current.text}
-      <button id="hint-btn">Hint</button>
-      <p id="hint-text" style="display:none; font-size:18px;">
-        First letter: ${first_letter}
-      </p>
-    `;
-  },
-
-  on_load: function(){
-    document.getElementById("hint-btn").addEventListener("click", function(){
-      document.getElementById("hint-text").style.display = "block";
-    });
-  },
-
-  check_answers: true,
-  button_text: 'Next',
-
-  mistake_fn: function(){
-    let correct_name = allfaceswithdata_shuffled_fortest2[0].text.match(/%([^%]+)%/)[1].trim();
-    alert(`Incorrect. The correct answer is ${correct_name}.`);
-  },
-
-  on_finish: function(data){
-    let f = allfaceswithdata_shuffled_fortest2.shift();
-
-    if(data.correct){
-      f.correct_once = true;
-    } else {
-      let rand_index = Math.floor(Math.random() * allfaceswithdata_shuffled_fortest2.length);
-      allfaceswithdata_shuffled_fortest2.splice(rand_index, 0, f);
-    }
-  }
-};
-
-timeline.push(facename_baselinetest);*/
-
-var allfaceswithdata_shuffled_fortest2 =
-  jsPsych.randomization.shuffle(
-    [...allfaces_withdata]
-  );
 
 var hint_used = false;
 var hint_count = 0;
@@ -2031,7 +2062,7 @@ var facename_baselinetest = {
     // REINSERT IF WRONG
     // =========================
 
-    if(!data.correct){
+    /*if(!data.correct){
 
       let rand_index =
         Math.floor(
@@ -2047,10 +2078,12 @@ var facename_baselinetest = {
 
     }
 
+  }*/
+
   }
 
 };
-
+	  
 var facename_baseline_loop = {
 
   timeline: [facename_baselinetest],
