@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>SWELDERS Data Pipeline Test</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 20px;
+    }
+    .test-box {
+      border: 2px solid #333;
+      padding: 20px;
+      margin: 20px 0;
+      background: #f9f9f9;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    .status {
+      margin-top: 20px;
+      padding: 10px;
+      border-radius: 5px;
+      font-weight: bold;
+    }
+    .success {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+    .error {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+    .pending {
+      background: #fff3cd;
+      color: #856404;
+      border: 1px solid #ffeaa7;
+    }
+    textarea {
+      width: 100%;
+      height: 150px;
+      font-family: monospace;
+      padding: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>SWELDERS Data Pipeline Test</h1>
+  <p>This page tests the Google Sheets integration by submitting dummy CSV data.</p>
+
+  <div class="test-box">
+    <h2>Test 1: Simple Participant Data</h2>
+    <p>Simulates a participant (ID: TEST_001) completing a simple task</p>
+    <button onclick="runTest1()">Submit Test Data</button>
+    <div id="status1"></div>
+  </div>
+
+  <div class="test-box">
+    <h2>Test 2: RT Task Data (Multiple Trials)</h2>
+    <p>Simulates RT task with 10 trials</p>
+    <button onclick="runTest2()">Submit RT Data</button>
+    <div id="status2"></div>
+  </div>
+
+  <div class="test-box">
+    <h2>Test 3: Face-Name Task Data</h2>
+    <p>Simulates face-name learning with trials</p>
+    <button onclick="runTest3()">Submit Face-Name Data</button>
+    <div id="status3"></div>
+  </div>
+
+  <div class="test-box">
+    <h2>Custom Test</h2>
+    <p>Paste custom CSV data and test:</p>
+    <textarea id="customCsv" placeholder="trial,response,rt,correct
+1,correct,450,true
+2,incorrect,520,false">trial,response,rt,correct
+1,correct,450,true
+2,incorrect,520,false</textarea>
+    <input type="text" id="customPtcId" placeholder="Participant ID (e.g., TEST_CUSTOM_001)" value="TEST_CUSTOM_001" style="width: 100%; padding: 10px; margin-top: 10px;">
+    <button onclick="runCustomTest()" style="margin-top: 10px; width: 100%;">Submit Custom Data</button>
+    <div id="statusCustom"></div>
+  </div>
+
+  <h2>After Submission:</h2>
+  <ol>
+    <li>Check your <a href="https://docs.google.com/spreadsheets/d/1SoLN-vWqgzXrTz2-Y3VA3G67otJzohVuKKDKeICiKLA/edit" target="_blank">Google Sheet</a></li>
+    <li>Look for new row(s) in the "Master" sheet</li>
+    <li>Check for new sheets like "TEST_001_RT_Session1"</li>
+  </ol>
+
+  <script>
+    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyzRSkOmjZk5vdQJgKJl3Q7CjyC8v2WduYAYF2cOzrGxx9EVzSl8Ng9noyDrOrJZQiI7A/exec';
+
+    function updateStatus(elementId, message, isSuccess) {
+      const el = document.getElementById(elementId);
+      el.className = 'status ' + (isSuccess ? 'success' : 'error');
+      el.textContent = message;
+    }
+
+    function submitData(filename, csv, statusElementId) {
+      updateStatus(statusElementId, 'Submitting...', null);
+      updateStatus(statusElementId, 'Submitting...', false);
+      document.querySelector(`#${statusElementId}`).className = 'status pending';
+
+      fetch(GOOGLE_SCRIPT_URL, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ filename: filename, csv: csv })
+      })
+      .then(res => res.text())
+      .then(txt => {
+        console.log('Response:', txt);
+        if (txt.includes('success')) {
+          updateStatus(statusElementId, '✓ Data submitted successfully! Check your Google Sheet (Master sheet + individual sheet)', true);
+        } else {
+          updateStatus(statusElementId, '✗ Submission failed: ' + txt, false);
+        }
+      })
+      .catch(err => {
+        console.error('Error:', err);
+        updateStatus(statusElementId, '✗ Network error: ' + err.message, false);
+      });
+    }
+
+    function runTest1() {
+      const csv = `trial,task,response,rt,correct
+1,baseline,responded,450,true`;
+      const filename = 'SWELDERS_RT_Session1_TEST_001_' + Date.now();
+      submitData(filename, csv, 'status1');
+    }
+
+    function runTest2() {
+      const csv = `trial,stimulus,response,rt,correct
+1,green,p,450,true
+2,red,q,520,true
+3,off,none,0,true
+4,green,p,380,true
+5,red,q,490,true
+6,off,none,0,true
+7,green,p,420,true
+8,red,q,510,false
+9,off,none,0,true
+10,green,p,460,true`;
+      const filename = 'SWELDERS_RT_Session1_TEST_002_' + Date.now();
+      submitData(filename, csv, 'status2');
+    }
+
+    function runTest3() {
+      const csv = `trial,face_id,face_name,response,correct,attempts
+1,CFD-AF-230-193-N,Mila,Mila,true,1
+2,CFD-AF-236-145-N,Lucy,Lucy,true,1
+3,CFD-AF-214-139-N,Nora,Nora,false,2
+4,CFD-AF-222-134-N,Ava,Ava,true,1
+5,CFD-WM-019-003-N,Liam,Leo,false,2
+6,CFD-WM-029-023-N,Leo,Leo,true,1`;
+      const filename = 'SWELDERS_FN_Session1_TEST_003_' + Date.now();
+      submitData(filename, csv, 'status3');
+    }
+
+    function runCustomTest() {
+      const csv = document.getElementById('customCsv').value;
+      const ptcId = document.getElementById('customPtcId').value || 'TEST_CUSTOM';
+      const filename = 'SWELDERS_TEST_Session1_' + ptcId + '_' + Date.now();
+      
+      if (!csv.trim()) {
+        updateStatus('statusCustom', '✗ Please enter CSV data', false);
+        return;
+      }
+      
+      submitData(filename, csv, 'statusCustom');
+    }
+  </script>
+</body>
+</html>
