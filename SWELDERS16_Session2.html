@@ -88,7 +88,8 @@ function saveData(filename, csv) {
     override_safe_mode: true,
      show_progress_bar: true,
     on_finish: function() {
-      const ptc_id = JSON.parse(jsPsych.data.get().select('responses').values[0])['participant id'];
+	  const ptc_id = jsPsych.data.get().values()[0]['participant id'];	
+      //const ptc_id = JSON.parse(jsPsych.data.get().select('responses').values[0])['participant id'];
       const filename = "SWELDERS_16_Session2_" + ptc_id + "_" + Date.now();
       fetch(GOOGLE_SCRIPT_URL, {
         method: "POST",
@@ -119,7 +120,7 @@ var participant_id = {
   type: jsPsychSurveyHtmlForm,
   html:
   "<p> Before we begin the study please type:" +
-  "<p> Your prolific ID <input name='participant id' type='text'>" +
+  "<p> Your prolific ID <input name='participant_id' type='text'>" +
   "<p> Once you have done this, press continue. </p>",
 	test_part: 'id'
 };
