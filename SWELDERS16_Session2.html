@@ -72,15 +72,20 @@ const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyzRSkOmjZk5v
 
 // Helper to send CSV data to a Google Apps Script web app
 function saveData(filename, csv) {
-  fetch(GOOGLE_SCRIPT_URL, {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({ filename: filename, csv: csv })
+fetch(GOOGLE_SCRIPT_URL, {
+  method: "POST",
+  body: JSON.stringify({
+    filename: filename,
+    csv: jsPsych.data.get().csv()
   })
-  .then(res => res.text())
-  .then(txt => console.log('Saved:', txt))
-  .catch(err => console.error('Save failed:', err));
-}
+})
+.then(response => response.text())
+.then(result => {
+  console.log("Saved:", result);
+})
+.catch(error => {
+  console.error("Upload failed:", error);
+});
 
 /*  initialize jsPsych */
 
