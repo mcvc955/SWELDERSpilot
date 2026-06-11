@@ -698,12 +698,12 @@ let allfaces_withdata = [
 var allfaceswithdata_shuffled_fortest2 = jsPsych.randomization.shuffle(allfaces_withdata);
 
 
-var allfaceswithdata_shuffled_fortest2 =
+/*var allfaceswithdata_shuffled_fortest2 =
   jsPsych.randomization.shuffle(
     [...allfaces_withdata]
-  );
+  );*/
 
-var hint_used = false;
+/*var hint_used = false;
 var hint_count = 0;
 
 var facename_baselinetest = {
@@ -855,7 +855,7 @@ var facename_baseline_loop = {
 
   }
 
-};
+};*/
 var allfaceswithdata_shuffled_fortest2 = jsPsych.randomization.shuffle(allfaces_withdata);
 
 var hint_used = false;
@@ -1001,6 +1001,19 @@ var facename_baselinetest = {
   }
 
 };
+	
+var facename_baseline_loop = {
+
+  timeline: [facename_baselinetest],
+
+  loop_function: function(){
+
+    return allfaceswithdata_shuffled_fortest2.length > 0;
+
+  }
+
+};
+
 
 timeline.push(facename_baseline_loop);
 
