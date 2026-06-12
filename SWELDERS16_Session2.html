@@ -312,7 +312,7 @@ var TMT1 = {
     return `
     <div class="tmt-wrapper">
 
-      <div class="tmt-board" id="tmt-board">
+    <div class="tmt-board" id="tmt-board-1">
 
       ${TMT_layout3.map(node => `
         <button class="tmt-btn"
@@ -339,7 +339,7 @@ var TMT1 = {
 
   on_load: function(){
     const board =
-  document.getElementById("tmt-board");
+  document.getElementById("tmt-board-1");
 
 const scaleX =
   window.innerWidth / 1000;
@@ -357,7 +357,7 @@ board.style.transform =
     total_errors = 0;
     tmt_responses_tmt1 = [];
 
-    document.querySelectorAll(".tmt-btn")
+    board.querySelectorAll(".tmt-btn")
       .forEach(function(btn){
 
         btn.addEventListener("click", function(){
@@ -440,7 +440,7 @@ var TMT2 = {
     return `
     <div class="tmt-wrapper">
 
-      <div class="tmt-board" id="tmt-board">
+      <div class="tmt-board" id="tmt-board-2">
 
       ${TMT_layout4.map(node => `
         <button class="tmt-btn"
@@ -467,7 +467,7 @@ var TMT2 = {
 
   on_load: function(){
     const board =
-  document.getElementById("tmt-board");
+  document.getElementById("tmt-board-2");
 
 const scaleX =
   window.innerWidth / 1000;
@@ -485,7 +485,7 @@ board.style.transform =
     total_errors = 0;
     tmt_responses_tmt2 = [];
 
-    document.querySelectorAll(".tmt-btn")
+    board.querySelectorAll(".tmt-btn")
       .forEach(function(btn){
 
         btn.addEventListener("click", function(){
