@@ -72,13 +72,20 @@ const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyzRSkOmjZk5v
 
 // Helper to send CSV data to a Google Apps Script web app
 function saveData(filename, csv) {
-fetch(GOOGLE_SCRIPT_URL, {
+  method: "POST",
+  mode: "no-cors",
+  body: JSON.stringify({
+    filename: filename,
+    csv: jsPsych.data.get().csv()
+  })
+});	
+/*fetch(GOOGLE_SCRIPT_URL, {
   method: "POST",
   body: JSON.stringify({
     filename: filename,
     csv: jsPsych.data.get().csv()
   })
-})
+})*/
 .then(response => response.text())
 .then(result => {
   console.log("Saved:", result);
@@ -89,19 +96,48 @@ fetch(GOOGLE_SCRIPT_URL, {
 }
 /*  initialize jsPsych */
 
-  var jsPsych = initJsPsych({
-    override_safe_mode: true,
-     show_progress_bar: true,
-    on_finish: function() {
-	  const ptc_id = jsPsych.data.get().values()[0]['participant id'];	
-      //const ptc_id = JSON.parse(jsPsych.data.get().select('responses').values[0])['participant id'];
-      const filename = "SWELDERS_16_Session2_" + ptc_id + "_" + Date.now();
-      fetch(GOOGLE_SCRIPT_URL, {
+const GOOGLE_SCRIPT_URL =
+  "https://script.google.com/macros/s/AKfycbyzRSkOmjZk5vdQJgKJl3Q7CjyC8v2WduYAYF2cOzrGxx9EVzSl8Ng9noyDrOrJZQiI7A/exec";
+
+var jsPsych = initJsPsych({
+
+  override_safe_mode: true,
+  show_progress_bar: true,
+
+  on_finish: function() {
+
+    // Get participant ID from first trial
+    const ptc_id =
+      jsPsych.data.get().values()[0].response.participant_id;
+
+    // Create unique filename
+    const filename =
+      "SWELDERS_16_Session2_" +
+      ptc_id +
+      "_" +
+      Date.now();
+
+    // Upload CSV to Apps Script
+    fetch(GOOGLE_SCRIPT_URL, {
+      method: "POST",
+      mode: "no-cors",
+      body: JSON.stringify({
+        filename: filename,
+        csv: jsPsych.data.get().csv()
+      })
+    });
+
+    console.log("Upload attempted:", filename);
+
+  }
+
+});
+      /*fetch(GOOGLE_SCRIPT_URL, {
         method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({filename: filename, csv: jsPsych.data.get().csv()})
       }).catch(err => console.error(err));
-    }
+    }*/
   });
 
 
