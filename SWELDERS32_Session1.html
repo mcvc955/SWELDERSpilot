@@ -67,35 +67,54 @@
   </style>
   <script>
 
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyzRSkOmjZk5vdQJgKJl3Q7CjyC8v2WduYAYF2cOzrGxx9EVzSl8Ng9noyDrOrJZQiI7A/exec';
+const GOOGLE_SCRIPT_URL =
+  "https://script.google.com/macros/s/AKfycbyzRSkOmjZk5vdQJgKJl3Q7CjyC8v2WduYAYF2cOzrGxx9EVzSl8Ng9noyDrOrJZQiI7A/exec";
 
-// Helper to send CSV data to a Google Apps Script web app
 function saveData(filename, csv) {
+
   fetch(GOOGLE_SCRIPT_URL, {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({ filename: filename, csv: csv })
-  })
-  .then(res => res.text())
-  .then(txt => console.log('Saved:', txt))
-  .catch(err => console.error('Save failed:', err));
+    method: "POST",
+    mode: "no-cors",
+    body: JSON.stringify({
+      filename: filename,
+      csv: csv
+    })
+  });
+
+  console.log("Upload attempted:", filename);
 }
 
-/*  initialize jsPsych */
+var jsPsych = initJsPsych({
 
-  var jsPsych = initJsPsych({
-    override_safe_mode: true,
-     show_progress_bar: true,
-    on_finish: function() {
-      const ptc_id = JSON.parse(jsPsych.data.get().select('responses').values[0])['participant id'];
-      const filename = "SWELDERS_32_Session1_" + ptc_id + "_" + Date.now();
-      fetch(GOOGLE_SCRIPT_URL, {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({filename: filename, csv: jsPsych.data.get().csv()})
-      }).catch(err => console.error(err));
-    }
-  });
+  override_safe_mode: true,
+  show_progress_bar: true,
+
+  on_finish: function() {
+
+    console.log(jsPsych.data.get().values()[0]);
+
+    const firstTrial =
+      jsPsych.data.get().values()[0];
+
+    const ptc_id =
+      firstTrial.response?.participant_id ||
+      firstTrial.responses?.participant_id ||
+      "unknown";
+
+    const filename =
+      "SWELDERS_32_Session1_" +
+      ptc_id +
+      "_" +
+      Date.now();
+
+    saveData(
+      filename,
+      jsPsych.data.get().csv()
+    );
+
+  }
+
+});
 
 
 /* create timeline */
@@ -785,10 +804,12 @@ var error_faces = [];
 var facename_test_instructions = {
   type: jsPsychHtmlKeyboardResponse,
   stimulus:
-    '<p><strong>Well done!</strong></p>' +
+    '<p><strong>Well done! You are now ready for a face-name practice task </strong></p>' +
     '<p>You will now be shown a picture of one of the faces you saw and asked to remember the name that goes with the face.</p>' +
     '<p>Please type the name in the text box provided and click the "Next" button.</p>' +
     '<p>Do not leave any responses blank.</p>' +
+	'<p>If you make a mistake, you will be told the correct name and asked to retype your answer. </p>' +
+	'<p> You will need to provide the correct answer twice for each face in order to move on from this practice session. </p>' +
     '<p>When you are ready, press the spacebar to begin.</p>',
   choices: [" "],
   post_trial_gap: 1000,
@@ -2087,7 +2108,7 @@ var facename_baselinetest = {
   }
 
 };
-	  
+	
 var facename_baseline_loop = {
 
   timeline: [facename_baselinetest],
@@ -2100,9 +2121,9 @@ var facename_baseline_loop = {
 
 };
 
+
 timeline.push(facename_baseline_loop);
-
-
+	  
 //DEBRIEF
 var debrief = {
   type : jsPsychHtmlButtonResponse,
