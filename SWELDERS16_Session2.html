@@ -177,6 +177,8 @@ var light_off = {
   type: jsPsychImageKeyboardResponse,
   stimulus: 'RTStimuli/LightsOff.png',
   choices: "NO_KEYS",
+  stimulus_width: 500,
+  maintain_aspect_ratio: true,
   trial_duration: function(){
     return jsPsych.randomization.sampleWithoutReplacement([250, 500, 750, 1000, 1250, 1500, 1750, 2000], 1)[0];
   },
@@ -190,9 +192,35 @@ var test_stimuli = [
   { stimulus: "RTStimuli/GreenLight.png",  choices: ['p', 'q'], correct_response: 'q',  data: {task: 'response_green'}}
 ];
 
+/*var red_light = {
+  type: jsPsychImageKeyboardResponse,
+  stimulus: "RTStimuli/RedLight.png",
+  choices: ['p', 'q'],
+  correct_response: 'p',
+  data: {task: 'response_red'},
+  response_ends_trial:true,
+  on_finish: function(data){
+    data.correct = jsPsych.pluginAPI.compareKeys(data.response, data.correct_response);
+  }
+}
+
+var green_light = {
+  type: jsPsychImageKeyboardResponse,
+  stimulus: "RTStimuli/GreenLight.png",
+  choices: ['p', 'q'],
+  correct_response: 'q',
+  data: {task: 'response_green'},
+  response_ends_trial:true,
+  on_finish: function(data){
+    data.correct = jsPsych.pluginAPI.compareKeys(data.response, data.correct_response);
+  }
+}*/
+
 var RT_test = {
       type: jsPsychImageKeyboardResponse,
       stimulus: jsPsych.timelineVariable('stimulus'),
+ 	  stimulus_width: 500,
+      maintain_aspect_ratio: true,	
       choices: ['q', 'p'],
       data: {
         task: 'response',
@@ -207,11 +235,14 @@ var RT_test = {
     var RT_Task = {
       timeline: [light_off, RT_test],
       timeline_variables: test_stimuli,
+	 stimulus_width: 500,
+      maintain_aspect_ratio: true,		
       repetitions: 40,
       randomize_order: true
     };
 
 timeline.push(RT_Task);
+
 
 var TMT_instructions1 = {
   type: jsPsychHtmlKeyboardResponse,
