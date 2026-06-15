@@ -68,36 +68,54 @@
   </style>
   <script>
 
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyzRSkOmjZk5vdQJgKJl3Q7CjyC8v2WduYAYF2cOzrGxx9EVzSl8Ng9noyDrOrJZQiI7A/exec';
+const GOOGLE_SCRIPT_URL =
+  "https://script.google.com/macros/s/AKfycbyzRSkOmjZk5vdQJgKJl3Q7CjyC8v2WduYAYF2cOzrGxx9EVzSl8Ng9noyDrOrJZQiI7A/exec";
 
-// Helper to send CSV data to a Google Apps Script web app
 function saveData(filename, csv) {
+
   fetch(GOOGLE_SCRIPT_URL, {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({ filename: filename, csv: csv })
-  })
-  .then(res => res.text())
-  .then(txt => console.log('Saved:', txt))
-  .catch(err => console.error('Save failed:', err));
-}
-
-/*  initialize jsPsych */
-
-  var jsPsych = initJsPsych({
-    override_safe_mode: true,
-     show_progress_bar: true,
-    on_finish: function() {
-      const ptc_id = JSON.parse(jsPsych.data.get().select('responses').values[0])['participant id'];
-      const filename = "SWELDERS_32_Session2_" + ptc_id + "_" + Date.now();
-      fetch(GOOGLE_SCRIPT_URL, {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({filename: filename, csv: jsPsych.data.get().csv()})
-      }).catch(err => console.error(err));
-    }
+    method: "POST",
+    mode: "no-cors",
+    body: JSON.stringify({
+      filename: filename,
+      csv: csv
+    })
   });
 
+  console.log("Upload attempted:", filename);
+}
+
+var jsPsych = initJsPsych({
+
+  override_safe_mode: true,
+  show_progress_bar: true,
+
+  on_finish: function() {
+
+    console.log(jsPsych.data.get().values()[0]);
+
+    const firstTrial =
+      jsPsych.data.get().values()[0];
+
+    const ptc_id =
+      firstTrial.response?.participant_id ||
+      firstTrial.responses?.participant_id ||
+      "unknown";
+
+    const filename =
+      "SWELDERS_32_Session2_" +
+      ptc_id +
+      "_" +
+      Date.now();
+
+    saveData(
+      filename,
+      jsPsych.data.get().csv()
+    );
+
+  }
+
+});
 
 /* create timeline */
 var timeline = [];
@@ -950,7 +968,7 @@ var facename_baselinetest = {
   }
 
 };
-
+	
 var facename_baseline_loop = {
 
   timeline: [facename_baselinetest],
@@ -963,7 +981,8 @@ var facename_baseline_loop = {
 
 };
 
-  timeline.push(facename_baseline_loop);
+
+timeline.push(facename_baseline_loop);
 
   //DEBRIEF
   var debrief = {
