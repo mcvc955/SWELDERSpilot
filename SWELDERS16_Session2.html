@@ -44,31 +44,30 @@
  html, body {
   margin: 0;
   padding: 0;
+  overflow: hidden;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
   height: 100%;
   overflow: hidden;
 }
 
-.jspsych-content-wrapper {
-  display: block !important;
-  padding-top: 0 !important;
-  margin-top: 0 !important;
-}
-
 .tmt-wrapper{
   width: 100vw;
-  height: 100vh;
-  display:flex;
-  justify-content:center;
-  align-items:flex-start;
-  padding-top: 20px;
+  height: calc(100vh - 20px);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 10px;
 }
 
 .tmt-board{
-  position:relative;
-  width:900px;
-  height:700px;
-
-  transform-origin: center center;
+  position: relative;
+  width: 900px;
+  height: 700px;
+  transform-origin: top center;
 }
   </style>
   <script>
