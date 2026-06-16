@@ -41,21 +41,26 @@
     font-weight: bold;
   }
 
-  html, body {
+ html, body {
   margin: 0;
   padding: 0;
+  height: 100%;
   overflow: hidden;
+}
+
+.jspsych-content-wrapper {
+  display: block !important;
+  padding-top: 0 !important;
+  margin-top: 0 !important;
 }
 
 .tmt-wrapper{
   width: 100vw;
   height: 100vh;
-
   display:flex;
   justify-content:center;
-  align-items:center;
-
-  overflow:hidden;
+  align-items:flex-start;
+  padding-top: 20px;
 }
 
 .tmt-board{
