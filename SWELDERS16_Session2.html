@@ -183,8 +183,10 @@ var light_off = {
   type: jsPsychImageKeyboardResponse,
   stimulus: 'RTStimuli/LightsOff.png',
   choices: "NO_KEYS",
-  stimulus_width: 500,
+  stimulus_width: 1080,
+  stimulus_height: 1920,
   maintain_aspect_ratio: true,
+  render_on_canvas: true,
   trial_duration: function(){
     return jsPsych.randomization.sampleWithoutReplacement([250, 500, 750, 1000, 1250, 1500, 1750, 2000], 1)[0];
   },
@@ -225,7 +227,8 @@ var green_light = {
 var RT_test = {
       type: jsPsychImageKeyboardResponse,
       stimulus: jsPsych.timelineVariable('stimulus'),
- 	  stimulus_width: 500,
+ 	  stimulus_width: 1080,
+      stimulus_height: 1920,
       maintain_aspect_ratio: true,	
       choices: ['q', 'p'],
       data: {
@@ -241,8 +244,9 @@ var RT_test = {
     var RT_Task = {
       timeline: [light_off, RT_test],
       timeline_variables: test_stimuli,
-	 stimulus_width: 500,
-      maintain_aspect_ratio: true,		
+ 	  stimulus_width: 1080,
+      stimulus_height: 1920,
+      maintain_aspect_ratio: true,	
       repetitions: 40,
       randomize_order: true
     };
