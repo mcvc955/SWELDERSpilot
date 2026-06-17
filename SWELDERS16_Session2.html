@@ -186,6 +186,7 @@ var light_off = {
   stimulus_width: 1080,
   stimulus_height: 1920,
   maintain_aspect_ratio: true,
+  canvas_size: [1920, 1080],
   render_on_canvas: true,
   trial_duration: function(){
     return jsPsych.randomization.sampleWithoutReplacement([250, 500, 750, 1000, 1250, 1500, 1750, 2000], 1)[0];
@@ -229,6 +230,7 @@ var RT_test = {
       stimulus: jsPsych.timelineVariable('stimulus'),
  	  stimulus_width: 1080,
       stimulus_height: 1920,
+	  canvas_size: [1920, 1080],
       maintain_aspect_ratio: true,	
       choices: ['q', 'p'],
       data: {
@@ -246,6 +248,7 @@ var RT_test = {
       timeline_variables: test_stimuli,
  	  stimulus_width: 1080,
       stimulus_height: 1920,
+	  canvas_size: [1920, 1080],	
       maintain_aspect_ratio: true,	
       repetitions: 40,
       randomize_order: true
