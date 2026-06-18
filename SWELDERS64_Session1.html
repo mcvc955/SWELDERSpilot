@@ -45,22 +45,21 @@
 }
 
 .tmt-wrapper{
-  width: 100vw;
-  height: 100vh;
+  height: 100%;
+  /*height: calc(100vh - 20px);*/
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 0;
+  margin-top: 0;
 
-  display:flex;
-  justify-content:center;
-  align-items:center;
-
-  overflow:hidden;
 }
 
 .tmt-board{
-  position:relative;
-  width:900px;
-  height:700px;
-
-  transform-origin: center center;
+  position: relative;
+  width: 900px;
+  height: 700px;
+  transform-origin: top center;
 }
   </style>
   <script>
@@ -214,6 +213,10 @@ var RT_practice = {
     type: jsPsychImageKeyboardResponse,
     //post_trial_gap: 300,
     render_on_canvas: true,
+	stimulus_width: 960,
+    stimulus_height: 540,
+    maintain_aspect_ratio: true,
+    canvas_size: [1920, 1080],
     //response_ends_trial: true,
     timeline: [
       {stimulus:'RTStimuli/LightsOff.png', choices: "NO_KEYS", trial_duration: 500, data: { test_part: 'practice', correct_response:"NO_KEYS",choices: "NO_KEYS" }, },
@@ -270,6 +273,10 @@ var light_off = {
   type: jsPsychImageKeyboardResponse,
   stimulus: 'RTStimuli/LightsOff.png',
   choices: "NO_KEYS",
+  stimulus_width: 960,
+  stimulus_height: 540,
+  maintain_aspect_ratio: true,
+  canvas_size: [1920, 1080],
   trial_duration: function(){
     return jsPsych.randomization.sampleWithoutReplacement([250, 500, 750, 1000, 1250, 1500, 1750, 2000], 1)[0];
   },
@@ -311,6 +318,10 @@ var RT_test = {
       type: jsPsychImageKeyboardResponse,
       stimulus: jsPsych.timelineVariable('stimulus'),
       choices: ['q', 'p'],
+	  stimulus_width: 960,
+      stimulus_height: 540,
+      maintain_aspect_ratio: true,
+      canvas_size: [1920, 1080],
       data: {
         task: 'response',
         correct_response: jsPsych.timelineVariable('correct_response')
@@ -324,6 +335,10 @@ var RT_test = {
     var RT_Task = {
       timeline: [light_off, RT_test],
       timeline_variables: test_stimuli,
+	  stimulus_width: 960,
+  	  stimulus_height: 540,
+      maintain_aspect_ratio: true,
+      canvas_size: [1920, 1080],
       repetitions: 40,
       randomize_order: true
     };
