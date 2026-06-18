@@ -48,22 +48,21 @@
 }
 
 .tmt-wrapper{
-  width: 100vw;
-  height: 100vh;
+  height: 100%;
+  /*height: calc(100vh - 20px);*/
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 0;
+  margin-top: 0;
 
-  display:flex;
-  justify-content:center;
-  align-items:center;
-
-  overflow:hidden;
 }
 
 .tmt-board{
-  position:relative;
-  width:900px;
-  height:700px;
-
-  transform-origin: center center;
+  position: relative;
+  width: 900px;
+  height: 700px;
+  transform-origin: top center;
 }
   </style>
   <script>
@@ -179,6 +178,11 @@ var RT_instructions = {
     type: jsPsychImageKeyboardResponse,
     stimulus: 'RTStimuli/LightsOff.png',
     choices: "NO_KEYS",
+	stimulus_width: 960,
+    stimulus_height: 540,
+    maintain_aspect_ratio: true,
+    canvas_size: [1920, 1080],
+    render_on_canvas: true,
     trial_duration: function(){
       return jsPsych.randomization.sampleWithoutReplacement([250, 500, 750, 1000, 1250, 1500, 1750, 2000], 1)[0];
     },
@@ -196,6 +200,11 @@ var RT_instructions = {
         type: jsPsychImageKeyboardResponse,
         stimulus: jsPsych.timelineVariable('stimulus'),
         choices: ['q', 'p'],
+	    stimulus_width: 960,
+        stimulus_height: 540,
+        maintain_aspect_ratio: true,
+        canvas_size: [1920, 1080],
+        render_on_canvas: true,
         data: {
           task: 'response',
           correct_response: jsPsych.timelineVariable('correct_response')
@@ -209,6 +218,11 @@ var RT_instructions = {
       var RT_Task = {
         timeline: [light_off, RT_test],
         timeline_variables: test_stimuli,
+		stimulus_width: 960,
+        stimulus_height: 540,
+        maintain_aspect_ratio: true,
+        canvas_size: [1920, 1080],
+        render_on_canvas: true,
         repetitions: 40,
         randomize_order: true
       };
