@@ -98,28 +98,27 @@ var jsPsych = initJsPsych({
 
   on_finish: function() {
 
-    console.log(jsPsych.data.get().values()[0]);
+  const idTrial =
+    jsPsych.data.get()
+      .filter({ test_part: 'id' })
+      .values()[0];
 
-    const firstTrial =
-      jsPsych.data.get().values()[0];
+  const ptc_id =
+    idTrial?.response?.participant_id ||
+    "unknown";
 
-    const ptc_id =
-      firstTrial.response?.participant_id ||
-      firstTrial.responses?.participant_id ||
-      "unknown";
+  const filename =
+    "SWELDERS_16_Session2_" +
+    ptc_id +
+    "_" +
+    Date.now();
 
-    const filename =
-      "SWELDERS_16_Session2_" +
-      ptc_id +
-      "_" +
-      Date.now();
+  saveData(
+    filename,
+    jsPsych.data.get().csv()
+  );
 
-    saveData(
-      filename,
-      jsPsych.data.get().csv()
-    );
-
-  }
+}
 
 });
 
@@ -142,10 +141,10 @@ timeline.push(preload_RTintro_images);
 var participant_id = {
   type: jsPsychSurveyHtmlForm,
   html:
-  "<p> Before we begin the study please type:" +
-  "<p> Your prolific ID <input name='participant_id' type='text'>" +
-  "<p> Once you have done this, press continue. </p>",
-	test_part: 'id'
+    "<p>Before we begin the study please type:" +
+    "<p>Your Prolific ID <input name='participant_id' type='text'>" +
+    "<p>Once you have done this, press continue.</p>",
+  test_part: 'id'
 };
 timeline.push(participant_id);
 
