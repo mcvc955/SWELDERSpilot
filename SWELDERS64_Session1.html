@@ -86,7 +86,7 @@ var jsPsych = initJsPsych({
   override_safe_mode: true,
   show_progress_bar: true,
 
- on_finish: function() {
+on_finish: function() {
 
   const idTrial =
     jsPsych.data.get()
@@ -98,7 +98,7 @@ var jsPsych = initJsPsych({
     "unknown";
 
   const filename =
-    "SWELDERS_64_Session2_" +
+    "SWELDERS_64_Session1_" +
     ptc_id +
     "_" +
     Date.now();
@@ -138,7 +138,6 @@ var participant_id = {
     "<p>Once you have done this, press continue.</p>",
   test_part: 'id'
 };
-
 timeline.push(participant_id);
 
 /*var full = {
