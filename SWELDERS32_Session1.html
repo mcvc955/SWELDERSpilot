@@ -88,32 +88,47 @@ var jsPsych = initJsPsych({
   override_safe_mode: true,
   show_progress_bar: true,
 
-on_finish: function() {
+  on_finish: function() {
 
-  const idTrial =
-    jsPsych.data.get()
-      .filter({ test_part: 'id' })
-      .values()[0];
+    const idTrial =
+      jsPsych.data.get()
+        .filter({ test_part: 'id' })
+        .values()[0];
 
-  const ptc_id =
-    idTrial?.response?.participant_id ||
-    "unknown";
+    let ptc_id = "unknown";
 
-  const filename =
-    "SWELDERS_32_Session1_" +
-    ptc_id +
-    "_" +
-    Date.now();
+    if (idTrial) {
+      if (idTrial.response && typeof idTrial.response === "object") {
+        ptc_id =
+          idTrial.response.participant_id ||
+          idTrial.response["participant id"] ||
+          "unknown";
+      } else if (typeof idTrial.response === "string") {
+        try {
+          const parsed = JSON.parse(idTrial.response);
+          ptc_id =
+            parsed.participant_id ||
+            parsed["participant id"] ||
+            "unknown";
+        } catch (e) {
+          console.warn("Could not parse participant ID response:", e);
+        }
+      }
+    }
 
-  saveData(
-    filename,
-    jsPsych.data.get().csv()
-  );
+    const filename =
+      "SWELDERS_32_Session1_" +
+      ptc_id +
+      "_" +
+      Date.now();
 
-}
+    saveData(
+      filename,
+      jsPsych.data.get().csv()
+    );
+  }
 
 });
-
 
 /* create timeline */
 var timeline = [];
