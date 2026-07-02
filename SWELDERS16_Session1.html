@@ -88,8 +88,15 @@ var jsPsych = initJsPsych({
 
   override_safe_mode: true,
   show_progress_bar: true,
+ on_finish: function(){
 
-on_finish: function() {
+   ptc_id = JSON.parse(jsPsych.data.get().select('responses').values[0])['participant_id'];
+   saveData("SWELDERS16_Session1" + ptc_id + '_'+ Date.now().toString(),
+   jsPsych.data.get().csv());
+},
+});
+
+/*on_finish: function() {
 
   const idTrial =
     jsPsych.data.get()
@@ -110,7 +117,7 @@ on_finish: function() {
     filename,
     jsPsych.data.get().csv()
   );
-};
+};*/
 
 
 
