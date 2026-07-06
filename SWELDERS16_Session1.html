@@ -74,26 +74,43 @@ function saveData(filename, csv) {
 
   fetch(GOOGLE_SCRIPT_URL, {
     method: "POST",
-    mode: "no-cors",
+    headers: {'Content-Type': 'application/json'},
     body: JSON.stringify({
       filename: filename,
       csv: csv
     })
-  });
-
-  console.log("Upload attempted:", filename);
+  })
+  .then(res => res.text())
+  .then(txt => console.log('Saved:', txt))
+  .catch(err => console.error('Save failed:', err));
 }
 
 var jsPsych = initJsPsych({
 
   override_safe_mode: true,
   show_progress_bar: true,
- on_finish: function(){
-
-   ptc_id = JSON.parse(jsPsych.data.get().select('responses').values()[0])['participant_id'];
-   saveData("SWELDERS16_Session1" + ptc_id + '_'+ Date.now().toString(),
-   jsPsych.data.get().csv());
-},
+  on_finish: function(){
+    // Extract participant ID from the ID trial
+    const idTrial = jsPsych.data.get().filter({ test_part: 'id' }).values()[0];
+    let ptc_id = 'unknown';
+    
+    if (idTrial && idTrial.response) {
+      // Handle both object and string responses
+      if (typeof idTrial.response === 'object') {
+        ptc_id = idTrial.response.participant_id || idTrial.response['participant id'] || 'unknown';
+      } else if (typeof idTrial.response === 'string') {
+        try {
+          const parsed = JSON.parse(idTrial.response);
+          ptc_id = parsed.participant_id || parsed['participant id'] || 'unknown';
+        } catch(e) {
+          ptc_id = idTrial.response;
+        }
+      }
+    }
+    
+    const filename = "SWELDERS_16_Session1_" + ptc_id + "_" + Date.now();
+    saveData(filename, jsPsych.data.get().csv());
+  }
 });
 
 /*on_finish: function() {

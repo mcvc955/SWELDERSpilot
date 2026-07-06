@@ -74,14 +74,15 @@ function saveData(filename, csv) {
 
   fetch(GOOGLE_SCRIPT_URL, {
     method: "POST",
-    mode: "no-cors",
+    headers: {'Content-Type': 'application/json'},
     body: JSON.stringify({
       filename: filename,
       csv: csv
     })
-  });
-
-  console.log("Upload attempted:", filename);
+  })
+  .then(res => res.text())
+  .then(txt => console.log('Saved:', txt))
+  .catch(err => console.error('Save failed:', err));
 }
 
 var jsPsych = initJsPsych({
