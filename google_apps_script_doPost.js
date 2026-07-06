@@ -5,6 +5,14 @@
  - Deploy the script as a Web App (Execute as: Me, Who has access: Anyone, even anonymous)
 */
 
+function doOptions(e) {
+  var output = ContentService.createTextOutput('');
+  output.addHeader('Access-Control-Allow-Origin', '*');
+  output.addHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  output.addHeader('Access-Control-Allow-Headers', 'Content-Type');
+  return output;
+}
+
 function doPost(e) {
   try {
     var payload = JSON.parse(e.postData.contents);
@@ -68,12 +76,20 @@ function doPost(e) {
       individualSheet.appendRow(individualRow);
     }
 
-    return ContentService
+    var output = ContentService
       .createTextOutput(JSON.stringify({result: 'success', sheet: sheetName, rowsAdded: csvLines.length - 1}))
       .setMimeType(ContentService.MimeType.JSON);
+    output.addHeader('Access-Control-Allow-Origin', '*');
+    output.addHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+    output.addHeader('Access-Control-Allow-Headers', 'Content-Type');
+    return output;
   } catch (err) {
-    return ContentService
+    var output = ContentService
       .createTextOutput(JSON.stringify({result: 'error', error: err.message}))
       .setMimeType(ContentService.MimeType.JSON);
+    output.addHeader('Access-Control-Allow-Origin', '*');
+    output.addHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+    output.addHeader('Access-Control-Allow-Headers', 'Content-Type');
+    return output;
   }
 }
