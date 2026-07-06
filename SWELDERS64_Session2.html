@@ -71,7 +71,9 @@ const GOOGLE_SCRIPT_URL =
   "https://script.google.com/macros/s/AKfycbyzRSkOmjZk5vdQJgKJl3Q7CjyC8v2WduYAYF2cOzrGxx9EVzSl8Ng9noyDrOrJZQiI7A/exec";
 
 function saveData(filename, csv) {
-
+  console.log('Saving data with filename:', filename);
+  console.log('CSV length:', csv ? csv.length : 'No CSV data');
+  
   fetch(GOOGLE_SCRIPT_URL, {
     method: "POST",
     headers: {'Content-Type': 'application/json'},
@@ -80,9 +82,18 @@ function saveData(filename, csv) {
       csv: csv
     })
   })
-  .then(res => res.text())
-  .then(txt => console.log('Saved:', txt))
-  .catch(err => console.error('Save failed:', err));
+  .then(res => {
+    console.log('Response received, status:', res.status);
+    return res.text();
+  })
+  .then(txt => {
+    console.log('Save result:', txt);
+    alert('Data saved successfully! Filename: ' + filename);
+  })
+  .catch(err => {
+    console.error('Save failed:', err);
+    alert('Error saving data: ' + err.message);
+  });
 }
 
 var jsPsych = initJsPsych({
@@ -154,8 +165,9 @@ var participant_id = {
   type: jsPsychSurveyHtmlForm,
   html:
     "<p>Before we begin the study please type:" +
-    "<p>Your Prolific ID <input name='participant_id' type='text'>" +
+    "<p>Your Prolific ID <input name='participant_id' type='text' required>" +
     "<p>Once you have done this, press continue.</p>",
+  button_label: 'Continue',
   test_part: 'id'
 };
 timeline.push(participant_id);
