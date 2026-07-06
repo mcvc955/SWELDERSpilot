@@ -1,8 +1,9 @@
 /*
  Google Apps Script Web App template (paste into script.google.com)
- - Appends data to both a "Master" sheet (flattened CSV rows) and individual participant-session sheets
- - Replace REPLACE_SPREADSHEET_ID with your spreadsheet ID
- - Deploy the script as a Web App (Execute as: Me, Who has access: Anyone, even anonymous)
+ - Saves CSV files to Google Drive folder
+ - Appends data to Master sheet in spreadsheet
+ - Creates individual participant-session sheets
+ - Deploy as Web App (Execute as: Me, Access: Anyone)
 */
 
 function doOptions(e) {
@@ -14,78 +15,99 @@ function doOptions(e) {
 }
 
 function doPost(e) {
+  const spreadsheetId = "1SoLN-vWqgzXrTz2-Y3VA3G67otJzohVuKKDKeICiKLA";
+  const folderId = "1GklTgVYAroOH5K2q0le-grNxV61_Gkc9";
+
   try {
-    var payload = JSON.parse(e.postData.contents);
-    var filename = payload.filename || '';
-    var csv = payload.csv || '';
+    const payload = JSON.parse(e.postData.contents);
+    const filename = payload.filename || '';
+    const csvData = payload.csv || '';
 
-    // Open the target spreadsheet
-    var ss = SpreadsheetApp.openById('1SoLN-vWqgzXrTz2-Y3VA3G67otJzohVuKKDKeICiKLA');
-    
-    // Extract participant ID and session from filename
-    // Expected format: "SWELDERS_RT_Session1_participant123_1717934567890"
-    var parts = filename.split('_');
-    var ptcId = parts[3] || 'unknown';
-    var sessionInfo = parts[1] + '_' + parts[2]; // e.g., "RT_Session1"
-    var sheetName = ptcId + '_' + sessionInfo; // e.g., "participant123_RT_Session1"
-
-    // Get or create master sheet
-    var masterSheet = ss.getSheetByName('Master');
-    if (!masterSheet) {
-      masterSheet = ss.insertSheet('Master', 0);
+    if (!filename || !csvData) {
+      throw new Error('Missing filename or CSV data');
     }
 
-    // Get or create individual participant-session sheet
-    var individualSheet = ss.getSheetByName(sheetName);
+    //------------------------------------
+    // Save CSV to Drive
+    //------------------------------------
+    const folder = DriveApp.getFolderById(folderId);
+    folder.createFile(filename + ".csv", csvData, MimeType.CSV);
+
+    //------------------------------------
+    // Append to Master Sheet
+    //------------------------------------
+    const ss = SpreadsheetApp.openById(spreadsheetId);
+    let masterSheet = ss.getSheetByName("Master");
+    
+    if (!masterSheet) {
+      masterSheet = ss.insertSheet("Master", 0);
+    }
+
+    const rows = Utilities.parseCsv(csvData);
+
+    // First file: write everything including header
+    if (masterSheet.getLastRow() === 0) {
+      masterSheet.getRange(1, 1, rows.length, rows[0].length).setValues(rows);
+    } else {
+      // Later files: append data rows only (skip header)
+      masterSheet.getRange(
+        masterSheet.getLastRow() + 1,
+        1,
+        rows.length - 1,
+        rows[0].length
+      ).setValues(rows.slice(1));
+    }
+
+    //------------------------------------
+    // Create Individual Participant Sheet
+    //------------------------------------
+    // Extract participant ID and session from filename
+    // Expected format: "SWELDERS_16_Session1_participant123_1717934567890"
+    var parts = filename.split('_');
+    var ptcId = parts[3] || 'unknown';
+    var sessionInfo = parts[1] + '_' + parts[2]; // e.g., "16_Session1"
+    var sheetName = ptcId + '_' + sessionInfo; // e.g., "participant123_16_Session1"
+
+    // Get or create individual participant sheet
+    let individualSheet = ss.getSheetByName(sheetName);
     if (!individualSheet) {
       individualSheet = ss.insertSheet(sheetName);
     }
 
-    // Parse CSV into rows
-    var csvLines = csv.trim().split('\n');
-    if (csvLines.length === 0) {
-      throw new Error('Empty CSV data');
-    }
-
-    // Get headers from first line
-    var headers = csvLines[0].split(',').map(function(h) { return h.trim(); });
-
-    // Initialize master sheet headers on first use
-    if (masterSheet.getLastRow() === 0) {
-      var masterHeaders = ['Timestamp', 'Participant_ID', 'Session', 'Filename'].concat(headers);
-      masterSheet.appendRow(masterHeaders);
-    }
-
-    // Initialize individual sheet headers on first use
+    // Append data to individual sheet
     if (individualSheet.getLastRow() === 0) {
-      var individualHeaders = ['Timestamp', 'Filename'].concat(headers);
-      individualSheet.appendRow(individualHeaders);
+      individualSheet.getRange(1, 1, rows.length, rows[0].length).setValues(rows);
+    } else {
+      individualSheet.getRange(
+        individualSheet.getLastRow() + 1,
+        1,
+        rows.length - 1,
+        rows[0].length
+      ).setValues(rows.slice(1));
     }
 
-    // Process each data row (skip header row at index 0)
-    var timestamp = new Date();
-    for (var i = 1; i < csvLines.length; i++) {
-      var values = csvLines[i].split(',').map(function(v) { return v.trim(); });
-      
-      // Append to master sheet: [Timestamp, Participant_ID, Session, Filename, ...csv_columns]
-      var masterRow = [timestamp, ptcId, sessionInfo, filename].concat(values);
-      masterSheet.appendRow(masterRow);
-
-      // Append to individual sheet: [Timestamp, Filename, ...csv_columns]
-      var individualRow = [timestamp, filename].concat(values);
-      individualSheet.appendRow(individualRow);
-    }
-
+    //------------------------------------
+    // Return Success Response
+    //------------------------------------
     var output = ContentService
-      .createTextOutput(JSON.stringify({result: 'success', sheet: sheetName, rowsAdded: csvLines.length - 1}))
+      .createTextOutput(JSON.stringify({
+        status: "success",
+        message: "CSV saved to Drive and data appended to Master and individual sheets",
+        individualSheet: sheetName,
+        rowsAdded: rows.length - 1
+      }))
       .setMimeType(ContentService.MimeType.JSON);
     output.addHeader('Access-Control-Allow-Origin', '*');
     output.addHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
     output.addHeader('Access-Control-Allow-Headers', 'Content-Type');
     return output;
+
   } catch (err) {
     var output = ContentService
-      .createTextOutput(JSON.stringify({result: 'error', error: err.message}))
+      .createTextOutput(JSON.stringify({
+        status: "error",
+        message: err.toString()
+      }))
       .setMimeType(ContentService.MimeType.JSON);
     output.addHeader('Access-Control-Allow-Origin', '*');
     output.addHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
