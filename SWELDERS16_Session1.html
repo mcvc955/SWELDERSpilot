@@ -250,9 +250,11 @@ var fixation = {
 var RT_practice = {
     type: jsPsychImageKeyboardResponse,
     //post_trial_gap: 300,
-	stimulus_width: 500,
- 	maintain_aspect_ratio: true,
     render_on_canvas: true,
+	stimulus_width: 960,
+    stimulus_height: 540,
+    maintain_aspect_ratio: true,
+    canvas_size: [1920, 1080],
     //response_ends_trial: true,
     timeline: [
       {stimulus:'RTStimuli/LightsOff.png', choices: "NO_KEYS", trial_duration: 500, data: { test_part: 'practice', correct_response:"NO_KEYS",choices: "NO_KEYS" }, },
