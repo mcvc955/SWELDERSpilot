@@ -7,11 +7,11 @@
 */
 
 function doOptions(e) {
-  var output = ContentService.createTextOutput('');
-  output.addHeader('Access-Control-Allow-Origin', '*');
-  output.addHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  output.addHeader('Access-Control-Allow-Headers', 'Content-Type');
-  return output;
+  return ContentService.createTextOutput('')
+    .addHeader('Access-Control-Allow-Origin', '*')
+    .addHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+    .addHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+    .addHeader('Access-Control-Max-Age', '86400');
 }
 
 function doPost(e) {
@@ -89,29 +89,27 @@ function doPost(e) {
     //------------------------------------
     // Return Success Response
     //------------------------------------
-    var output = ContentService
+    return ContentService
       .createTextOutput(JSON.stringify({
         status: "success",
         message: "CSV saved to Drive and data appended to Master and individual sheets",
         individualSheet: sheetName,
         rowsAdded: rows.length - 1
       }))
-      .setMimeType(ContentService.MimeType.JSON);
-    output.addHeader('Access-Control-Allow-Origin', '*');
-    output.addHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-    output.addHeader('Access-Control-Allow-Headers', 'Content-Type');
-    return output;
+      .setMimeType(ContentService.MimeType.JSON)
+      .addHeader('Access-Control-Allow-Origin', '*')
+      .addHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+      .addHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
   } catch (err) {
-    var output = ContentService
+    return ContentService
       .createTextOutput(JSON.stringify({
         status: "error",
         message: err.toString()
       }))
-      .setMimeType(ContentService.MimeType.JSON);
-    output.addHeader('Access-Control-Allow-Origin', '*');
-    output.addHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-    output.addHeader('Access-Control-Allow-Headers', 'Content-Type');
-    return output;
+      .setMimeType(ContentService.MimeType.JSON)
+      .addHeader('Access-Control-Allow-Origin', '*')
+      .addHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+      .addHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   }
 }
