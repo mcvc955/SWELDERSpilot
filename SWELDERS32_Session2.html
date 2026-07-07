@@ -104,26 +104,46 @@ var jsPsych = initJsPsych({
         .filter({ test_part: 'id' })
         .values()[0];
 
+    console.log('=== PARTICIPANT ID EXTRACTION DEBUG ===');
+    console.log('Full idTrial object:', idTrial);
+    console.log('idTrial.response:', idTrial?.response);
+    console.log('response type:', typeof idTrial?.response);
+    if (idTrial?.response && typeof idTrial.response === 'object') {
+      console.log('response keys:', Object.keys(idTrial.response));
+      console.log('response entries:', Object.entries(idTrial.response));
+    }
+
     let ptc_id = "unknown";
 
     if (idTrial) {
       if (idTrial.response && typeof idTrial.response === "object") {
+        console.log('Response is object, checking properties...');
+        console.log('participant_id:', idTrial.response.participant_id);
+        console.log('participant id:', idTrial.response["participant id"]);
         ptc_id =
           idTrial.response.participant_id ||
           idTrial.response["participant id"] ||
+          Object.values(idTrial.response)[0] ||
           "unknown";
       } else if (typeof idTrial.response === "string") {
+        console.log('Response is string, attempting JSON.parse...');
         try {
           const parsed = JSON.parse(idTrial.response);
+          console.log('Parsed successfully:', parsed);
           ptc_id =
             parsed.participant_id ||
             parsed["participant id"] ||
+            Object.values(parsed)[0] ||
             "unknown";
         } catch (e) {
           console.warn("Could not parse participant ID response:", e);
+          ptc_id = idTrial.response;
         }
       }
     }
+
+    console.log('Final extracted ptc_id:', ptc_id);
+    console.log('=====================================' );
 
     const filename =
       "SWELDERS_32_Session2_" +
@@ -131,6 +151,7 @@ var jsPsych = initJsPsych({
       "_" +
       Date.now();
 
+    console.log('Final filename:', filename);
     saveData(
       filename,
       jsPsych.data.get().csv()
