@@ -103,13 +103,18 @@ var jsPsych = initJsPsych({
   on_finish: function(){
     // Extract participant ID from the ID trial
     const idTrial = jsPsych.data.get().filter({ test_part: 'id' }).values()[0];
+    console.log('ID Trial:', idTrial);
+    console.log('ID Trial Response:', idTrial?.response);
+    
     let ptc_id = 'unknown';
     
     if (idTrial && idTrial.response) {
       // Handle both object and string responses
       if (typeof idTrial.response === 'object') {
+        console.log('Response is object:', idTrial.response);
         ptc_id = idTrial.response.participant_id || idTrial.response['participant id'] || 'unknown';
       } else if (typeof idTrial.response === 'string') {
+        console.log('Response is string:', idTrial.response);
         try {
           const parsed = JSON.parse(idTrial.response);
           ptc_id = parsed.participant_id || parsed['participant id'] || 'unknown';
@@ -119,7 +124,9 @@ var jsPsych = initJsPsych({
       }
     }
     
+    console.log('Extracted participant_id:', ptc_id);
     const filename = "SWELDERS_16_Session1_" + ptc_id + "_" + Date.now();
+    console.log('Final filename:', filename);
     saveData(filename, jsPsych.data.get().csv());
   }
 });
