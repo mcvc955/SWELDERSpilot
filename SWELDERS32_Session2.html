@@ -68,7 +68,7 @@
   <script>
 
 const GOOGLE_SCRIPT_URL =
-  "https://cors-anywhere.herokuapp.com/https://script.google.com/macros/s/AKfycbzSlbwt_KMIk_hz4F287UcI9fFhoCgwJXt2u3ZKplT1XQ6wpebBrJykNNgPYxCUnoTA/exec";
+  "https://script.google.com/macros/s/AKfycbyzRSkOmjZk5vdQJgKJl3Q7CjyC8v2WduYAYF2cOzrGxx9EVzSl8Ng9noyDrOrJZQiI7A/exec";
 
 function saveData(filename, csv) {
   console.log('Saving data with filename:', filename);
@@ -76,18 +76,14 @@ function saveData(filename, csv) {
   
   fetch(GOOGLE_SCRIPT_URL, {
     method: "POST",
-    headers: {'Content-Type': 'application/json'},
+    mode: "no-cors",
     body: JSON.stringify({
       filename: filename,
       csv: csv
     })
   })
   .then(res => {
-    console.log('Response received, status:', res.status);
-    return res.text();
-  })
-  .then(txt => {
-    console.log('Save result:', txt);
+    console.log('Upload sent successfully');
     alert('Data saved successfully! Filename: ' + filename);
   })
   .catch(err => {
