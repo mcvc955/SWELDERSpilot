@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SWELDERS Study - Consent Form (16 Faces)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 24px;
+        }
+
+        .pdf-container {
+            width: 100%;
+            height: 500px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 30px;
+            overflow: auto;
+        }
+
+        .pdf-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .pdf-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f9f9f9;
+            color: #999;
+            font-size: 16px;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        button {
+            padding: 12px 30px;
+            font-size: 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .consent-btn {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .consent-btn:hover {
+            background-color: #45a049;
+        }
+
+        .no-consent-btn {
+            background-color: #f44336;
+            color: white;
+        }
+
+        .no-consent-btn:hover {
+            background-color: #da190b;
+        }
+
+        .info-text {
+            text-align: center;
+            color: #666;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>SWELDERS Study - Consent Form</h1>
+        <p class="info-text">(16 Faces Variant)</p>
+
+        <div class="pdf-container" id="pdfContainer">
+            <div class="pdf-placeholder">
+                Consent form PDF will be displayed here
+            </div>
+        </div>
+
+        <div class="button-container">
+            <button class="consent-btn" onclick="consentYes()">I Consent</button>
+            <button class="no-consent-btn" onclick="consentNo()">I Do Not Consent</button>
+        </div>
+    </div>
+
+    <script>
+        // Load PDF if available
+        window.addEventListener('DOMContentLoaded', function() {
+            const pdfPath = 'SWELDERS_Pilot_ConsentForm_GroupA.pdf';
+            const container = document.getElementById('pdfContainer');
+
+            // Try to load PDF using iframe
+            const iframe = document.createElement('iframe');
+            iframe.src = pdfPath;
+            iframe.style.width = '100%';
+            iframe.style.height = '100%';
+            iframe.style.border = 'none';
+
+            // Load the PDF
+            container.innerHTML = '';
+            container.appendChild(iframe);
+        });
+
+        function consentYes() {
+            // Redirect to SWELDERS16_Session1
+            window.location.href = 'SWELDERS16_Session1.html';
+        }
+
+        function consentNo() {
+            // Go back to previous page
+            window.history.back();
+        }
+    </script>
+</body>
+</html>
