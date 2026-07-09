@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thank You - SWELDERS Study</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 700px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 28px;
+        }
+
+        .message {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #555;
+            margin-bottom: 30px;
+        }
+
+        .message p {
+            margin-bottom: 15px;
+        }
+
+        .message strong {
+            color: #333;
+        }
+
+        .link-section {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 20px;
+            margin: 30px 0;
+        }
+
+        .link-section label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .link-container {
+            display: flex;
+            gap: 10px;
+        }
+
+        .link-input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            word-break: break-all;
+            background-color: white;
+            cursor: text;
+        }
+
+        .copy-btn {
+            padding: 10px 20px;
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .copy-btn:hover {
+            background-color: #0b7dda;
+        }
+
+        .copy-feedback {
+            display: none;
+            color: #4CAF50;
+            font-weight: bold;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        .button-container {
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .start-btn {
+            padding: 15px 40px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 18px;
+            transition: background-color 0.3s;
+        }
+
+        .start-btn:hover {
+            background-color: #45a049;
+        }
+
+        .warning {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 4px;
+            padding: 15px;
+            margin-bottom: 20px;
+            color: #856404;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Thank You for Taking Part in Our Study!</h1>
+
+        <div class="warning">
+            <strong>Important Timing Requirements:</strong> This study must be completed in the morning, within about 2 hours of waking up.
+        </div>
+
+        <div class="message">
+            <p>If it is currently morning, within about two hours of waking up, and you are ready to begin the task, please click the button below labelled "Start Study Now".</p>
+
+            <p>Otherwise, copy the link below, wait until it is morning and within two hours of you having woken up, and paste it onto your browser when you are ready to begin the study.</p>
+        </div>
+
+        <div class="link-section">
+            <label for="studyLink">Study Link:</label>
+            <div class="link-container">
+                <div class="link-input" id="studyLink"></div>
+                <button class="copy-btn" onclick="copyLink()">Copy Link</button>
+            </div>
+            <div class="copy-feedback" id="copyFeedback">Link copied to clipboard!</div>
+        </div>
+
+        <div class="button-container">
+            <button class="start-btn" onclick="startStudy()">Start Study Now</button>
+        </div>
+    </div>
+
+    <script>
+        window.addEventListener('DOMContentLoaded', function() {
+            // Get the current URL and set up the study link
+            const currentURL = window.location.href;
+            const baseURL = currentURL.substring(0, currentURL.lastIndexOf('/') + 1);
+            const studyLink = baseURL + 'SWELDERS32_Session1.html';
+            document.getElementById('studyLink').textContent = studyLink;
+        });
+
+        function copyLink() {
+            const linkText = document.getElementById('studyLink').textContent;
+            navigator.clipboard.writeText(linkText).then(function() {
+                const feedback = document.getElementById('copyFeedback');
+                feedback.style.display = 'block';
+                setTimeout(function() {
+                    feedback.style.display = 'none';
+                }, 3000);
+            }).catch(function(err) {
+                alert('Failed to copy link. Please copy manually: ' + linkText);
+            });
+        }
+
+        function startStudy() {
+            // Get the base URL and navigate to SWELDERS32_Session1
+            const currentURL = window.location.href;
+            const baseURL = currentURL.substring(0, currentURL.lastIndexOf('/') + 1);
+            window.location.href = baseURL + 'SWELDERS32_Session1.html';
+        }
+    </script>
+</body>
+</html>
