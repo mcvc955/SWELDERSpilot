@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SWELDERS Study - Consent Form (32 Faces)</title>
+    <title>SWELDERS Study - Consent Form (16 Faces)</title>
     <style>
         * {
             margin: 0;
@@ -120,7 +120,7 @@
     <script>
         // Load PDF if available
         window.addEventListener('DOMContentLoaded', function() {
-            const pdfPath = 'SWELDERS_Pilot_ConsentForm_GroupB.pdf';
+            const pdfPath = 'SWELDERS_Pilot_ConsentForm_GroupA.pdf';
             const container = document.getElementById('pdfContainer');
 
             // Try to load PDF using iframe
@@ -137,7 +137,7 @@
 
         function consentYes() {
             // Redirect to thank you page
-            window.location.href = 'Consent_32_Thanks.html';
+            window.location.href = 'Consent_16_Thanks.html';
         }
 
         function consentNo() {
