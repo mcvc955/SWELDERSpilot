@@ -29,16 +29,20 @@
         h1 {
             text-align: center;
             color: #333;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             font-size: 24px;
+        }
+
+        .info-text {
+            display: none;
         }
 
         .pdf-container {
             width: 100%;
-            height: 500px;
+            height: 75vh;
             border: 1px solid #ddd;
             border-radius: 4px;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             overflow: auto;
         }
 
@@ -94,18 +98,12 @@
             background-color: #da190b;
         }
 
-        .info-text {
-            text-align: center;
-            color: #666;
-            margin-bottom: 20px;
-            font-size: 14px;
-        }
+
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>SWELDERS Study - Consent Form</h1>
-        <p class="info-text">(32 Faces Variant)</p>
+        <h1>Consent Form</h1>
 
         <div class="pdf-container" id="pdfContainer">
             <div class="pdf-placeholder">
@@ -114,8 +112,8 @@
         </div>
 
         <div class="button-container">
-            <button class="consent-btn" onclick="consentYes()">I Consent</button>
             <button class="no-consent-btn" onclick="consentNo()">I Do Not Consent</button>
+            <button class="consent-btn" onclick="consentYes()">I Consent</button>
         </div>
     </div>
 
