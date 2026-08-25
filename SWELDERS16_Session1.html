@@ -68,7 +68,7 @@
   <script>
 
 const GOOGLE_SCRIPT_URL =
-  "https://script.google.com/macros/s/AKfycbyzRSkOmjZk5vdQJgKJl3Q7CjyC8v2WduYAYF2cOzrGxx9EVzSl8Ng9noyDrOrJZQiI7A/exec";
+  "https://script.google.com/macros/s/AKfycbwXa-v4VPxs61-rFKu_UCQrzG7Y6XOgc3LSX_uMAAaj_sEMH819fuj15SqTrfPj2c0q/exec";
 
 function saveData(filename, csv) {
   console.log('Saving data with filename:', filename);
@@ -1155,6 +1155,11 @@ var forced_correction_trial = {
 
     html: function(){
 
+      let correct_name =
+        last_incorrect_face && last_incorrect_face.answer
+          ? last_incorrect_face.answer
+          : "";
+
       return `
         <div style="text-align:center;">
 
@@ -1163,6 +1168,10 @@ var forced_correction_trial = {
 
           <p>
             Please type the correct name before continuing:
+          </p>
+
+          <p style="font-size:22px; font-weight:bold; color:#1a1a1a;">
+            Correct name: ${correct_name}
           </p>
 
           <input
@@ -1182,7 +1191,7 @@ var forced_correction_trial = {
     on_finish: function(data){
 
       let typed =
-        data.response.correction
+        (data.response.correction || "")
           .trim()
           .toLowerCase();
 
@@ -1222,8 +1231,13 @@ var forced_correction_trial = {
 
     } else {
 
+      let correct_name =
+        last_incorrect_face && last_incorrect_face.answer
+          ? last_incorrect_face.answer
+          : "";
+
       alert(
-        "Please type the correct name exactly."
+        "Please type the correct name exactly: " + correct_name
       );
 
       return true;
